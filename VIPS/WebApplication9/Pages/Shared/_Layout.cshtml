@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApplication9</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/searchStyle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApplication9.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -24,6 +24,14 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <form autocomplete="off" action="/action_page.php">
+                                <div class="autocomplete" style="width:300px;">
+                                    <input id="myInput" type="text" name="myCountry" placeholder="UNF Department">
+                                </div>
+                                <input type='button' value='Submit' class="btn" onclick="document.location.href='https://localhost:7163/Privacy';" />
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -45,6 +53,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/search.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
