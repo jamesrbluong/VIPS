@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Formats.Asn1;
 using System.Globalization;
+using System.IO;
 
 namespace VIPS.Controllers
 {
@@ -31,6 +32,8 @@ namespace VIPS.Controllers
             using (var streamReader = new StreamReader(file.OpenReadStream()))
             using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
             {
+                streamReader.ReadLine();
+                streamReader.ReadLine();
                 records = csvReader.GetRecords<CSV>().ToList();
             }
 
