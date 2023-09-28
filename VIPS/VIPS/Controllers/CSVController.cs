@@ -1,12 +1,12 @@
 ﻿using CsvHelper;
-using CSVParser.Data;
-using CSVParser.Models;
+using VIPS.Data;
+using VIPS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Formats.Asn1;
 using System.Globalization;
 
-namespace CSVParser.Controllers
+namespace VIPS.Controllers
 {
     public class CSVController : Controller
     {

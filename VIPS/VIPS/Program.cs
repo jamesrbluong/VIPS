@@ -1,4 +1,5 @@
-using CSVParser.Data;
+
+using VIPS.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

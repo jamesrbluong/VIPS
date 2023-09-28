@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace CSVParser.Models
+namespace VIPS.Models
 {
     public class CSV
     {

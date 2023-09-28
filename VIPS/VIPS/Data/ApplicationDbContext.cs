@@ -1,10 +1,10 @@
 ﻿
-using CSVParser.Models;
+using VIPS.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 
-namespace CSVParser.Data
+namespace VIPS.Data
 {
     public class ApplicationDbContex : DbContext
     {
@@ -15,4 +15,5 @@ namespace CSVParser.Data
         public DbSet<CSV> CSVs { get; set; }
 
     }
+
 }
