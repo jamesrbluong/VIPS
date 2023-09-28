@@ -1,4 +1,4 @@
-namespace CSVParser.Models
+namespace VIPS.Models
 {
     public class ErrorViewModel
     {
