@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\VIPS.bundle.scp.css",
+      "PackagePath": "staticwebassets\\VIPS.bundle.scp.css"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.VIPS.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.VIPS.props",
+      "PackagePath": "build\\VIPS.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.VIPS.props",
+      "PackagePath": "buildMultiTargeting\\VIPS.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.VIPS.props",
+      "PackagePath": "buildTransitive\\VIPS.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,46 @@
+{
+  "Version": 1,
+  "Hash": "UeTZG2dJv8NOkX9ByugZY0LNYNR95J+sIDqUW0oIh+k=",
+  "Source": "VIPS",
+  "BasePath": "_content/VIPS",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\bundle\\VIPS.styles.css",
+      "SourceId": "VIPS",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\bundle\\",
+      "BasePath": "_content/VIPS",
+      "RelativePath": "VIPS.styles.css",
+      "AssetKind": "All",
+      "AssetMode": "CurrentProject",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ApplicationBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\bundle\\VIPS.styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\VIPS.bundle.scp.css",
+      "SourceId": "VIPS",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\",
+      "BasePath": "_content/VIPS",
+      "RelativePath": "VIPS.bundle.scp.css",
+      "AssetKind": "All",
+      "AssetMode": "Reference",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ProjectBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\VIPS.bundle.scp.css"
+    }
+  ]
+}
