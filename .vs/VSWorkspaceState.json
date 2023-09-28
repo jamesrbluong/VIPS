@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\VIPS",
+    "\\VIPS\\Controller",
+    "\\VIPS\\Model",
+    "\\VIPS\\View",
+    "\\VIPS\\View\\CSV",
+    "\\VIPS\\View\\Home",
+    "\\VIPS\\View\\Shared"
+  ],
+  "SelectedNode": "\\VIPS\\VIPS.sln",
+  "PreviewInSolutionExplorer": false
+}
