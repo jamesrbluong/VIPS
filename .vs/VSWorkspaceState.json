@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\VIPS",
-    "\\VIPS\\bin",
-    "\\VIPS\\obj",
     "\\VIPS\\VIPS"
   ],
-  "SelectedNode": "\\VIPS\\VIPS\\Program.cs",
+  "SelectedNode": "\\VIPS\\VIPS.sln",
   "PreviewInSolutionExplorer": false
 }
