@@ -1,18 +1,144 @@
 html {
-  font-size: 14px;
+	font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+	html {
+		font-size: 16px;
+	}
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+	min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+	margin-bottom: 60px;
 }
+
+nav#navBar{
+	background:#edeeee;
+	position:relative;
+	z-index:100;
+	min-height:40px;
+	min-width:300px;
+}
+nav#navBar a{
+	text-decoration:none;
+}
+.MenuHoriz{
+	width:100%;
+	margin:auto;
+	display:flex;
+	flex-direction:row;
+	justify-content:space-between;
+	align-items:stretch;
+}
+.MenuHoriz>li{
+	flex:0 0 auto;
+	display:flex;
+	align-items:center;
+	font-size:1.075em;
+	font-weight:600;
+
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+
+header{
+	background:#0a233f;
+	color:#fff
+}
+header .container{
+	display:flex;
+	flex-direction:row;
+}
+header .logo{
+	flex:1 1 250px;
+	padding:15px 0px;
+}
+header .logo img{
+	height:100px;
+	width:unset;
+}
+header .right{
+	flex:1 1 auto;
+	min-height:106px;
+}
+header .actionLinks{
+	margin:.5em 0 1em 0;
+	text-align:right;
+	list-style-type:none;
+}
+header .actionLinks li{
+	display:inline-block;
+}
+header .actionLinks a{
+	color:#fff;
+	text-decoration:none;
+}
+header .actionLinks a:hover{
+	border-bottom:#009CC7 1px dotted;
+	opacity:1;
+	color:#009CC7;
+	text-decoration:none !important;
+}
+header .actionLinks a:focus{
+	border-bottom:#009CC7 1px dotted;
+	opacity:1;
+	color:#009CC7;
+}
+header .searchBar{
+	text-align:right;
+	margin-top:20px;
+	font-size:1em;
+	display:flex;
+	flex-direction:column;
+	align-items:flex-end;
+}
+header .searchBar>div{
+	flex:1 1 auto;
+	max-width:360px;
+}
+header .searchSelect{
+	float:right;
+	min-width:265px;
+}
+header .searchSelect fieldset{
+	display:inline-block;
+}
+header .searchSelect label{
+	font-size:.75em;
+	font-weight:normal;
+	margin-left:10px;
+	margin-bottom:0px;
+}
+header .searchAZ{
+	font-size:.75em;
+	margin:0px 0px 0px 15px;
+	float:right;
+	text-align:right;
+}
+header .searchAZ a{
+	color:#fff;
+	text-decoration:none;
+	font-size:.90em;
+}
+header .searchAZ a:hover{
+	border-bottom:#009CC7 1px dotted;
+	opacity:1;
+	color:#009CC7;
+	text-decoration:none !important;
+}
+header .searchBtn{
+	display:none;
+}
+header input:focus{
+	outline:2px solid #81d1e2 !important;
+	outline-offset:4px !important;
+}
+
+
+
+

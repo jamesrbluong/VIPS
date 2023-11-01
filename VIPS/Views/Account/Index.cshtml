@@ -1,0 +1,40 @@
+﻿@model VIPS.Models.Account.AccountIndexModel
+
+@{
+    ViewBag.Title = "User Accounts";
+    Layout = "_Layout";
+}
+
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+<table class="table table-condensed table-bordered">
+    <tr>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    @if (!Model.UserList.Any())
+    {
+        <tr>
+            <td colspan="3" class="text-center">
+                No User Accounts
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var user in Model.UserList)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <a class="btn btn-success" asp-controller="Account" asp-action="Edit" asp-route-id="@user.Id">Update</a>
+                    <a class="btn btn-danger" asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    <a class="btn btn-danger" asp-controller="Account" asp-action="Role" asp-route-id="@user.Id">Change Role</a>
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<a class="btn btn-primary" asp-action="Create">Create</a>
+<a class="btn btn-primary" asp-controller="Home" asp-action="Index">Home</a>

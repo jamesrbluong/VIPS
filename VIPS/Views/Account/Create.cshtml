@@ -1,0 +1,27 @@
+﻿@model VIPS.Models.Account.LoginAccountModel
+
+@{
+    ViewData["Title"] = "Create User Account";
+    Layout = "_Layout";
+}
+
+<!--<div asp-validation-summary="All" class="text-danger"></div>-->
+
+<form asp-controller="Account" asp-action="CreateAccount" asp-antiforgery="true" method="POST" class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label" asp-for="Email">Email:</label>
+        <input class="form-control" asp-for="Email" />
+    </div>
+    <div class="form-group">
+        <label class="control-label" asp-for="Password">Password:</label>
+        <input class="form-control" asp-for="Password" type="password" />
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="reset" class="btn btn-primary">Reset</button>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
