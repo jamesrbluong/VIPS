@@ -27,7 +27,7 @@ namespace VIPS.Controllers
             ViewBag.Count = data.Count;
 
             int countOfDuplicates = data.Count(model => model.Duplicate);
-            ViewBag.Duplicate = countOfDuplicates;
+            ViewBag.Duplicate = countOfDuplicates - data.Count;
 
             return View(data);
         }
@@ -51,8 +51,8 @@ namespace VIPS.Controllers
             _db.CSVs.AddRange(records);
             _db.SaveChanges();
 
-            var duplicates = CheckForDuplicates();
-            ViewBag.Duplicate = duplicates;
+            CheckForDuplicates();
+
             return RedirectToAction("Index");
         } 
 
