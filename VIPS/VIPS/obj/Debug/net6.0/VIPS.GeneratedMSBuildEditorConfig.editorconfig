@@ -16,12 +16,12 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Matthew\Source\Repos\jamesrbluong\VIPS\VIPS\VIPS
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSV/CSView.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXENTVmlldy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSV/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSV/ViewCSV.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXFZpZXdDU1YuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/VIPS/Views/Home/Index.cshtml]

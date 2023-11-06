@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VIPS.Models
 {
-    public class CSV
+    public class Contract
     {
         [Key]
         [Ignore]
@@ -164,12 +164,5 @@ namespace VIPS.Models
 
         [Name("Zip Code")]
         public string ZipCode { get; set; }
-
-        [Ignore]
-        public bool Error { get; set; }
-
-        [Ignore]
-        public bool ErrorDescription { get; set; }  
     }
-
 }

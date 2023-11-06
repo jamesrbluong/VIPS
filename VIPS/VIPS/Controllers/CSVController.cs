@@ -22,7 +22,8 @@ namespace VIPS.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var data = _db.CSVs.ToList();
+            return View(data);
         }
 
         [HttpPost]
@@ -56,7 +57,7 @@ namespace VIPS.Controllers
         public IActionResult Submit()
         {
             //_db.SaveChanges();
-            return View();
+            return RedirectToAction("Index");
         }
 
         public IActionResult ToNotepad()
