@@ -379,4 +379,12 @@
 @Html.ActionLink("Submit", "Submit", "CSV", null, new { @class = "btn btn-primary" })
 @Html.ActionLink("OverWrite Submit", "OverWriteSubmit", "CSV", null, new { @class = "btn btn-primary" })
 @Html.ActionLink("Export to Notepad", "ToNotepad", "CSV", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Clear CSV", "ClearUpload", "CSV", null, new { @class = "btn btn-primary" })
+
+@if (TempData["AlertMessage"] != null)
+{
+    <script>
+        alert('@TempData["AlertMessage"]');
+    </script>
+}
 

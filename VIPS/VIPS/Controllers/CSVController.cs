@@ -75,11 +75,10 @@ namespace VIPS.Controllers
                 if (csvItem.Error)
                 {
                     messageContent += csvItem.ContractID + " ";
-                    messageContent += csvItem.ErrorDescription + " ";
+                    messageContent += csvItem.ErrorDescription + " " + "\n";
                 }
                 
             }
-                
             // Convert the string to bytes
             byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
 
@@ -204,12 +203,20 @@ namespace VIPS.Controllers
 
         public IActionResult Submit()
         {
+            var csvData = _db.CSVs.ToList();
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.Error)
+                {
+                    TempData["AlertMessage"] = "There is an error in one of your Contracts so you cannot submit. Please use Export Errors to get a full list.";
+                    return RedirectToAction("Index");
+                }
+            }
             DeleteContractDataFromTable();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Index");
         }
-
 
         public void DeleteContractDataFromTable()
         {
@@ -224,6 +231,15 @@ namespace VIPS.Controllers
             _db.CSVs.RemoveRange(data);
             _db.SaveChanges();
         }
+
+        public IActionResult ClearUpload()
+        {
+            var data = _db.CSVs.ToList();
+            _db.CSVs.RemoveRange(data);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        
 
         public void CheckForDuplicates()
         {
