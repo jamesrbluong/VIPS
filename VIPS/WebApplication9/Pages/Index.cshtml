@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="~/css/searchStyle.css"/>
+</head>
+<body>
+
+<input type="text" id="searchBox" placeholder="Search here!">
+<button onclick="performSearch()">Search</button>
+
+<script>
+  function performSearch() {
+    var searchBox = document.getElementById("searchBox");
+    var searchTerm = searchBox.value.trim(); // Space Removal
+
+    if (searchTerm === "") {
+      alert("Please enter a search entry prior to pressing search.");
+    } else if (
+      searchTerm === "Brooks College of Health" ||
+      searchTerm === "Brooks" ||
+      searchTerm === "Health" ||
+      searchTerm === "Coggin College of Business" ||
+      searchTerm === "Coggin" ||
+      searchTerm === "Business" ||
+      searchTerm === "College of Arts and Sciences" ||
+      searchTerm === "Art" ||
+      searchTerm === "Science" ||
+      searchTerm === "College of Computing, Engineering, and Construction" ||
+      searchTerm === "Computing" ||
+      searchTerm === "Engineering" ||
+      searchTerm === "Construction" ||
+      searchTerm === "College of Education and Human Services" ||
+      searchTerm === "Education" ||
+      searchTerm === "Human Services" ||
+      searchTerm === "Hicks Honor College" ||
+      searchTerm === "Honors"
+    ) {
+      // The search term is equal to "Search Term"
+      alert("Now Loading Contracts for: " + searchTerm);
+
+      // Redirect to a new page
+      window.location.href = "https://localhost:7163/Privacy";
+    } else {
+      // The search term is not equal to "Searches"
+      alert("Invalid Entry: The search term must be an Active College Study at UNF.");
+    }
+  }
+
+<script src="~/js/search.js"></script>
+</body>
+</html>

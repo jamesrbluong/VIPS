@@ -1,0 +1,113 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+</style>
+</head>
+<body>
+
+<h2>Department Contract Search</h2>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+<table id="myTable">
+  <tr class="header">
+    <th style="width:60%;">Contract Name</th>
+    <th style="width:40%;">Department</th>
+    <th style="width:60%;">Contract Expiration Date</th>
+  </tr>
+  <tr>
+    <td>Ronald McDonald House</td>
+    <td>Construction</td>
+    <td>05-29-2002</td>
+  </tr>
+  <tr>
+    <td>Feeding NE Florida</td>
+    <td>Construction</td>
+    <td>06-07-2021</td>
+  </tr>
+   <tr>
+    <td>Wounded Warrior Project</td>
+    <td>Construction</td>
+    <td>101-11-2022</td>
+  </tr>
+   <tr>
+    <td>University of North Florida</td>
+    <td>Construction</td>
+    <td>12-22-2021</td>
+  </tr>
+  
+</table>
+
+<form action="/action_page.php">
+  <select name="filter" id="filter" onchange="filterTable()">
+    <option value="closestExpiration">Closest Exp. Date</option>
+    <option value="farExpiration">Furthest Exp. Date</option>
+  </select>
+</form>
+
+<script>
+function filterDisplay() { //Filter Displaying Table Rows
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");//Grabbing Search Bar element via the ID
+  filter = input.value.toUpperCase(); //Uppercase Conversion
+  table = document.getElementById("myTable");//Element for Table ID
+  tr = table.getElementsByTagName("tr");//Arrau for All Table Rows.
+  for (i = 0; i < tr.length; i++) { //Looping through all of the rows
+    td = tr[i].getElementsByTagName("td")[0]; //First Cell Grab
+    if (td) {
+      txtValue = td.textContent || td.innerText;//Does cell exist?
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {//Does the cell contain what was searched?
+        tr[i].style.display = "";//Row Display
+      } else {
+        tr[i].style.display = "none";//No Display
+      }
+    }
+  }
+}
+
+function filterTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("myTable");
+  rows = table.getElementsByTagName("tr");
+  switching = true;
+  var filterValue = document.getElementById("filter").value;
+
+  while (switching) {
+    switching = false;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("td")[2]; // Expiration date cell
+      y = rows[i + 1].getElementsByTagName("td")[2]; // Expiration date cell
+
+      if (filterValue === "closestExpiration") {
+        if (new Date(x.textContent) > new Date(y.textContent)) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (filterValue === "farExpiration") {
+        if (new Date(x.textContent) < new Date(y.textContent)) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+</script>
+
+</body>
+</html>
