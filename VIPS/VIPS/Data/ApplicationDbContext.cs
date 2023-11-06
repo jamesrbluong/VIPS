@@ -14,6 +14,9 @@ namespace VIPS.Data
 
         public DbSet<CSV> CSVs { get; set; }
         public DbSet<Contract> Contracts { get; set; }
+
+        
+
     }
 
 }

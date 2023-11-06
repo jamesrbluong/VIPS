@@ -46,19 +46,7 @@ namespace VIPS.Controllers
             _db.SaveChanges();
 
             return RedirectToAction("Index");
-        }
-
-        public IActionResult ViewCSV()
-        {
-            var data = _db.CSVs.ToList(); // Replace YourModels with the name of your DbSet
-            return View(data);
-        }
-
-        public IActionResult Submit()
-        {
-            //_db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        } 
 
         public IActionResult ToNotepad()
         {
@@ -74,6 +62,38 @@ namespace VIPS.Controllers
             string fileName = "model_info.txt";
 
             return File(fileBytes, "text/plain", fileName);
+        }
+
+        public IActionResult Submit()
+        {
+            TransferData();
+            DeleteAllDataFromTable();
+            return RedirectToAction("Index");
+        }
+
+        public void TransferData()
+        {
+            // Retrieve all records from the table
+            var data = _db.CSVs.ToList();
+
+            // Remove each record from the DbSet
+            _db.CSVs.RemoveRange(data);
+
+            // Save changes to the database
+            _db.SaveChanges();
+        }
+
+
+        public void DeleteAllDataFromTable()
+        {
+            // Retrieve all records from the table
+            var data = _db.CSVs.ToList();
+
+            // Remove each record from the DbSet
+            _db.CSVs.RemoveRange(data);
+
+            // Save changes to the database
+            _db.SaveChanges();
         }
     }
 
