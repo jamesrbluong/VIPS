@@ -23,12 +23,10 @@
         New Number of Contracts:   @ViewBag.Duplicate
     </p>
 
-    <button id="filterButton">Filter Duplicates</button>
+    <button id="showAllButton">Show All Objects</button>
+    <button id="showFilteredButton">Show Non-Duplicate Objects</button>
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
+    <table class="table" id="objectTable">
         <thead>
             <tr>
                 <th>
@@ -192,6 +190,9 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ErrorDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Duplicate)
                 </th>
                 <th></th>
             </tr>
@@ -357,9 +358,13 @@
                         @Html.DisplayFor(modelItem => item.ZipCode)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @(item.Error ? "true" : "false")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ErrorDescription)
+                    </td>
+                    <td>
+                        @(item.Duplicate ? "true" : "false")
                     </td>
                 </tr>
             }

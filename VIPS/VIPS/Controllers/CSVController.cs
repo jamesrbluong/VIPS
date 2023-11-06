@@ -27,7 +27,7 @@ namespace VIPS.Controllers
             ViewBag.Count = data.Count;
 
             int countOfDuplicates = data.Count(model => model.Duplicate);
-            ViewBag.Duplicate = countOfDuplicates - data.Count;
+            ViewBag.Duplicate = data.Count - countOfDuplicates;
 
             return View(data);
         }
@@ -52,6 +52,7 @@ namespace VIPS.Controllers
             _db.SaveChanges();
 
             CheckForDuplicates();
+            _db.SaveChanges();
 
             return RedirectToAction("Index");
         } 
@@ -81,15 +82,22 @@ namespace VIPS.Controllers
 
         public IActionResult Submit()
         {
+            DeleteContractDataFromTable();
             TransferData();
-            DeleteAllDataFromTable();
+            DeleteCSVDataFromTable();
             return RedirectToAction("Index");
         }
 
 
-        public void DeleteAllDataFromTable()
+        public void DeleteContractDataFromTable()
         {
+            var data = _db.Contracts.ToList();
+            _db.Contracts.RemoveRange(data);
+            _db.SaveChanges();
+        }
 
+        public void DeleteCSVDataFromTable()
+        {
             var data = _db.CSVs.ToList();
             _db.CSVs.RemoveRange(data);
             _db.SaveChanges();

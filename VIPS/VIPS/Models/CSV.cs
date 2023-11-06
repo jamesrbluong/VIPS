@@ -166,7 +166,7 @@ namespace VIPS.Models
         public string ZipCode { get; set; }
 
         [Ignore]
-        public bool? Error { get; set; }
+        public bool Error { get; set; }
 
         [Ignore]
         public string? ErrorDescription { get; set; }
