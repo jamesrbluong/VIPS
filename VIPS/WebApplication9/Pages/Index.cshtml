@@ -12,12 +12,51 @@
 <body>
 
 
-<!--Make sure the form has the autocomplete function switched off:-->
+  <input type="text" id="searchBox">
+  <button onclick="performSearch()">Search</button>
+
+<script>
+    function performSearch() {
+      var searchBox = document.getElementById("searchBox");
+      var searchTerm = searchBox.value.trim(); // Trim to remove leading/trailing spaces
+
+      if (searchTerm === "") {
+        alert("Please enter a search entry prior to pressing search.");
+      } else if(
+    searchTerm === "Brooks College of Health" ||
+    searchTerm === "Brooks" ||
+    searchTerm === "Health" ||
+    searchTerm === "Coggin College of Business" ||
+    searchTerm === "Coggin" ||
+    searchTerm === "Business" ||
+    searchTerm === "College of Arts and Sciences" ||
+    searchTerm === "Art" ||
+    searchTerm === "Science" ||
+    searchTerm === "College of Computing, Engineering, and Construction" ||
+    searchTerm === "Computing" ||
+    searchTerm === "Engineering" ||
+    searchTerm === "Construction" ||
+    searchTerm === "College of Education and Human Services" ||
+    searchTerm === "Education" ||
+    searchTerm === "Human Services" ||
+    searchTerm === "Hicks Honor College" ||
+    searchTerm === "Honors"
+  ) {
+        // The search term is equal to "College of Computing"
+        alert("Now Loading Contracts for: " + searchTerm);
+      } else {
+        // The search term is not equal to "College of Computing"
+        alert("Invalid Entry: The search term must be an Active College Study at UNF.");
+      }
+    }
+  </script>
+
+
+
 
 
 
 
  <script src="~/js/search.js"></script>
-
 </body>
 </html>

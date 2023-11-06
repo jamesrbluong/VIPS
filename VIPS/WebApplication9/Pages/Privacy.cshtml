@@ -12,6 +12,9 @@
   box-sizing: border-box;
 }
 
+
+
+
 #myInput {
   background-image: url('/css/searchicon.png');
   background-position: 10px 10px;
@@ -22,6 +25,9 @@
   border: 1px solid #ddd;
   margin-bottom: 12px;
 }
+
+
+
 
 #myTable {
   border-collapse: collapse;
@@ -54,18 +60,29 @@
   <tr class="header">
     <th style="width:60%;">Contract Name</th>
     <th style="width:40%;">Department</th>
+    <th style = "width:60%;"> Contract Expiration Date</th>
   </tr>
   <tr>
     <td>Ronald McDonald House</td>
     <td>Construction</td>
+    <td>05-29-2002</td>
   </tr>
   <tr>
     <td>Feeding NE Florida</td>
     <td>Construction</td>
+    <td>06-07-2021</td>
   </tr>
+
  
 
 </table>
+
+<form action="/action_page.php">
+  <select name="filter" id="filter">
+    <option value="closestExpiration">Closest Exp. Date</option>
+    <option value="farExpiration">Furthest Exp. Date</option>
+  </select> 
+</form>
 
 <script>
 function myFunction() {
@@ -87,6 +104,8 @@ function myFunction() {
   }
 }
 </script>
+
+
 
 </body>
 </html>
