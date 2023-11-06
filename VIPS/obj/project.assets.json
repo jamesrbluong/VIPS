@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\frost\\source\\repos\\VIPS\\VIPS\\VIPS.csproj",
+      "projectUniqueName": "C:\\Users\\frost\\Desktop\\VIPS\\VIPS\\VIPS.csproj",
       "projectName": "VIPS",
-      "projectPath": "C:\\Users\\frost\\source\\repos\\VIPS\\VIPS\\VIPS.csproj",
+      "projectPath": "C:\\Users\\frost\\Desktop\\VIPS\\VIPS\\VIPS.csproj",
       "packagesPath": "C:\\Users\\frost\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\frost\\source\\repos\\VIPS\\VIPS\\obj\\",
+      "outputPath": "C:\\Users\\frost\\Desktop\\VIPS\\VIPS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\frost\\AppData\\Roaming\\NuGet\\NuGet.Config",
