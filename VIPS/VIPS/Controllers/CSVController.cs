@@ -75,8 +75,9 @@ namespace VIPS.Controllers
         
          public IActionResult OverWriteSubmit()
         {
+            DeleteContractDataFromTable();
             TransferData();
-            DeleteAllDataFromTable();
+            DeleteCSVDataFromTable();
             return RedirectToAction("Index");
         }
 
