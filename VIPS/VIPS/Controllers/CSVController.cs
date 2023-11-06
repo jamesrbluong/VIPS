@@ -51,8 +51,7 @@ namespace VIPS.Controllers
                 records = csvReader.GetRecords<CSV>().ToList();
             }
 
-            // Assuming validation and any necessary transformation of records is done here
-
+            
             // Save the records to the database
             _db.CSVs.AddRange(records);
             _db.SaveChanges();
@@ -60,18 +59,29 @@ namespace VIPS.Controllers
             CheckForDuplicates();
             _db.SaveChanges();
 
+            ErrorChecking();
+            _db.SaveChanges();
+
             return RedirectToAction("Index");
         } 
 
         public IActionResult ToNotepad()
         {
-            // Fetch data for the model (replace with your data retrieval logic)
+            var csvData = _db.CSVs.ToList();
+            string messageContent = "";
 
-            // Create a string with the model information
-            string content = "Hello this is a test";
-
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.Error)
+                {
+                    messageContent += csvItem.ContractID + " ";
+                    messageContent += csvItem.ErrorDescription + " ";
+                }
+                
+            }
+                
             // Convert the string to bytes
-            byte[] fileBytes = Encoding.UTF8.GetBytes(content);
+            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
 
             // Set the file name
             string fileName = "model_info.txt";
@@ -132,6 +142,56 @@ namespace VIPS.Controllers
         private bool CSVExists(int id)
         {
             return (_db.CSVs?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private void ErrorChecking()
+        {
+            //Go through every variable in the contract and check to make sure they are useable 
+            ErrorCheckingDepartments(); 
+
+        }
+
+        private void ErrorCheckingDepartments()
+        {
+            //Go through every variable in the contract and check to make sure they are useable 
+            var csvData = _db.CSVs.ToList();
+
+            List<string> departmentData = new List<string>
+            {
+                "BCH_AgingServicesManagement",
+                "BCH_AthleticTraining",
+                "BCH_College",
+                "BCH_ExerciseScience",
+                "BCH_HealthAdministration",
+                "BCH_InterdisciplinaryHealthStudies",
+                "BCH_MentalHealthCounseling",
+                "BCH_NurseAnesthetist",
+                "BCH_Nursing",
+                "BCH_NutritionDietetics",
+                "BCH_PhysicalTherapy",
+                "BCH_PublicHealth"
+            };
+
+            foreach (var csvItem in csvData)
+            {
+                foreach (var departmentItem in departmentData)
+                {
+                    // Use reflection to get the value of the property with the dynamic name
+                    var property = csvItem.GetType().GetProperty(departmentItem);
+                    if (property != null)
+                    {
+                        var departmentValue = (string)property.GetValue(csvItem);
+                        if (departmentValue != "TRUE" && departmentValue != "FALSE")
+                        {
+                            csvItem.Error = true;
+                            csvItem.ErrorDescription += $" {departmentItem} needs to be either TRUE or FALSE,";
+                        }
+                    }
+                }
+
+        }
+
+        _db.SaveChanges();
         }
 
         public IActionResult OverWriteSubmit()
