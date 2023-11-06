@@ -78,8 +78,63 @@ namespace VIPS.Controllers
 
             return File(fileBytes, "text/plain", fileName);
         }
-        
-         public IActionResult OverWriteSubmit()
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _db.CSVs == null)
+            {
+                return NotFound();
+            }
+
+            var cSV = await _db.CSVs.FindAsync(id);
+            if (cSV == null)
+            {
+                return NotFound();
+            }
+            return View(cSV);
+        }
+
+        // POST: CSVs22/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ContractID,CreatedOn,CreatedBy,ContractName,ContractOrigin,ContractTypeName,CurrentStageAssignees,DaysInCurrStage,Description,ExternalContractReferenceID,FolderName,Locked,Owner,PrimaryDocument,RelatedToContract,RelatedToContractID,StageName,UpdatedBy,UpdatedOn,Workflow,ProgramsOrCourses,CCECMajors,AutoRenewal,ContractCategory,AgencyMailingAddress1,AgencyMailingAddress2,AgencyName,BCH_AgingServicesManagement,BCH_AthleticTraining,BCH_College,BCH_ExerciseScience,BCH_HealthAdministration,BCH_InterdisciplinaryHealthStudies,BCH_MentalHealthCounseling,BCH_NurseAnesthetist,BCH_Nursing,BCH_NutritionDietetics,BCH_PhysicalTherapy,BCH_PublicHealth,City,COEHSPrograms,Department,EmailAddress,FacultyInitiator,Graduate_Undergraduate,PhoneNumber,PrimaryContact,Renewal,State,TitleCert,Year,ZipCode,Error,ErrorDescription,Duplicate")] CSV cSV)
+        {
+            if (id != cSV.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _db.Update(cSV);
+                    await _db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CSVExists(cSV.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(cSV);
+        }
+
+        private bool CSVExists(int id)
+        {
+            return (_db.CSVs?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public IActionResult OverWriteSubmit()
         {
             DeleteContractDataFromTable();
             TransferData();
