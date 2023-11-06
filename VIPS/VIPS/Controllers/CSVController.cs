@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Formats.Asn1;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace VIPS.Controllers
 {
@@ -45,5 +46,34 @@ namespace VIPS.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult ViewCSV()
+        {
+            var data = _db.CSVs.ToList(); // Replace YourModels with the name of your DbSet
+            return View(data);
+        }
+
+        public IActionResult Submit()
+        {
+            //_db.SaveChanges();
+            return View();
+        }
+
+        public IActionResult ToNotepad()
+        {
+            // Fetch data for the model (replace with your data retrieval logic)
+
+            // Create a string with the model information
+            string content = "Hello this is a test";
+
+            // Convert the string to bytes
+            byte[] fileBytes = Encoding.UTF8.GetBytes(content);
+
+            // Set the file name
+            string fileName = "model_info.txt";
+
+            return File(fileBytes, "text/plain", fileName);
+        }
     }
-}
+
+    }
