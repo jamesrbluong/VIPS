@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj": {}
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj": {
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj",
+        "projectUniqueName": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj",
         "projectName": "VIPS",
-        "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj",
+        "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\VIPS.csproj",
         "packagesPath": "C:\\Users\\Matthew\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\",
+        "outputPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
