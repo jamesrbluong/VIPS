@@ -81,13 +81,9 @@ namespace VIPS.Controllers
 
         public void DeleteAllDataFromTable()
         {
-            // Retrieve all records from the table
+
             var data = _db.CSVs.ToList();
-
-            // Remove each record from the DbSet
             _db.CSVs.RemoveRange(data);
-
-            // Save changes to the database
             _db.SaveChanges();
         }
 
@@ -101,12 +97,61 @@ namespace VIPS.Controllers
             {
                 var contractItem = new Contract
                 {
-                    ContractID = csvItem.ContractID, // Map CSV properties to Contract properties
-                    /*ContractID = csvItem.CSVProperty2,*/
-                    // Map other properties as needed
+                    ContractID = csvItem.ContractID,
+                    RelatedToContractID = csvItem.RelatedToContractID,
+                    CreatedOn = csvItem.CreatedOn,
+                    CreatedBy = csvItem.CreatedBy,
+                    ContractName = csvItem.ContractName,
+                    ContractOrigin = csvItem.ContractOrigin,
+                    ContractTypeName = csvItem.ContractTypeName,
+                    CurrentStageAssignees = csvItem.CurrentStageAssignees,
+                    DaysInCurrStage = csvItem.DaysInCurrStage,
+                    Description = csvItem.Description,
+                    ExternalContractReferenceID = csvItem.ExternalContractReferenceID,
+                    FolderName = csvItem.FolderName,
+                    Locked = csvItem.Locked,
+                    Owner = csvItem.Owner,
+                    PrimaryDocument = csvItem.PrimaryDocument,
+                    RelatedToContract = csvItem.RelatedToContract,
+                    StageName = csvItem.StageName,
+                    UpdatedBy = csvItem.UpdatedBy,
+                    UpdatedOn = csvItem.UpdatedOn,
+                    Workflow = csvItem.Workflow,
+                    ProgramsOrCourses = csvItem.ProgramsOrCourses,
+                    CCECMajors = csvItem.CCECMajors,
+                    AutoRenewal = csvItem.AutoRenewal,
+                    ContractCategory = csvItem.ContractCategory,
+                    AgencyMailingAddress1 = csvItem.AgencyMailingAddress1,
+                    AgencyMailingAddress2 = csvItem.AgencyMailingAddress2,
+                    AgencyName = csvItem.AgencyName,
+                    BCH_AgingServicesManagement = csvItem.BCH_AgingServicesManagement,
+                    BCH_AthleticTraining = csvItem.BCH_AthleticTraining,
+                    BCH_College = csvItem.BCH_College,
+                    BCH_ExerciseScience = csvItem.BCH_ExerciseScience,
+                    BCH_HealthAdministration = csvItem.BCH_HealthAdministration,
+                    BCH_InterdisciplinaryHealthStudies = csvItem.BCH_InterdisciplinaryHealthStudies,
+                    BCH_MentalHealthCounseling = csvItem.BCH_MentalHealthCounseling,
+                    BCH_NurseAnesthetist = csvItem.BCH_NurseAnesthetist,
+                    BCH_Nursing = csvItem.BCH_Nursing,
+                    BCH_NutritionDietetics = csvItem.BCH_NutritionDietetics,
+                    BCH_PhysicalTherapy = csvItem.BCH_PhysicalTherapy,
+                    BCH_PublicHealth = csvItem.BCH_PublicHealth,
+                    City = csvItem.City,
+                    COEHSPrograms = csvItem.COEHSPrograms,
+                    Department = csvItem.Department,
+                    EmailAddress = csvItem.EmailAddress,
+                    FacultyInitiator = csvItem.FacultyInitiator,
+                    Graduate_Undergraduate = csvItem.Graduate_Undergraduate,
+                    PhoneNumber = csvItem.PhoneNumber,
+                    PrimaryContact = csvItem.PrimaryContact,
+                    Renewal = csvItem.Renewal,
+                    State = csvItem.State,
+                    TitleCert = csvItem.TitleCert,
+                    Year = csvItem.Year,
+                    ZipCode = csvItem.ZipCode
                 };
 
-                contractData.Add(contractItem);
+                _db.Contracts.Add(contractItem);
             }
             // Remove each record from the DbSet
             _db.CSVs.RemoveRange(csvData);
