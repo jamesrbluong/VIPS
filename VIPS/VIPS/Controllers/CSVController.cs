@@ -22,7 +22,13 @@ namespace VIPS.Controllers
 
         public IActionResult Index()
         {
+            
             var data = _db.CSVs.ToList();
+            ViewBag.Count = data.Count;
+
+            int countOfDuplicates = data.Count(model => model.Duplicate);
+            ViewBag.Duplicate = countOfDuplicates;
+
             return View(data);
         }
 
@@ -45,6 +51,8 @@ namespace VIPS.Controllers
             _db.CSVs.AddRange(records);
             _db.SaveChanges();
 
+            var duplicates = CheckForDuplicates();
+            ViewBag.Duplicate = duplicates;
             return RedirectToAction("Index");
         } 
 
@@ -86,6 +94,28 @@ namespace VIPS.Controllers
             _db.CSVs.RemoveRange(data);
             _db.SaveChanges();
         }
+
+        public void CheckForDuplicates()
+        {
+            if (_db.CSVs.ToList().Count > 0)
+            {
+                
+                var csvData = _db.CSVs.ToList();
+                var contractData = _db.Contracts.ToList();
+
+                foreach (var csvItem in csvData)
+                {
+                    if (contractData.Any(contract => contract.ContractID == csvItem.ContractID))
+                    {
+                        // Update the variable in the matching CSV instance
+                        csvItem.Duplicate = true;
+                        // If you want to save changes to the database, you can do it here
+                    }
+                }
+                _db.SaveChanges();
+            }
+        }
+
 
         public void TransferData()
         {

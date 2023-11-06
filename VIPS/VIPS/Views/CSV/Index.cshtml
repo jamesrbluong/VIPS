@@ -17,6 +17,13 @@
 @if (Model != null && Model.Any())
 {
     <p>
+        Total Number of Contracts: @ViewBag.Count
+    </p>
+    <p>
+        New Number of Contracts:   @ViewBag.Duplicate
+    </p>
+
+    <p>
         <a asp-action="Create">Create New</a>
     </p>
     <table class="table">
@@ -177,6 +184,12 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Error)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ErrorDescription)
                 </th>
                 <th></th>
             </tr>

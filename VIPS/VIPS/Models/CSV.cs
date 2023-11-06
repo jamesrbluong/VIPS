@@ -166,10 +166,13 @@ namespace VIPS.Models
         public string ZipCode { get; set; }
 
         [Ignore]
-        public bool Error { get; set; }
+        public bool? Error { get; set; }
 
         [Ignore]
-        public bool ErrorDescription { get; set; }  
+        public string? ErrorDescription { get; set; }
+
+        [Ignore]
+        public bool Duplicate { get; set; } = false;
     }
 
 }
