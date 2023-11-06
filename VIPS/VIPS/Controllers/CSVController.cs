@@ -32,7 +32,13 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-        [HttpPost]
+        public IActionResult CSView()
+        {
+            var data = _db.CSVs.ToList();
+            return View(data);
+    }
+
+    [HttpPost]
         public IActionResult Upload(IFormFile file)
         {
             var records = new List<CSV>();
@@ -196,6 +202,8 @@ namespace VIPS.Controllers
             _db.CSVs.RemoveRange(csvData);
             _db.SaveChanges();
         }
+
+  
     }
 
     }

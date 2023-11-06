@@ -9,12 +9,32 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = VIPS
 build_property.RootNamespace = VIPS
-build_property.ProjectDir = C:\Users\Matthew\Source\Repos\jamesrbluong\VIPS\VIPS\VIPS\
+build_property.ProjectDir = C:\Users\Matthew\source\repos\jamesrbluong\VIPS\VIPS\VIPS\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Matthew\Source\Repos\jamesrbluong\VIPS\VIPS\VIPS
+build_property.MSBuildProjectDirectory = C:\Users\Matthew\source\repos\jamesrbluong\VIPS\VIPS\VIPS
 build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Matthew/source/repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSVs22/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWczIyXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/source/repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSVs22/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWczIyXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/source/repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSVs22/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWczIyXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/source/repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSVs22/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWczIyXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/source/repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSVs22/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWczIyXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Matthew/source/repos/jamesrbluong/VIPS/VIPS/VIPS/Views/CSV/CSView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXENTVmlldy5jc2h0bWw=
