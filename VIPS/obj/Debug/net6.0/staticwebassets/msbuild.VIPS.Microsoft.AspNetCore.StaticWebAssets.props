@@ -1,5 +1,6 @@
 ﻿<Project>
   <ItemGroup>
+<<<<<<< HEAD:VIPS/obj/Debug/net6.0/staticwebassets/msbuild.VIPS.Microsoft.AspNetCore.StaticWebAssets.props
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Content\Images\UNFLogo.png))">
       <SourceType>Package</SourceType>
       <SourceId>VIPS</SourceId>
@@ -16,6 +17,8 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\Content\Images\UNFLogo.png))</OriginalItemSpec>
     </StaticWebAsset>
+=======
+>>>>>>> Sprint2.1-Matthew:VIPS/VIPS/obj/Debug/net6.0/staticwebassets/msbuild.VIPS.Microsoft.AspNetCore.StaticWebAssets.props
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\css\site.css))">
       <SourceType>Package</SourceType>
       <SourceId>VIPS</SourceId>
@@ -32,6 +35,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\css\site.css))</OriginalItemSpec>
     </StaticWebAsset>
+<<<<<<< HEAD:VIPS/obj/Debug/net6.0/staticwebassets/msbuild.VIPS.Microsoft.AspNetCore.StaticWebAssets.props
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\favicon.ico))">
       <SourceType>Package</SourceType>
       <SourceId>VIPS</SourceId>
@@ -48,6 +52,8 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\favicon.ico))</OriginalItemSpec>
     </StaticWebAsset>
+=======
+>>>>>>> Sprint2.1-Matthew:VIPS/VIPS/obj/Debug/net6.0/staticwebassets/msbuild.VIPS.Microsoft.AspNetCore.StaticWebAssets.props
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\js\site.js))">
       <SourceType>Package</SourceType>
       <SourceId>VIPS</SourceId>
