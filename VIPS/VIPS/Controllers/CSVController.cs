@@ -7,6 +7,7 @@ using System.Formats.Asn1;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Azure.Messaging;
 
 namespace VIPS.Controllers
 {
@@ -87,6 +88,16 @@ namespace VIPS.Controllers
 
             return File(fileBytes, "text/plain", fileName);
         }
+
+        public IActionResult ToExcel()
+        {
+            string messageContent = "";
+            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
+            string fileName = "model_info.txt";
+
+            return File(fileBytes, "text/plain", fileName);
+        }
+
 
         public async Task<IActionResult> Edit(int? id)
         {
