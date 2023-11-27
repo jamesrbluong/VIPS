@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\VIPS"
+    "\\VIPS",
+    "\\VIPS\\VIPS",
+    "\\VIPS\\VIPS\\Controllers"
   ],
-  "SelectedNode": "\\VIPS\\VIPS.sln",
+  "SelectedNode": "\\VIPS\\VIPS\\Controllers\\CSVController.cs",
   "PreviewInSolutionExplorer": false
 }
