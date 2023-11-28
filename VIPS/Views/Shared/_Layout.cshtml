@@ -1,0 +1,135 @@
+﻿@inject IHttpContextAccessor httpContextAccessor
+
+@{
+    string email = "";
+    string roleName = "";
+
+    if (httpContextAccessor.HttpContext.Session.GetString("CurrentEmail") != null)
+    {
+        email = httpContextAccessor.HttpContext.Session.GetString("CurrentEmail");
+
+    }
+    if (httpContextAccessor.HttpContext.Session.GetString("CurrentUserRole") != null)
+    {
+        roleName = httpContextAccessor.HttpContext.Session.GetString("CurrentUserRole");
+
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VIPS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="https://www.unf.edu/">
+                    <img alt="University of North Florida" src="@Url.Content("~/Content/Images/UNFLogo.png")" />
+                </a>
+            </div>
+            
+            <div class="right">
+                <ul aria-label="Action Links" class="actionLinks">
+
+                    @if (String.IsNullOrEmpty(email))
+                    {
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                        <li class-"nav-item">
+                            <a asp-area="" asp-controller="Account" asp-action="Create">Signup</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a>@email</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                        </li>
+                    }
+
+                </ul>
+                <div class="searchBar">
+                    <input type="text" placeholder="Search..." />
+                </div>
+            </div>
+
+            
+        </div>
+    </header>
+
+    <nav aria-label="Main Menu" id="navBar" class="navbar navbar-expand-sm navbar-toggleable-sm">
+            <div class="container-fluid">
+            
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="MenuHoriz">
+                        <li class="nav-item">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a asp-area="" asp-controller="" asp-action="">Visualization</a>
+                        </li>
+                        <li class="nav-item">
+                        <a asp-area="" asp-controller="" asp-action="">Detailed View</a>
+                        </li>
+
+
+
+                    @if (roleName.Equals("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                        </li>
+                    }
+
+                    
+
+                    </ul>
+                </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            </div>
+        </nav>
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success">@TempData["success"]</div>
+            }
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["error"]</div>
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - VIPS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <base href="~/"/>
+    <script src="_framework/blazor.server.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

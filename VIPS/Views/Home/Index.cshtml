@@ -1,0 +1,16 @@
+﻿@using VIPS.Components
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Visualization of Institutional Partnerships System</h1>
+    <h4 >UNF Center for Community-Based Learning</h4>
+</div>
+
+<p>Test</p>
+<a asp-controller="Account" asp-action="Index">Account List</a>
+
+
+@(await Html.RenderComponentAsync<Visualization>(RenderMode.Server))
