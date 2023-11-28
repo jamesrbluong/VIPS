@@ -4,9 +4,10 @@
     "\\VIPS",
     "\\VIPS\\VIPS",
     "\\VIPS\\VIPS\\Controllers",
+    "\\VIPS\\VIPS\\Models",
     "\\VIPS\\VIPS\\Views",
     "\\VIPS\\VIPS\\Views\\CSV"
   ],
-  "SelectedNode": "\\VIPS\\VIPS\\Views\\CSV\\CSView.cshtml",
+  "SelectedNode": "\\VIPS\\VIPS\\Controllers\\CSVController.cs",
   "PreviewInSolutionExplorer": false
 }
