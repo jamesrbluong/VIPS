@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+
+#Custom Added by Matthew Lynch 11/28/2023
+VIPS/WebApplication9/obj/Release/net6.0/
+VIPS/obj/Debug/net6.0/
+
 # User-specific files
 *.rsuser
 *.suo
