@@ -1,0 +1,53 @@
+﻿@model VIPS.Models.ViewModels.Account.EditViewModel
+
+@{
+    ViewData["Title"] = "Edit Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Account</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditAccount" method="POST">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="SecurityStamp" value="@Model.SecurityStamp" />
+
+            <!--
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="@Model.Email" value="" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            -->
+            
+
+            <div class="form-group">
+                <div>
+                    <b>Current Role: @Model.RoleName</b>
+                </div>
+                <select name="RoleName" id="RoleNameDDL" value="">
+                    <option value="UNF_Employee">UNF Employee</option>
+                    <option value="CCBL_Employee">CCBL Employee</option>
+                    <option value="Admin">Admin</option>
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Return To Index</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
