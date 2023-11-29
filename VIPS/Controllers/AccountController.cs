@@ -1,10 +1,13 @@
 ﻿// using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Web;
 using VIPS.Models.Data;
 using VIPS.Models.ViewModels.Account;
 using VIPS.Models.ViewModels.Account.ForgotPassword;
@@ -13,11 +16,11 @@ namespace VIPS.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> _roleManager;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole<Guid>> roleManager)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -55,7 +58,7 @@ namespace VIPS.Controllers
                 if (user != null) // if the user associated with the email exists
                 {
                     await _signInManager.SignOutAsync(); // sign out current user if they are signed in
-                    if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, false)).Succeeded)
+                    if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).Succeeded)
                     {
                         var roleNameList = await _userManager.GetRolesAsync(user); // each user only has one role
 
@@ -68,11 +71,20 @@ namespace VIPS.Controllers
 
                         return RedirectToAction("Index", "Home");
                     }
+                    else if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).IsLockedOut)
+                    {
+                        TempData["error"] = "Too many failed login attempts. Try again later.";
+                        
+                    }
+                    else
+                    {
+                        TempData["error"] = "Invalid Email or Password";
+                    }
+                    // await _userManager.SetLockoutEndDateAsync(user, null);
 
                 }
             }
 
-            TempData["error"] = "Invalid Email or Password";
             return View("Login", model);
         }
 
@@ -96,7 +108,7 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateAccount(LoginViewModel model)
         {
-            if (true) // model.Email.Contains("@unf.edu")
+            if (model.Email.Contains("@unf.edu")) // model.Email.Contains("@unf.edu")
             {
                 AppUser user = new AppUser // Create user with values from the model
                 {
@@ -104,7 +116,7 @@ namespace VIPS.Controllers
                     Email = model.Email
                 };
 
-                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+                Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
@@ -133,7 +145,7 @@ namespace VIPS.Controllers
 
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
+                Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
                     TempData["success"] = "User deleted successfully";
@@ -224,17 +236,17 @@ namespace VIPS.Controllers
 
         public void SendEmail(string Email, string Code, string Purpose)
         {
-            var VerifyUrl = "/Account/" + Purpose + "/" + Code;
-            var link = "www.google.com"; // update url
-
             var fromEmail = new MailAddress("joshuastabile@gmail.com", "test"); // change email from mine
             var toEmail = new MailAddress(Email);
-            var fromEmailPassword = "mdlaxyzndlimjlql";
+            var fromEmailPassword = "gynn cppj sxpk bxbc";
+
+            var VerifyUrl = "/Account/" + Purpose + "/" + Code;
+            var link = "https://localhost:7110/Account/" + Purpose + "?code=" + HttpUtility.UrlEncode(Code) + "&email=" + HttpUtility.UrlEncode(Email); // update url
 
             string subject = "";
             string body = "";
 
-            if (Purpose == "ForgotPassword")
+            if (Purpose == "ResetPassword")
             {
                 subject = "Reset Password";
                 body = "Hello," +
@@ -253,7 +265,7 @@ namespace VIPS.Controllers
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = true,
+                UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword)
             };
 
@@ -270,7 +282,8 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
-            return View();
+            var model = new ForgotPasswordViewModel();
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -281,11 +294,14 @@ namespace VIPS.Controllers
             if (user != null)
             {
                 // Send Email
-                string resetCode = Guid.NewGuid().ToString();
-                SendEmail(user.Email, resetCode, "ForgotPassword");
+                string resetCode = await _userManager.GeneratePasswordResetTokenAsync(user); // Guid.NewGuid().ToString();
+                SendEmail(user.Email, resetCode, "ResetPassword");
+                // Console.WriteLine("HELLO" + resetCode);
                 // user.ResetPasswordCode = resetCode;
 
                 await _userManager.UpdateAsync(user);
+                model.Sent = true;
+                return View("ForgotPassword", model);
 
             }
             else
@@ -294,46 +310,63 @@ namespace VIPS.Controllers
 
             }
 
-            return View();
+            return RedirectToAction("ForgotPassword", "Account");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code, string email) 
+        {
+            var model = new ResetPasswordViewModel
+            {
+                Email = email,
+                ResetCode = code
+            };
+
+            return View(model);
+            
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword(string id)
+        public async Task<IActionResult> ResetPasswordUpdate(ResetPasswordViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
+            if (!model.NewPassword.Equals(model.ConfirmPassword))
             {
-                ResetPasswordViewModel model = new ResetPasswordViewModel();
-
-                model.ResetCode = id;
-                return View(model);
-
+                TempData["error"] = "Passwords do not match";
+                return RedirectToAction("ResetPassword", "Account", new
+                {
+                    code = model.ResetCode,
+                    email = model.Email
+                });
             }
 
-            TempData["error"] = "User not found";
-            return RedirectToAction("Index", "Home");
-        }
-
-        [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            var user = await _userManager.FindByIdAsync(model.ResetCode);
+            var user = await _userManager.FindByEmailAsync(model.Email); // add email form input to view and get from view, search user for email
             if (user != null)
             {
                 if (await _userManager.HasPasswordAsync(user))
                 {
-                    await _userManager.RemovePasswordAsync(user);
-                    await _userManager.AddPasswordAsync(user, model.NewPassword);
+                    // Console.WriteLine("test" + model.Email + model.NewPassword + model.ResetCode);
 
-                    TempData["success"] = "Password updated successfully";
-                    return RedirectToAction("Index", "Home");
+                    Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.ResetPasswordAsync(user, model.ResetCode, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        TempData["success"] = "Password updated successfully";
+                    }
+                    else
+                    {
+                        TempData["error"] = "Reset Password Token could not be verified";
+                    }
                 }
-
-                
-
+                else
+                {
+                    TempData["error"] = "User account has no password";
+                }
             }
-
-            TempData["error"] = "User not found";
+            else
+            {
+                TempData["error"] = "User not found";
+            }
+ 
             return RedirectToAction("Index", "Home");
         }
 

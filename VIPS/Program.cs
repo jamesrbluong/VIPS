@@ -17,7 +17,13 @@ builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
 builder.Services.AddSession(); 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
+    {
+        // Lockout settings
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+    }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 
 var app = builder.Build();

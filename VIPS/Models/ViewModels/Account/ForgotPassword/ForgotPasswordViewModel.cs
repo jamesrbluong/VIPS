@@ -6,6 +6,7 @@ namespace VIPS.Models.ViewModels.Account.ForgotPassword
     {
         [Required]
         public string Email { get; set; }
+        public bool? Sent { get; set; }
 
     }
 }
