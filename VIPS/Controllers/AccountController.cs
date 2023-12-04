@@ -99,6 +99,7 @@ namespace VIPS.Controllers
         }
 
         // [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
@@ -175,7 +176,6 @@ namespace VIPS.Controllers
                 {
                     Id = id,
                     SecurityStamp = oldUser.SecurityStamp,
-                    Email = oldUser.Email,
                     RoleName = roleName
                 };
 
@@ -193,8 +193,6 @@ namespace VIPS.Controllers
             AppUser oldUser = await _userManager.FindByIdAsync(model.Id);
             if (oldUser != null)
             {
-                oldUser.Email = model.Email;
-
                 await ChangeRole(model);
 
                 await _userManager.UpdateAsync(oldUser);
@@ -223,7 +221,7 @@ namespace VIPS.Controllers
                 if ((oldRoleName != null) && !oldRoleName.Equals(model.RoleName))
                 {
                     await _userManager.RemoveFromRoleAsync(user, oldRoleName);
-                    TempData["success"] = "Role for user: " + model.Email + " has been updated from " + oldRoleName + " to " + model.RoleName;
+                    TempData["success"] = "Role for user has been updated from " + oldRoleName + " to " + model.RoleName;
                     await _userManager.AddToRoleAsync(user, model.RoleName);
                     return RedirectToAction("Index", "Account");
                 }
@@ -232,8 +230,8 @@ namespace VIPS.Controllers
             TempData["error"] = "No change to user role";
             return RedirectToAction("Index", "Account");
         }
-        
 
+        
         public void SendEmail(string Email, string Code, string Purpose)
         {
             var fromEmail = new MailAddress("joshuastabile@gmail.com", "test"); // change email from mine
@@ -296,8 +294,6 @@ namespace VIPS.Controllers
                 // Send Email
                 string resetCode = await _userManager.GeneratePasswordResetTokenAsync(user); // Guid.NewGuid().ToString();
                 SendEmail(user.Email, resetCode, "ResetPassword");
-                // Console.WriteLine("HELLO" + resetCode);
-                // user.ResetPasswordCode = resetCode;
 
                 await _userManager.UpdateAsync(user);
                 model.Sent = true;
@@ -306,7 +302,7 @@ namespace VIPS.Controllers
             }
             else
             {
-                TempData["error"] = "User not found";
+                // TempData["error"] = "User not found";
 
             }
 
@@ -350,6 +346,7 @@ namespace VIPS.Controllers
                     Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.ResetPasswordAsync(user, model.ResetCode, model.NewPassword);
                     if (result.Succeeded)
                     {
+
                         TempData["success"] = "Password updated successfully";
                     }
                     else
@@ -361,13 +358,14 @@ namespace VIPS.Controllers
                 {
                     TempData["error"] = "User account has no password";
                 }
+                await _userManager.UpdateSecurityStampAsync(user);
             }
             else
             {
                 TempData["error"] = "User not found";
             }
- 
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Index", "Login");
         }
 
         

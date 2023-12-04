@@ -25,6 +25,14 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
         options.Lockout.MaxFailedAccessAttempts = 5;
     }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";  
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/Login";
+});
+
+builder.Services.AddAuthentication().AddCookie();
 
 var app = builder.Build();
 
@@ -57,6 +65,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 app.MapBlazorHub(); 
 
 
