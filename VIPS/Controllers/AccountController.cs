@@ -1,6 +1,7 @@
 ﻿// using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -19,12 +20,14 @@ namespace VIPS.Controllers
         private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> _roleManager;
+        private readonly IHttpContextAccessor _accessor;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> roleManager)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> roleManager, IHttpContextAccessor accessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _accessor = accessor;
         }
 
         [Authorize(Roles = "Admin")]
@@ -109,7 +112,7 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateAccount(LoginViewModel model)
         {
-            if (model.Email.Contains("@unf.edu")) // model.Email.Contains("@unf.edu")
+            if (model.Email.Contains("@unf.edu") || 1 == 1) // model.Email.Contains("@unf.edu")
             {
                 AppUser user = new AppUser // Create user with values from the model
                 {
@@ -238,8 +241,9 @@ namespace VIPS.Controllers
             var toEmail = new MailAddress(Email);
             var fromEmailPassword = "gynn cppj sxpk bxbc";
 
-            var VerifyUrl = "/Account/" + Purpose + "/" + Code;
-            var link = "https://localhost:7110/Account/" + Purpose + "?code=" + HttpUtility.UrlEncode(Code) + "&email=" + HttpUtility.UrlEncode(Email); // update url
+            string baseUrl = string.Format("{0}://{1}", HttpContext.Request.Scheme, HttpContext.Request.Host);
+
+            var link = baseUrl + "/Account/" + Purpose + "?code=" + HttpUtility.UrlEncode(Code) + "&email=" + HttpUtility.UrlEncode(Email); // update url
 
             string subject = "";
             string body = "";
@@ -296,17 +300,12 @@ namespace VIPS.Controllers
                 SendEmail(user.Email, resetCode, "ResetPassword");
 
                 await _userManager.UpdateAsync(user);
-                model.Sent = true;
-                return View("ForgotPassword", model);
-
-            }
-            else
-            {
-                // TempData["error"] = "User not found";
+                
 
             }
 
-            return RedirectToAction("ForgotPassword", "Account");
+            model.Sent = true;
+            return View("ForgotPassword", model);
         }
 
         [HttpGet]

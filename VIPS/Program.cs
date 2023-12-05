@@ -14,7 +14,8 @@ builder.Services.AddMvc();
 builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
 
 
-builder.Services.AddSession(); 
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>

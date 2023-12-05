@@ -481,3 +481,6 @@ C:\Users\Josh\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\scopedcss\projectbundl
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\VIPS.csproj.CopyComplete
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\VIPS.genruntimeconfig.cache
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\ref\VIPS.dll
+C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.dll
+C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Owin.dll
