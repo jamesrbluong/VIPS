@@ -1,68 +1,20 @@
 ﻿<h1>Visualization</h1>
 
-<Sidebar IsShown=_isSidebarShown Width="500"></Sidebar>
 <div class="container border">
-    <button @onclick=@(() => _isSidebarShown = !_isSidebarShown)>CCBL</button>
+    <div id="mynetwork"></div>
+    <div id="sidebar" class="sidebar">
+        <a href="#" id="sidebarName"></a>
+        <div id="sidebarTags"></div>
+        <div id="sidebarDesc"></div>
+    </div>
 </div>
-
-<div id="sidebar" class="sidebar">
-    <a href="#" id="sidebarName">#</a>
-    <div id="sidebarTags">#</div>
-    <div id="sidebarDesc">#</div>
-</div>
-
-
-
 
 @code {
     private bool _isSidebarShown = false;
 }
 
 
-<style type="text/css">
-    #mynetwork {
-        width: 1300px;
-        height: 650px;
-        border: 3px solid lightgray;
-    }
 
-    .sidebar {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        right: 0;
-        background-color: #999;
-        overflow-x: hidden;
-        padding-top: 60px;
-        transition: 0.5s;
-    }
-
-        .sidebar a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #111;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidebar div {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 20px;
-            color: #111;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidebar a:hover {
-            text-decoration: underline;
-            color: #6495ED;
-        }
-
-</style>
 
     
 

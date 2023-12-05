@@ -46,6 +46,19 @@
           }
         }
       },
+      "CsvHelper/30.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "EntityFramework/6.4.4": {
         "type": "package",
         "dependencies": {
@@ -2204,6 +2217,30 @@
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "CsvHelper/30.0.1": {
+      "sha512": "rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
+      "type": "package",
+      "path": "csvhelper/30.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "csvhelper.30.0.1.nupkg.sha512",
+        "csvhelper.nuspec",
+        "lib/net45/CsvHelper.dll",
+        "lib/net45/CsvHelper.xml",
+        "lib/net47/CsvHelper.dll",
+        "lib/net47/CsvHelper.xml",
+        "lib/net5.0/CsvHelper.dll",
+        "lib/net5.0/CsvHelper.xml",
+        "lib/net6.0/CsvHelper.dll",
+        "lib/net6.0/CsvHelper.xml",
+        "lib/netstandard2.0/CsvHelper.dll",
+        "lib/netstandard2.0/CsvHelper.xml",
+        "lib/netstandard2.1/CsvHelper.dll",
+        "lib/netstandard2.1/CsvHelper.xml"
       ]
     },
     "EntityFramework/6.4.4": {
@@ -5127,6 +5164,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "CsvHelper >= 30.0.1",
       "EntityFramework >= 6.4.4",
       "Microsoft.AspNet.Identity.EntityFramework >= 2.2.4",
       "Microsoft.AspNetCore >= 2.2.0",
@@ -5138,19 +5176,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\joshu\\.nuget\\packages\\": {}
+    "C:\\Users\\Josh\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+      "projectUniqueName": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
       "projectName": "VIPS",
-      "projectPath": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
-      "packagesPath": "C:\\Users\\joshu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\VIPS\\obj\\",
+      "projectPath": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+      "packagesPath": "C:\\Users\\Josh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\joshu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Josh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5158,7 +5196,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5177,6 +5215,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "CsvHelper": {
+            "target": "Package",
+            "version": "[30.0.1, )"
+          },
           "EntityFramework": {
             "target": "Package",
             "version": "[6.4.4, )"
@@ -5233,7 +5275,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   },

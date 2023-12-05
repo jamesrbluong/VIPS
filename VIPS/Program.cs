@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMvc();
-
+//@(await Html.RenderComponentAsync<Visualization>(RenderMode.Server))
 
 builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
 

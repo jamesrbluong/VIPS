@@ -1,0 +1,42 @@
+﻿#mynetwork {
+    width: 100%;
+    height: 100%;
+    border: 3px solid lightgray;
+}
+
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #999;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+    .sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #111;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .sidebar div {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #111;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+        text-decoration: underline;
+        color: #6495ED;
+    }
+

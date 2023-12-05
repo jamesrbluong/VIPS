@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CsvHelper.Configuration.Attributes;
+﻿using CsvHelper.Configuration.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace VIPS.Models.Data
 {
-    public class Contract
+    public class CSV
     {
         [Key]
         [Ignore]
@@ -164,5 +164,14 @@ namespace VIPS.Models.Data
 
         [Name("Zip Code")]
         public string ZipCode { get; set; }
+
+        [Ignore]
+        public bool Error { get; set; }
+
+        [Ignore]
+        public string? ErrorDescription { get; set; }
+
+        [Ignore]
+        public bool Duplicate { get; set; } = false;
     }
 }

@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/visualization.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -66,7 +68,7 @@
                 {
                     <div class="adminOptions">
                         <a asp-area="" asp-controller="Account" asp-action="Index">Account</a>
-                        <a asp-area="" asp-controller="" asp-action="Index">Upload</a>
+                        <a asp-area="" asp-controller="CSV" asp-action="Upload">Upload</a>
                     </div>
                 }
 
@@ -78,7 +80,6 @@
 
     <nav aria-label="Main Menu" id="navBar" class="navbar navbar-expand-sm navbar-toggleable-sm">
         <div class="container-fluid">
-            
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="MenuHoriz">
                     <li class="nav-item">
@@ -125,6 +126,10 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/CSV.js" asp-append-version="true"></script>
+    <script src="~/js/visualization.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
 
     <base href="~/"/>
     <script src="_framework/blazor.server.js"></script>
