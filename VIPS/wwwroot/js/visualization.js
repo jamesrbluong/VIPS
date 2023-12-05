@@ -1,4 +1,6 @@
 ﻿var options = {
+    autoResize: true,
+    height: window.innerHeight,
     nodes: {
         font: {
             color: "#FFFFFF",
@@ -8,7 +10,7 @@
         fixed: false,
         shape: "circle",
         color: "rgba(10, 35, 63,1)"
-            
+        
     },
 
     physics: {

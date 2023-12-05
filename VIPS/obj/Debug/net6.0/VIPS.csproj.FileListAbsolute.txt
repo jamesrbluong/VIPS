@@ -484,3 +484,7 @@ C:\Users\Josh\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\ref\VIPS.dll
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.dll
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.Host.SystemWeb.dll
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Owin.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\CsvHelper.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Owin.dll
