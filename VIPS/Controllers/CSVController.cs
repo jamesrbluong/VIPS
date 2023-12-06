@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using VIPS.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 
@@ -213,6 +214,8 @@ namespace VIPS.Controllers
         public IActionResult OverWriteSubmit()
         {
             DeleteContractDataFromTable();
+            DeletePartnerDataFromTable();
+            PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -230,9 +233,18 @@ namespace VIPS.Controllers
                 }
             }
             DeleteContractDataFromTable();
+            DeletePartnerDataFromTable();
+            PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
+        }
+
+        public void DeletePartnerDataFromTable()
+        {
+            var data = _db.Partners.ToList();
+            _db.Partners.RemoveRange(data);
+            _db.SaveChanges();
         }
 
         public void DeleteContractDataFromTable()
@@ -279,6 +291,38 @@ namespace VIPS.Controllers
             }
         }
 
+        public void PopulatePartners()
+        {
+            var partnerData = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.AgencyName))
+                .Select(csv => csv.AgencyName.Trim())
+                .Distinct()
+                .ToList();
+
+           // var existingPartners = _db.Partners.ToList();
+
+            // Populate Partner model with unique AgencyNames
+            foreach (var partnerItem in partnerData)
+            {
+                // Check for duplicates in memory (LINQ to Objects)
+                //if (!existingPartners.Any(p => RemovePunct(p.Name).Equals(RemovePunct(partnerItem), StringComparison.OrdinalIgnoreCase)))
+                //{
+                    var partner = new Partner
+                    {
+                        Name = partnerItem
+                    };
+                    _db.Partners.Add(partner);
+                //}
+            }
+            _db.SaveChanges();
+
+            }
+
+
+        private static string RemovePunct(string input)
+        {
+            return Regex.Replace(input, @"[.,'\-]", "");
+        }
 
         public void TransferData()
         {
