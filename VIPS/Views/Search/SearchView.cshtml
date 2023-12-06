@@ -1,0 +1,112 @@
+﻿@model VIPS.Models.ViewModels.Search.SearchViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+<!DOCTYPE html>
+<html>
+<h1>View</h1>
+
+<form method="GET" action="/search">
+    <input type="text" name="query" placeholder="Search...">
+    <button type="submit">Search</button>
+</form>
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ContractID
+            </th>
+            <th>
+                CreatedOn
+            </th>
+            <th>
+                ContractName
+            </th>
+            <th>
+                Owner
+            </th>
+            <th>
+                StageName
+            </th>
+            <th>
+                UpdatedOn
+            </th>
+            <th>
+                AgencyName
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Department
+            </th>
+            <th>
+                FacultyInitiator
+            </th>
+            <th>
+                Renewal
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Year
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ContractList)
+        {
+            <tr>
+                <td>
+                    @item.ContractID
+                </td>
+                <td>
+                    @item.CreatedOn
+                </td>
+                <td>
+                    @item.ContractName
+                </td>
+                <td>
+                    @item.Owner
+                </td>
+                <td>
+                    @item.StageName
+                </td>
+                <td>
+                    @item.UpdatedOn
+                </td>
+                <td>
+                    @item.AgencyName
+                </td>
+                <td>
+                    @item.City
+                </td>
+                <td>
+                    @item.Department
+                </td>
+                <td>
+                    @item.FacultyInitiator
+                </td>
+                <td>
+                    @item.Renewal
+                </td>
+                <td>
+                    @item.State
+                </td>
+                <td>
+                    @item.Year
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</html>
