@@ -1,0 +1,111 @@
+﻿@model VIPS.Models.ViewModels.Search.SearchViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+<!DOCTYPE html>
+<html>
+<h1>View</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+    ContractID
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.CreatedOn)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.ContractName)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.Owner)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.StageName)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.UpdatedOn)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.AgencyName)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.City)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.Department)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.FacultyInitiator)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.Renewal)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.State)
+</th>
+<th>
+    @Html.DisplayNameFor(model => model.ContractList.Year)
+</th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ContractList) {
+        <tr>
+           <td>
+    @Html.DisplayNameFor(model => model.ContractList.ContractID)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.CreatedOn)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.ContractName)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.Owner)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.StageName)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.UpdatedOn)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.AgencyName)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.City)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.Department)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.FacultyInitiator)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.Renewal)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.State)
+</td>
+<td>
+    @Html.DisplayNameFor(model => model.ContractList.Year)
+</td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</html>
