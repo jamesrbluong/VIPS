@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
+      "Id": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\visOLD.js",
+      "PackagePath": "staticwebassets\\js\\visOLD.js"
+    },
+    {
       "Id": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\visualization.js",
       "PackagePath": "staticwebassets\\js\\visualization.js"
     },

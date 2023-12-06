@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8fdkLMlAlvhRwBP5XR8knqSGcZLV2bUTKdFbtezm4AU=",
+  "Hash": "i/DVaa3eURiVtOEWgThaJxvSZrqKPwIMgk8XebZVCu0=",
   "Source": "VIPS",
   "BasePath": "_content/VIPS",
   "Mode": "Default",
@@ -151,6 +151,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\visOLD.js",
+      "SourceId": "VIPS",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\",
+      "BasePath": "_content/VIPS",
+      "RelativePath": "js/visOLD.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\visOLD.js"
     },
     {
       "Identity": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\visualization.js",

@@ -34,7 +34,47 @@
     }
 };
 
+
+//var nodes = new vis.DataSet([
+//    { id: 1, label: "Node 1" },
+//    { id: 2, label: "Node 2" },
+//    { id: 3, label: "Node 3" },
+//    { id: 4, label: "Node 4" }
+//]);
+
+/*var nodes = new vis.DataSet();*/
+
+
+//nodes.add({ id: 1, label: "School of Computing", tags: "tag1, tag2", desc: "This is a node." });
+//nodes.add({ id: 2, label: "Partner 1", tags: "tag1, tag2", desc: "This is a node." });
+//nodes.add({ id: 3, label: "Partner 2", tags: "tag1, tag2", desc: "This is a node." });
+
+//for (var i = 4; i <= 100; i++) {
+//    nodes.add({ id: i, label: "Node " + i, tags: "tag1, tag2", desc: "This is a node."});
+//}
+
+
+
+//var edges = new vis.DataSet([
+//    { from: 1, to: 3 },
+//    { from: 1, to: 2 },
+//    { from: 2, to: 4 },
+//    { from: 2, to: 5 }
+//]);
+
+//var container = document.getElementById('mynetwork');
+
+//var data = {
+//    nodes: new vis.DataSet(nodesArray),
+//    edges: edges
+//};
+
+
+//var network = new vis.Network(container, data, options);
+
 var network;
+var nodes;
+var edges;
 var dataUrl = '/Visualization/GetPartnerData';
 
 // Make an AJAX request to fetch data from the server
@@ -65,6 +105,8 @@ $.ajax({
         };
 
         network = new vis.Network(container, data, options);
+
+        network.on("click", neighbourhoodHighlight);
     },
     error: function (error) {
         console.error('Error fetching data:', error);
@@ -81,7 +123,7 @@ var newOptions = {
 
 
 
-network.on("click", neighbourhoodHighlight);
+
 
 
 network.on("selectNode", function (params) {
