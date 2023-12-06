@@ -4,14 +4,9 @@ namespace VIPS.Models.ViewModels.Search
 {
     public class SearchViewModel
     {
-        public List<Contract> ContractList { get; set; }
+        public List<CondensedContract> ContractList { get; set; }
+        public string SearchQuery { get; set; }
 
-
-        public SearchViewModel()
-        {
-            ContractList = new List<Contract>();
-        }
-
-        
     }
+
 }

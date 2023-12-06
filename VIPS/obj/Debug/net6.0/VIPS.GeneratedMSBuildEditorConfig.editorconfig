@@ -8,89 +8,89 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = VIPS
 build_property.RootNamespace = VIPS
-build_property.ProjectDir = C:\Users\casec\Documents\GitHub\VIPS\VIPS\
+build_property.ProjectDir = C:\Users\casec\Downloads\VIPS-Sprint3.1-Joshua\VIPS\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\casec\Documents\GitHub\VIPS\VIPS
+build_property.MSBuildProjectDirectory = C:\Users\casec\Downloads\VIPS-Sprint3.1-Joshua\VIPS
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Components/Counter.razor]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Components/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Components/Visualization.razor]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Components/Visualization.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xWaXN1YWxpemF0aW9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/_Imports.razor]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Account/Create.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Account/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Account/Edit.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Account/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Account/ForgotPassword.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Account/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Account/Index.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Account/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Account/Login.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Account/ResetPassword.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Account/ResetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/CSV/CSV.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/CSV/CSV.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXENTVi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/CSV/Edit.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/CSV/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/CSV/Upload.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/CSV/Upload.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXFVwbG9hZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Home/Index.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Home/Privacy.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Search/SearchView.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Search/SearchView.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VhcmNoXFNlYXJjaFZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Shared/Error.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/_ViewImports.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/_ViewStart.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/casec/Documents/GitHub/VIPS/VIPS/Views/Shared/_Layout.cshtml]
+[C:/Users/casec/Downloads/VIPS-Sprint3.1-Joshua/VIPS/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-nkuqh3yaeg

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj": {}
+    "C:\\Users\\casec\\Downloads\\VIPS-Sprint3.1-Joshua\\VIPS\\VIPS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj": {
+    "C:\\Users\\casec\\Downloads\\VIPS-Sprint3.1-Joshua\\VIPS\\VIPS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+        "projectUniqueName": "C:\\Users\\casec\\Downloads\\VIPS-Sprint3.1-Joshua\\VIPS\\VIPS.csproj",
         "projectName": "VIPS",
-        "projectPath": "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+        "projectPath": "C:\\Users\\casec\\Downloads\\VIPS-Sprint3.1-Joshua\\VIPS\\VIPS.csproj",
         "packagesPath": "C:\\Users\\casec\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\obj\\",
+        "outputPath": "C:\\Users\\casec\\Downloads\\VIPS-Sprint3.1-Joshua\\VIPS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -87,14 +87,6 @@
             "Microsoft.Owin.Host.SystemWeb": {
               "target": "Package",
               "version": "[4.2.2, )"
-            },
-            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
-              "target": "Package",
-              "version": "[6.0.16, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.5.0, )"
             }
           },
           "imports": [

@@ -112,7 +112,7 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateAccount(LoginViewModel model)
         {
-            if (model.Email.Contains("@unf.edu") || 1 == 1) // model.Email.Contains("@unf.edu")
+            if (model.Email.Contains("@unf.edu")) // model.Email.Contains("@unf.edu")
             {
                 AppUser user = new AppUser // Create user with values from the model
                 {
