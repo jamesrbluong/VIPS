@@ -16,3 +16,40 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+/* Reset some default styles for better consistency */
+#objectTable,
+#detailTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    /* Style table header */
+    #objectTable th,
+    #detailTable th {
+        background-color: #f2f2f2;
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    /* Style alternating rows for better readability */
+    #objectTable tr:nth-child(even),
+    #detailTable tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    /* Style table cells */
+    #objectTable td,
+    #detailTable td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    /* Add hover effect to highlight rows */
+    #objectTable tr:hover,
+    #detailTable tr:hover {
+        background-color: #e0e0e0;
+    }

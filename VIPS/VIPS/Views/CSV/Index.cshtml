@@ -14,6 +14,12 @@
     <button type="submit">Upload</button>
 </form>
 
+
+@Html.ActionLink("Submit", "Submit", "CSV", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("OverWrite Submit", "OverWriteSubmit", "CSV", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Export to Notepad", "ToNotepad", "CSV", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Clear CSV", "ClearUpload", "CSV", null, new { @class = "btn btn-primary" })
+
 @if (Model != null && Model.Any())
 {
     <p>
@@ -186,40 +192,37 @@
 </table>
 
 <script>
-        // Get all rows from the first table
-        var rows = document.querySelectorAll('#objectTable tbody tr');
+    // Get all rows from the first table
+    var rows = document.querySelectorAll('#objectTable tbody tr');
 
-        // Add a click event listener to each row
-        rows.forEach(function(row) {
-            row.addEventListener('click', function() {
-                // Reset the style of all rows
-                rows.forEach(function(r) {
-                    r.style.backgroundColor = '';
-                });
-
-                // Highlight the selected row
-                row.style.backgroundColor = '#cce5ff';
-
-                // Get the data from the selected row
-                var contractID = row.cells[0].innerText;
-                // Add more variables for other columns as needed
-
-                // Populate the second table with detailed information
-                var detailTable = document.getElementById('detailTable');
-                detailTable.innerHTML = '<tr><td>ContractID:</td><td>' + contractID + '</td></tr>';
-                // Add more rows for other columns as needed
-
-                // Show the second table
-                detailTable.style.display = 'table';
+    // Add a click event listener to each row
+    rows.forEach(function (row) {
+        row.addEventListener('click', function () {
+            // Reset the style of all rows
+            rows.forEach(function (r) {
+                r.style.backgroundColor = '';
             });
+
+            // Highlight the selected row
+            row.style.backgroundColor = '#cce5ff';
+
+            // Get the data from the selected row
+            var contractID = row.cells[0].innerText;
+            var contractID = row.cells[0].innerText;
+            // Add more variables for other columns as needed
+
+            // Populate the second table with detailed information
+            var detailTable = document.getElementById('detailTable');
+            detailTable.innerHTML = '<tr><td>ContractID:</td><td>' + contractID + '</td></tr>';
+            // Add more rows for other columns as needed
+
+            // Show the second table
+            detailTable.style.display = 'table';
         });
-    </script>
+    });
+</script>
 
 
-@Html.ActionLink("Submit", "Submit", "CSV", null, new { @class = "btn btn-primary" })
-@Html.ActionLink("OverWrite Submit", "OverWriteSubmit", "CSV", null, new { @class = "btn btn-primary" })
-@Html.ActionLink("Export to Notepad", "ToNotepad", "CSV", null, new { @class = "btn btn-primary" })
-@Html.ActionLink("Clear CSV", "ClearUpload", "CSV", null, new { @class = "btn btn-primary" })
 
 @if (TempData["AlertMessage"] != null)
 {
