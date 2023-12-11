@@ -1,17 +1,25 @@
-﻿@model VIPS.Models.ViewModels.Search.SearchViewModel
-
-@{
-    ViewData["Title"] = "View";
+﻿@{
+    ViewData["Title"] = "Search";
 }
-<!DOCTYPE html>
-<html>
+
 <h1>View</h1>
 
-<form method="GET" action="/search">
-    <input type="text" name="query" placeholder="Search...">
+<form method="get" asp-action="SearchView">
+    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
     <button type="submit">Search</button>
-</form>
 
+    <label for="sortOrder">Filter:</label>
+    <select id="sortOrder" name="sortOrder">
+        <option value="alphabetical">Alphabetical (A-Z)</option>
+        <option value="close_exp">Closest to Expiration</option>
+        <option value="far_exp">Furthest from Expiration</option>
+    </select>
+    <script>
+        document.getElementById('sortOrder').addEventListener('change', function () {
+            this.form.submit();
+        });
+    </script>
+</form>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -109,4 +117,3 @@
         }
     </tbody>
 </table>
-</html>

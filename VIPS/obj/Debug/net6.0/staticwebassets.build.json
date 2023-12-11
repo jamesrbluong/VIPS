@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IuwY8seoTAJ6nt6QMB8IYnhHkI+n+HYXVR58QkyVihw=",
+  "Hash": "Ycfphe03xl/Er/fd+QeeARZbd/eV5+vjgoWZWQ5ZKVk=",
   "Source": "VIPS",
   "BasePath": "_content/VIPS",
   "Mode": "Default",
@@ -66,6 +66,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\Images\\UNFLogo.png"
+    },
+    {
+      "Identity": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\css\\csv.css",
+      "SourceId": "VIPS",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\",
+      "BasePath": "_content/VIPS",
+      "RelativePath": "css/csv.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\csv.css"
     },
     {
       "Identity": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\css\\site.css",

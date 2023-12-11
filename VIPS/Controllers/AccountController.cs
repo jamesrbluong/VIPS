@@ -55,41 +55,89 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LoginAccount(LoginViewModel model)
         {
-            if (!model.Email.IsNullOrEmpty()) // if the email is not empty
+            if (ValidateEmail(model.Email) == false || ValidatePassword(model.Password) == false)
             {
-                AppUser user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null) // if the user associated with the email exists
-                {
-                    await _signInManager.SignOutAsync(); // sign out current user if they are signed in
-                    if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).Succeeded)
-                    {
-                        var roleNameList = await _userManager.GetRolesAsync(user); // each user only has one role
+                return View("Login", model);
+            }
 
-                        HttpContext.Session.SetString("CurrentEmail", user.Email);
-                        HttpContext.Session.SetString("CurrentUserRole", roleNameList.FirstOrDefault());
+            AppUser user = await _userManager.FindByEmailAsync(model.Email);
 
-                        TempData["success"] = user.UserName + " logged in successfully!";
+            if (user == null)
+            {
+                TempData["error"] = "Invalid Email or Password";
+                return View("Login", model);
+            }
 
-                        Console.WriteLine(roleNameList.FirstOrDefault());
+            await _signInManager.SignOutAsync(); // sign out current user if they are signed in
+            if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).Succeeded)
+            {
+                var roleNameList = await _userManager.GetRolesAsync(user); // each user only has one role
 
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).IsLockedOut)
-                    {
-                        TempData["error"] = "Too many failed login attempts. Try again later.";
-                        
-                    }
-                    else
-                    {
-                        TempData["error"] = "Invalid Email or Password";
-                    }
-                    // await _userManager.SetLockoutEndDateAsync(user, null);
+                HttpContext.Session.SetString("CurrentEmail", user.Email);
+                HttpContext.Session.SetString("CurrentUserRole", roleNameList.FirstOrDefault());
 
-                }
+                TempData["success"] = user.Email + " logged in successfully!";
+
+                return RedirectToAction("Index", "Home");
+            }
+            else if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).IsLockedOut)
+            {
+                TempData["error"] = "Too many failed login attempts. Try again later.";
+            }
+            else
+            {
+                TempData["error"] = "Invalid Email or Password";
             }
 
             return View("Login", model);
+            
         }
+
+        
+
+        public bool ValidateEmail(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+            {
+                TempData["error"] = "Email must not be empty";
+                return false;
+            }
+
+            if (!email.Contains("@unf.edu"))
+            {
+                TempData["error"] = "Email must contain \"@unf.edu\"";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidatePassword(string password)
+        {
+            if (String.IsNullOrEmpty(password))
+            {
+                TempData["error"] = "Password must not be empty";
+                return false;
+            }
+
+            return true;
+        }
+        public bool ValidatePassword(string password, string confirmPassword) 
+        {
+            if (String.IsNullOrEmpty(password) || String.IsNullOrEmpty(confirmPassword))
+            {
+                TempData["error"] = "Password must not be empty";
+                return false;
+            }
+            if (!password.Equals(confirmPassword))
+            {
+                TempData["error"] = "Passwords do not match";
+                return false;
+            }
+
+            return true;
+        }
+        
 
         [AllowAnonymous]
         public async Task<RedirectResult> Logout(string returnUrl = "/")
@@ -110,41 +158,55 @@ namespace VIPS.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateAccount(LoginViewModel model)
+        public async Task<IActionResult> CreateAccount(CreateViewModel model)
         {
-            if (model.Email.Contains("@unf.edu")) // model.Email.Contains("@unf.edu")
+            if (ValidateEmail(model.Email) == false || ValidatePassword(model.Password, model.ConfirmPassword) == false)
             {
-                AppUser user = new AppUser // Create user with values from the model
+                return RedirectToAction("Create", "Account");
+            }
+
+            AppUser user = new AppUser // Create user with values from the model
+            {
+                UserName = model.Email,
+                Email = model.Email
+            };
+
+            Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                TempData["success"] = "Account created successfully";
+                await _userManager.AddToRoleAsync(user, "UNF_Employee");
+
+                LoginViewModel temp = new LoginViewModel
                 {
-                    UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    Password = model.Password
                 };
 
-                Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+                return await LoginAccount(temp);
 
-                if (result.Succeeded)
-                {
-                    TempData["success"] = "Account created successfully";
-                    await _userManager.AddToRoleAsync(user, "UNF_Employee");
-                    return await LoginAccount(model);
-
-                }
-                else
-                {
-                    TempData["error"] = "Error occurred, account was not created";
-                }
             }
             else
             {
-                TempData["error"] = "Error occurred, email must contain @unf.edu";
+                TempData["error"] = "Error occurred, account was not created";
+                return RedirectToAction("Create", "Account");
             }
-
-            return RedirectToAction("Create", "Account");
         }
+
+        
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
+            var currUser = await _userManager.FindByIdAsync(User.Identity.GetUserId());
+
+            if (currUser.Id.ToString().Equals(id))
+            {
+                TempData["error"] = "You cannot delete the account you are currently logged in to";
+                return RedirectToAction("Index", "Account");
+            }
+
             AppUser user = await _userManager.FindByIdAsync(id);
 
             if (user != null)
@@ -168,7 +230,16 @@ namespace VIPS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
+            var currUser = await _userManager.FindByIdAsync(User.Identity.GetUserId());
+
+            if (currUser.Id.ToString().Equals(id))
+            {
+                TempData["error"] = "You cannot edit the account you are currently logged in to";
+                return RedirectToAction("Index", "Account");
+            }
+
             AppUser oldUser = await _userManager.FindByIdAsync(id);
+
             if (oldUser != null)
             {
                 var roleNameList = await _userManager.GetRolesAsync(oldUser);
@@ -192,46 +263,46 @@ namespace VIPS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAccount(EditViewModel model)
         {
-            // Console.WriteLine("Test1 " + model.NewUserName + model.NewUserEmail);
-            AppUser oldUser = await _userManager.FindByIdAsync(model.Id);
-            if (oldUser != null)
+            AppUser user = await _userManager.FindByIdAsync(model.Id);
+            if (user != null)
             {
-                await ChangeRole(model);
-
-                await _userManager.UpdateAsync(oldUser);
-
-                TempData["success"] = "User has been successfully edited";
-                return RedirectToAction("Index", "Account");
+                await ChangeRole(model, user);
             }
-
-            TempData["error"] = "User not found";
+            else
+            {
+                TempData["error"] = "User not found";
+            }
+            
             return RedirectToAction("Index", "Account");
 
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ChangeRole(EditViewModel model)
+        public async Task<IActionResult> ChangeRole(EditViewModel model, AppUser user)
         {
-            // Console.WriteLine("Test: " + model.Id + " AND " + model.RoleName);
-            AppUser user = await _userManager.FindByIdAsync(model.Id); // gets the user whos role is being changed
-
-            if (user != null)
+            if (user == null || string.IsNullOrEmpty(model.RoleName))
             {
-                var oldRoleNameList = await _userManager.GetRolesAsync(user); // gets a list of all the roles the user is assigned to
-                var oldRoleName = oldRoleNameList.FirstOrDefault(); // gets the first element of the list, there should only be one role per user
-
-                if ((oldRoleName != null) && !oldRoleName.Equals(model.RoleName))
-                {
-                    await _userManager.RemoveFromRoleAsync(user, oldRoleName);
-                    TempData["success"] = "Role for user has been updated from " + oldRoleName + " to " + model.RoleName;
-                    await _userManager.AddToRoleAsync(user, model.RoleName);
-                    return RedirectToAction("Index", "Account");
-                }
-
+                TempData["error"] = "No change to user role";
+                return View("EditAccount", model.Id);
             }
-            TempData["error"] = "No change to user role";
+
+            var oldRoleNameList = await _userManager.GetRolesAsync(user); // gets a list of all the roles the user is assigned to
+            var oldRoleName = oldRoleNameList.FirstOrDefault(); // gets the first element of the list, there should only be one role per user
+
+            if (!string.IsNullOrEmpty(oldRoleName) && !oldRoleName.Equals(model.RoleName))
+            {
+                await _userManager.RemoveFromRoleAsync(user, oldRoleName);
+                await _userManager.AddToRoleAsync(user, model.RoleName);
+
+                await _userManager.UpdateAsync(user);
+
+                TempData["success"] = "Role for user has been updated from " + oldRoleName + " to " + model.RoleName;
+                
+            }
+
             return RedirectToAction("Index", "Account");
+
         }
 
         
@@ -296,7 +367,9 @@ namespace VIPS.Controllers
             if (user != null)
             {
                 // Send Email
+                await _userManager.UpdateSecurityStampAsync(user);
                 string resetCode = await _userManager.GeneratePasswordResetTokenAsync(user); // Guid.NewGuid().ToString();
+                Console.WriteLine(resetCode);
                 SendEmail(user.Email, resetCode, "ResetPassword");
 
                 await _userManager.UpdateAsync(user);
@@ -325,9 +398,8 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ResetPasswordUpdate(ResetPasswordViewModel model)
         {
-            if (!model.NewPassword.Equals(model.ConfirmPassword))
+            if (ValidatePassword(model.NewPassword, model.ConfirmPassword) == false)
             {
-                TempData["error"] = "Passwords do not match";
                 return RedirectToAction("ResetPassword", "Account", new
                 {
                     code = model.ResetCode,
@@ -345,8 +417,8 @@ namespace VIPS.Controllers
                     Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.ResetPasswordAsync(user, model.ResetCode, model.NewPassword);
                     if (result.Succeeded)
                     {
-
                         TempData["success"] = "Password updated successfully";
+                        return RedirectToAction("Login", "Account");
                     }
                     else
                     {
@@ -357,14 +429,14 @@ namespace VIPS.Controllers
                 {
                     TempData["error"] = "User account has no password";
                 }
-                await _userManager.UpdateSecurityStampAsync(user);
+                // await _userManager.UpdateSecurityStampAsync(user);
             }
             else
             {
                 TempData["error"] = "User not found";
             }
 
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("ForgotPassword", "Account");
         }
 
         

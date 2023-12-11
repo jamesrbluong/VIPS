@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\Content\\Images\\UNFLogo.png"
     },
     {
+      "Id": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\css\\csv.css",
+      "PackagePath": "staticwebassets\\css\\csv.css"
+    },
+    {
       "Id": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Text;
 using VIPS.Models.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 namespace VIPS.Controllers
 {
@@ -213,6 +214,7 @@ namespace VIPS.Controllers
         public IActionResult OverWriteSubmit()
         {
             DeleteContractDataFromTable();
+            PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -230,6 +232,7 @@ namespace VIPS.Controllers
                 }
             }
             DeleteContractDataFromTable();
+            PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -351,7 +354,41 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
-  
+        public void PopulatePartners()
+        {
+            var partnerData = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.AgencyName))
+                .Select(csv => csv.AgencyName.Trim())
+                .Distinct()
+                .ToList();
+
+            // var existingPartners = _db.Partners.ToList();
+
+            // Populate Partner model with unique AgencyNames
+            foreach (var partnerItem in partnerData)
+            {
+                // Check for duplicates in memory (LINQ to Objects)
+                //if (!existingPartners.Any(p => RemovePunct(p.Name).Equals(RemovePunct(partnerItem), StringComparison.OrdinalIgnoreCase)))
+                //{
+                var partner = new Partner
+                {
+                    Name = partnerItem
+                };
+                _db.Partners.Add(partner);
+                //}
+            }
+            _db.SaveChanges();
+
+        }
+
+
+        private static string RemovePunct(string input)
+        {
+            return Regex.Replace(input, @"[.,'\-]", "");
+        }
+
+
+
     }
 
     }

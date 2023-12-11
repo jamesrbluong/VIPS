@@ -14,8 +14,12 @@ namespace VIPS.Controllers
         {
             _db = db;
         }
-        public IActionResult SearchView()
+        public async Task<IActionResult> SearchView(string sortOrder, string searchString)
         {
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "alphabetical" : "";
+            ViewData["DateSortParm"] = sortOrder == "close_exp" ? "far_exp" : "close_exp";
+            ViewData["CurrentFilter"] = searchString;
+
             var tempcontracts = _db.Contracts.Select(x => new CondensedContract
             {
                 ContractID = x.ContractID,
@@ -30,15 +34,40 @@ namespace VIPS.Controllers
                 FacultyInitiator = x.FacultyInitiator,
                 Renewal = x.Renewal,
                 State = x.State,
-                Year =  x.Year
+                Year = x.Year
             }).ToList();
 
-            var model = new SearchViewModel()
+            var model = new SearchViewModel
             {
                 ContractList = tempcontracts
             };
 
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                model.ContractList = model.ContractList
+                    .Where(c => c.ContractName.Contains(searchString))
+                    .ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "alphabetical":
+                    model.ContractList = model.ContractList.OrderByDescending(c => c.ContractName).ToList();
+                    break;
+                case "close_exp":
+                    model.ContractList = model.ContractList.OrderBy(c => DateTime.Parse(c.CreatedOn)).ToList();
+                    break;
+                case "far_exp":
+                    model.ContractList = model.ContractList.OrderByDescending(c => DateTime.Parse(c.CreatedOn)).ToList();
+                    break;
+                default:
+                    model.ContractList = model.ContractList.OrderBy(c => c.ContractName).ToList();
+                    break;
+            }
+
             return View(model);
+
         }
     }
 }

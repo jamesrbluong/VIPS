@@ -1,6 +1,6 @@
 ﻿var options = {
     autoResize: true,
-    height: window.innerHeight,
+    height: '100%',
     nodes: {
         font: {
             color: "#FFFFFF",
@@ -8,20 +8,22 @@
             face: "open sans"
         },
         fixed: false,
+        widthConstraint: 200,
+        heightConstraint: 100,
         shape: "circle",
         color: "rgba(10, 35, 63,1)"
-        
+
     },
 
     physics: {
         enabled: true,
         barnesHut: {
-            gravitationalConstant: -1000,
+            gravitationalConstant: -2000,
             centralGravity: 0.1,
             springLength: 200,
             springConstant: 0.05,
             damping: 0.15,
-            avoidOverlap: 1   
+            avoidOverlap: 2
         }
     },
     edges: {
@@ -32,42 +34,42 @@
     }
 };
 
+var network;
+var dataUrl = '/Visualization/GetPartnerData';
 
-//var nodes = new vis.DataSet([
-//    { id: 1, label: "Node 1" },
-//    { id: 2, label: "Node 2" },
-//    { id: 3, label: "Node 3" },
-//    { id: 4, label: "Node 4" }
-//]);
+// Make an AJAX request to fetch data from the server
+$.ajax({
+    url: dataUrl,
+    type: 'GET',
+    dataType: 'json',
+    success: function (data) {
+        var nodesArray = [];
+        var edgesArray = [];
 
-var nodes = new vis.DataSet();
+        // Assuming the data is an array of partners
+        // Modify this part based on your actual data structure
+        for (var i = 0; i < data.length; i++) {
+            nodesArray.push({
+                id: data[i].partnerId,
+                label: data[i].name
+                // Add other properties as needed
+            });
+        }
 
-nodes.add({ id: 1, label: "School of Computing", tags: "tag1, tag2", desc: "This is a node." });
-nodes.add({ id: 2, label: "Partner 1", tags: "tag1, tag2", desc: "This is a node." });
-nodes.add({ id: 3, label: "Partner 2", tags: "tag1, tag2", desc: "This is a node." });
+        // Initialize the network with the retrieved data
+        var container = document.getElementById('mynetwork');
 
-for (var i = 4; i <= 100; i++) {
-    nodes.add({ id: i, label: "Node " + i, tags: "tag1, tag2", desc: "This is a node."});
-}
+        var data = {
+            nodes: new vis.DataSet(nodesArray),
+            edges: new vis.DataSet(edgesArray)
+        };
 
-
-
-var edges = new vis.DataSet([
-    { from: 1, to: 3 },
-    { from: 1, to: 2 },
-    { from: 2, to: 4 },
-    { from: 2, to: 5 }
-]);
-
-var container = document.getElementById('mynetwork');
-
-var data = {
-    nodes: nodes,
-    edges: edges
-};
-
-
-var network = new vis.Network(container, data, options);
+        network = new vis.Network(container, data, options);
+    },
+    error: function (error) {
+        console.error('Error fetching data:', error);
+    }
+});
 
 var newOptions = {
     nodes: {
@@ -91,8 +93,8 @@ network.on("selectNode", function (params) {
     });
     if (nodes.get(nodeId).hiddenLabel == undefined) {
         document.getElementById("sidebarName").innerHTML = nodes.get(nodeId).label;
-        document.getElementById("sidebarTags").innerHTML = nodes.get(nodeId).tags;
-        document.getElementById("sidebarDesc").innerHTML = nodes.get(nodeId).desc;
+        //document.getElementById("sidebarTags").innerHTML = nodes.get(nodeId).tags;
+        //document.getElementById("sidebarDesc").innerHTML = nodes.get(nodeId).desc;
     }
     else {
         document.getElementById("sidebarName").innerHTML = nodes.get(nodeId).hiddenLabel;

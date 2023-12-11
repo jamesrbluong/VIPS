@@ -12,5 +12,7 @@ namespace VIPS.Models.ViewModels.Account
 
         [Required]
         public string Password { get; set; }
+        [Required]
+        public string ConfirmPassword { get; set; }
     }
 }

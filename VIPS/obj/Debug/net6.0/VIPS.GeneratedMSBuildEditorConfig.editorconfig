@@ -95,3 +95,7 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/Josh/Documents/GitHub/VIPS/VIPS/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-nkuqh3yaeg
+
+[C:/Users/Josh/Documents/GitHub/VIPS/VIPS/Views/Shared/_UploadLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9VcGxvYWRMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-tl8pqzos9c

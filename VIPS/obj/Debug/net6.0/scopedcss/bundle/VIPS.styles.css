@@ -52,3 +52,57 @@ button.accept-policy[b-nkuqh3yaeg] {
     background: #0a233f;
     color: white;
 }
+/* _content/VIPS/Views/Shared/_UploadLayout.cshtml.rz.scp.css */
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand[b-tl8pqzos9c] {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a[b-tl8pqzos9c] {
+  color: #0077cc;
+}
+
+.btn-primary[b-tl8pqzos9c] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-tl8pqzos9c], .nav-pills .show > .nav-link[b-tl8pqzos9c] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top[b-tl8pqzos9c] {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom[b-tl8pqzos9c] {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-tl8pqzos9c] {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-tl8pqzos9c] {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer[b-tl8pqzos9c] {
+    white-space: nowrap;
+    line-height: 60px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999;
+    background: #0a233f;
+    color: white;
+}

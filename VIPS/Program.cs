@@ -104,7 +104,7 @@ async Task CreateRoles(IServiceProvider serviceProvider)
         // create adminUser if they do not already exist
         var adminUser = new AppUser
         {
-            UserName = "admin",
+            UserName = "admin@unf.edu",
             Email = "admin@unf.edu",
         };
         string adminPassword = "Admin123*";
