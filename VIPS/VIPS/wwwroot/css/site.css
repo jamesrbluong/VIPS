@@ -23,6 +23,7 @@ body {
 #detailTable {
     border-collapse: collapse;
     width: 100%;
+    max-width: 100%; /* Set a maximum width for the table container */
 }
 
     /* Style table header */

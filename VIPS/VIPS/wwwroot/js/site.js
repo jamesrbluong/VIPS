@@ -14,6 +14,7 @@ document.getElementById("showFilteredButton").addEventListener("click", function
 
 function showAllObjects() {
     // Display all table rows
+    console.log("showAllObjects");
     let table = document.getElementById("objectTable");
     let rows = table.getElementsByTagName("tr");
     for (let i = 0; i < rows.length; i++) {
@@ -23,12 +24,15 @@ function showAllObjects() {
 
 function showNonDuplicateObjects() {
     // Hide rows where Duplicate is true (non-visible column)
+    console.log("showNonDuplicateObjects");
     let table = document.getElementById("objectTable");
     let rows = table.getElementsByTagName("tr");
     for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
         let cells = rows[i].getElementsByTagName("td");
-        if (cells.length >= 3) {
-            let isDuplicate = cells[54].textContent.trim() === "true";
+
+        // Check if there are enough cells and if the cell at index 54 exists
+        if (cells.length > 13 && typeof cells[13].textContent !== 'undefined') {
+            let isDuplicate = cells[13].textContent.trim() === "true";
             rows[i].style.display = isDuplicate ? "none" : "table-row";
         }
     }

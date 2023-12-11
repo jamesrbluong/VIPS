@@ -66,7 +66,7 @@ namespace VIPS.Controllers
             return RedirectToAction("Index");
         } 
 
-        public IActionResult ToNotepad()
+/*        public IActionResult ToNotepad()
         {
             var csvData = _db.CSVs.ToList();
             string messageContent = "";
@@ -87,15 +87,35 @@ namespace VIPS.Controllers
             string fileName = "model_info.txt";
 
             return File(fileBytes, "text/plain", fileName);
-        }
+        }*/
 
-        public IActionResult ToExcel()
+        public IActionResult ToCSV()
         {
-            string messageContent = "";
-            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
-            string fileName = "model_info.txt";
+            var csvData = _db.CSVs.ToList();
 
-            return File(fileBytes, "text/plain", fileName);
+            // Create a StringBuilder to build the CSV content
+            var csvContent = new StringBuilder();
+
+            // Add header row
+            csvContent.AppendLine("ContractID,ErrorDescription");
+
+            // Add data rows
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.Error)
+                {
+                    csvContent.AppendLine($"{csvItem.ContractID},{csvItem.ErrorDescription}");
+                }
+            }
+
+            // Convert the string to bytes
+            byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent.ToString());
+
+            // Set the file name
+            string fileName = "CSV_Error_Export.csv";
+
+            // Return the CSV file
+            return File(fileBytes, "text/csv", fileName);
         }
 
 
