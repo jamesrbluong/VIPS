@@ -37,7 +37,7 @@
     <button id="showAllButton">Show All Objects</button>
     <button id="showFilteredButton">Show New Contracts Only</button>
 
-    <table class="table" id="objectTable">
+    <table class="custom-table" id="objectTable">
         <thead>
             <tr>
                 <th>
@@ -117,7 +117,7 @@
     </table>
 }
 
-<table class="table" id="detailTable" style="display: none;">
+<table class="custom-table" id="detailTable" style="display: none;">
     <thead>
         <tr>
             <th>
@@ -462,6 +462,16 @@
     </tbody>
 </table>
 
+
+<h2>Detailed View</h2>
+
+<div id="containerId"></div>
+<div id="containerId2"></div>
+<div id="containerId3"></div>
+<div id="containerId4"></div>
+<div id="containerId5"></div>
+<div id="containerId6"></div>
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -471,24 +481,15 @@
             var contractID = $(this).find("td:first-child").text().trim();
 
             // Call the showRowByContractID function with the contractID
-            showRowByContractID(contractID);
+            showRowByContractID1(contractID);
+            showRowByContractID2(contractID);
+            showRowByContractID3(contractID);
+            showRowByContractID4(contractID);
+            showRowByContractID5(contractID);
+            showRowByContractID6(contractID);
         });
-
-        // Function to show row by contractID
-        function showRowByContractID(contractID) {
-            // Hide all rows
-            $("#detailTable tbody tr").hide();
-
-            // Show the row with the specified ContractID
-            $("#detailTable tbody tr").filter(function () {
-                return $(this).find("td:first-child").text().trim() === contractID;
-            }).show();
-
-            // Show the table
-            $("#detailTable").show();
-        }
     });
-</script>
+</script> 
 
 
 @if (TempData["AlertMessage"] != null)
