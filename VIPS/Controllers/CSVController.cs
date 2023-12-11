@@ -214,6 +214,7 @@ namespace VIPS.Controllers
         public IActionResult OverWriteSubmit()
         {
             DeleteContractDataFromTable();
+            DeletePartnerDataFromTable();
             PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
@@ -232,6 +233,7 @@ namespace VIPS.Controllers
                 }
             }
             DeleteContractDataFromTable();
+            DeletePartnerDataFromTable();
             PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
@@ -387,6 +389,12 @@ namespace VIPS.Controllers
             return Regex.Replace(input, @"[.,'\-]", "");
         }
 
+        public void DeletePartnerDataFromTable()
+        {
+            var data = _db.Partners.ToList();
+            _db.Partners.RemoveRange(data);
+            _db.SaveChanges();
+        }
 
 
     }
