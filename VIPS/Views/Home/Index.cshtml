@@ -9,8 +9,20 @@
     <h4 >UNF Center for Community-Based Learning</h4>
 </div>
 
-<p>Test</p>
-<a asp-controller="Account" asp-action="Index">Account List</a>
+<br />
+<div>
+    <input type="text" placeholder="Search..." class="search-home" />
+    <p>Search for connections between UNF Departments and our community partners </p>
+    <a asp-action="SearchView" asp-controller="Search" class="btn btn-primary">Search</a>
+</div>
+
+<div class="container border">
+    <div id="mynetwork"></div>
+    <div id="sidebar" class="sidebar">
+        <a href="#" id="sidebarName"></a>
+        <div id="sidebarTags"></div>
+        <div id="sidebarDesc"></div>
+    </div>
+</div>
 
 
-@(await Html.RenderComponentAsync<Visualization>(RenderMode.Server))

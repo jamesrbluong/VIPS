@@ -1,4 +1,4 @@
-﻿@model VIPS.Models.Account.AccountIndexModel
+﻿@model VIPS.Models.ViewModels.Account.IndexViewModel
 
 @{
     ViewBag.Title = "User Accounts";
@@ -29,12 +29,8 @@
                 <td>
                     <a class="btn btn-success" asp-controller="Account" asp-action="Edit" asp-route-id="@user.Id">Update</a>
                     <a class="btn btn-danger" asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                    <a class="btn btn-danger" asp-controller="Account" asp-action="Role" asp-route-id="@user.Id">Change Role</a>
                 </td>
             </tr>
         }
     }
 </table>
-
-<a class="btn btn-primary" asp-action="Create">Create</a>
-<a class="btn btn-primary" asp-controller="Home" asp-action="Index">Home</a>

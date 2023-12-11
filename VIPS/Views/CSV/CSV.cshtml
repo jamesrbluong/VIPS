@@ -1,0 +1,361 @@
+﻿@model IEnumerable<VIPS.Models.Data.CSV>
+
+
+@{
+    ViewData["Title"] = "CSV";
+}
+
+<h1>CSView</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractOrigin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentStageAssignees)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaysInCurrStage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExternalContractReferenceID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FolderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Locked)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Owner)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrimaryDocument)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RelatedToContract)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RelatedToContractID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Workflow)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProgramsOrCourses)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CCECMajors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AutoRenewal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgencyMailingAddress1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgencyMailingAddress2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgencyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_AgingServicesManagement)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_AthleticTraining)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_College)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_ExerciseScience)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_HealthAdministration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_InterdisciplinaryHealthStudies)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_MentalHealthCounseling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_NurseAnesthetist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_Nursing)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_NutritionDietetics)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_PhysicalTherapy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BCH_PublicHealth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.COEHSPrograms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Department)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacultyInitiator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Graduate_Undergraduate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrimaryContact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Renewal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TitleCert)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Error)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ErrorDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duplicate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractOrigin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractTypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentStageAssignees)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysInCurrStage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExternalContractReferenceID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FolderName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Locked)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrimaryDocument)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RelatedToContract)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RelatedToContractID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StageName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workflow)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProgramsOrCourses)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CCECMajors)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AutoRenewal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractCategory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgencyMailingAddress1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgencyMailingAddress2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgencyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_AgingServicesManagement)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_AthleticTraining)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_College)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_ExerciseScience)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_HealthAdministration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_InterdisciplinaryHealthStudies)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_MentalHealthCounseling)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_NurseAnesthetist)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_Nursing)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_NutritionDietetics)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_PhysicalTherapy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BCH_PublicHealth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.COEHSPrograms)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FacultyInitiator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Graduate_Undergraduate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrimaryContact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Renewal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TitleCert)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZipCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Error)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ErrorDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duplicate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

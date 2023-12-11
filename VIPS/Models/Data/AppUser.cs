@@ -5,5 +5,6 @@ namespace VIPS.Models.Data
 {
     public class AppUser : IdentityUser<Guid>
     {
+        
     }
 }

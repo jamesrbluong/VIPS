@@ -9,16 +9,31 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMvc();
-
+//@(await Html.RenderComponentAsync<Visualization>(RenderMode.Server))
 
 builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
 
 
-builder.Services.AddSession(); 
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
+    {
+        // Lockout settings
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+    }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";  
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/Login";
+});
+
+builder.Services.AddAuthentication().AddCookie();
 
 var app = builder.Build();
 
@@ -51,6 +66,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 app.MapBlazorHub(); 
 
 
@@ -87,7 +104,7 @@ async Task CreateRoles(IServiceProvider serviceProvider)
         // create adminUser if they do not already exist
         var adminUser = new AppUser
         {
-            UserName = "admin",
+            UserName = "admin@unf.edu",
             Email = "admin@unf.edu",
         };
         string adminPassword = "Admin123*";

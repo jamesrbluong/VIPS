@@ -1,4 +1,4 @@
-﻿@model VIPS.Models.CSV
+﻿@model VIPS.Models.Data.CSV
 
 @{
     ViewData["Title"] = "Edit";
@@ -300,5 +300,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

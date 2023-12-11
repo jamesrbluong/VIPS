@@ -1,20 +1,18 @@
 html {
-  font-size: 14px;
+	font-size: 14px;
+	min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+	html {
+		font-size: 16px;
+		min-height: 100%;
+	}
 }
 
 body {
-  margin-bottom: 60px;
+	margin-bottom: 60px;
+	margin-left: 0px;
 }
 
 nav#navBar{
@@ -42,14 +40,13 @@ nav#navBar a{
 	font-size:1.075em;
 	font-weight:600;
 
-	padding-left: 30px;
-	padding-right: 30px;
+	
 }
-
 
 header{
 	background:#0a233f;
-	color:#fff
+	color:#fff;
+	margin: 0;
 }
 header .container{
 	display:flex;
@@ -60,8 +57,8 @@ header .logo{
 	padding:15px 0px;
 }
 header .logo img{
-	height:100px;
-	width:unset;
+	height: 100px;
+	width: unset;
 }
 header .right{
 	flex:1 1 auto;
@@ -69,8 +66,8 @@ header .right{
 }
 header .actionLinks{
 	margin:.5em 0 1em 0;
-	text-align:right;
-	list-style-type:none;
+	text-align: right;
+	list-style-type: none;
 }
 header .actionLinks li{
 	display:inline-block;
@@ -115,18 +112,18 @@ header .searchSelect label{
 	margin-left:10px;
 	margin-bottom:0px;
 }
-header .searchAZ{
+header .adminOptions{
 	font-size:.75em;
 	margin:0px 0px 0px 15px;
 	float:right;
 	text-align:right;
 }
-header .searchAZ a{
+header .adminOptions a{
 	color:#fff;
 	text-decoration:none;
 	font-size:.90em;
 }
-header .searchAZ a:hover{
+header .adminOptions a:hover{
 	border-bottom:#009CC7 1px dotted;
 	opacity:1;
 	color:#009CC7;
@@ -138,6 +135,11 @@ header .searchBtn{
 header input:focus{
 	outline:2px solid #81d1e2 !important;
 	outline-offset:4px !important;
+}
+
+.search-home {
+	box-sizing: border-box;
+	width: 100%;
 }
 
 

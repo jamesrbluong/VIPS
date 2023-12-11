@@ -1,4 +1,4 @@
-﻿@model VIPS.Models.Account.LoginAccountModel
+﻿@model VIPS.Models.ViewModels.Account.LoginViewModel
 
 @{
     ViewData["Title"] = "Log In";
@@ -22,4 +22,5 @@
         <input asp-for="Password" type="Password" class="form-control" />
     </div>
     <button class="btn btn-primary" type="submit">Log In</button>
+    <a asp-controller="Account" asp-action="ForgotPassword" >Forgot Password</a>
 </form>

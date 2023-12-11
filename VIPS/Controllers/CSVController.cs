@@ -1,26 +1,26 @@
 ﻿using CsvHelper;
-using VIPS.Data;
 using VIPS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Formats.Asn1;
 using System.Globalization;
-using System.IO;
 using System.Text;
+using VIPS.Models.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 namespace VIPS.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CSVController : Controller
     {
 
-        private readonly ApplicationDbContex _db;
-
-        public CSVController(ApplicationDbContex db)
+        private readonly ApplicationDbContext _db;
+        public CSVController(ApplicationDbContext db)
         {
             _db = db;
         }
-
-        public IActionResult Index()
+        
+        public IActionResult Upload()
         {
             
             var data = _db.CSVs.ToList();
@@ -32,37 +32,45 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-        public IActionResult CSView()
+        public IActionResult CSV()
         {
             var data = _db.CSVs.ToList();
             return View(data);
     }
 
     [HttpPost]
-        public IActionResult Upload(IFormFile file)
+        public IActionResult UploadFile(IFormFile file)
         {
             var records = new List<CSV>();
 
-            using (var streamReader = new StreamReader(file.OpenReadStream()))
-            using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+            if (file != null)
             {
-                streamReader.ReadLine();
-                streamReader.ReadLine();
-                records = csvReader.GetRecords<CSV>().ToList();
+                using (var streamReader = new StreamReader(file.OpenReadStream()))
+                using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                {
+                    streamReader.ReadLine();
+                    streamReader.ReadLine();
+                    records = csvReader.GetRecords<CSV>().ToList();
+                }
+
+
+                // Save the records to the database
+                _db.CSVs.AddRange(records);
+                _db.SaveChanges();
+
+                CheckForDuplicates();
+                _db.SaveChanges();
+
+                ErrorChecking();
+                _db.SaveChanges();
             }
-
+            else
+            {
+                TempData["error"] = "No file uploaded";
+            }
             
-            // Save the records to the database
-            _db.CSVs.AddRange(records);
-            _db.SaveChanges();
 
-            CheckForDuplicates();
-            _db.SaveChanges();
-
-            ErrorChecking();
-            _db.SaveChanges();
-
-            return RedirectToAction("Index");
+            return RedirectToAction("Upload", "CSV");
         } 
 
         public IActionResult ToNotepad()
@@ -87,6 +95,16 @@ namespace VIPS.Controllers
 
             return File(fileBytes, "text/plain", fileName);
         }
+
+        public IActionResult ToExcel()
+        {
+            string messageContent = "";
+            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
+            string fileName = "model_info.txt";
+
+            return File(fileBytes, "text/plain", fileName);
+        }
+
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -196,9 +214,10 @@ namespace VIPS.Controllers
         public IActionResult OverWriteSubmit()
         {
             DeleteContractDataFromTable();
+            PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
-            return RedirectToAction("Index");
+            return RedirectToAction("Upload");
         }
 
         public IActionResult Submit()
@@ -209,13 +228,14 @@ namespace VIPS.Controllers
                 if (csvItem.Error)
                 {
                     TempData["AlertMessage"] = "There is an error in one of your Contracts so you cannot submit. Please use Export Errors to get a full list.";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Upload");
                 }
             }
             DeleteContractDataFromTable();
+            PopulatePartners();
             TransferData();
             DeleteCSVDataFromTable();
-            return RedirectToAction("Index");
+            return RedirectToAction("Upload");
         }
 
         public void DeleteContractDataFromTable()
@@ -237,7 +257,7 @@ namespace VIPS.Controllers
             var data = _db.CSVs.ToList();
             _db.CSVs.RemoveRange(data);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Upload");
         }
         
 
@@ -334,7 +354,41 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
-  
+        public void PopulatePartners()
+        {
+            var partnerData = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.AgencyName))
+                .Select(csv => csv.AgencyName.Trim())
+                .Distinct()
+                .ToList();
+
+            // var existingPartners = _db.Partners.ToList();
+
+            // Populate Partner model with unique AgencyNames
+            foreach (var partnerItem in partnerData)
+            {
+                // Check for duplicates in memory (LINQ to Objects)
+                //if (!existingPartners.Any(p => RemovePunct(p.Name).Equals(RemovePunct(partnerItem), StringComparison.OrdinalIgnoreCase)))
+                //{
+                var partner = new Partner
+                {
+                    Name = partnerItem
+                };
+                _db.Partners.Add(partner);
+                //}
+            }
+            _db.SaveChanges();
+
+        }
+
+
+        private static string RemovePunct(string input)
+        {
+            return Regex.Replace(input, @"[.,'\-]", "");
+        }
+
+
+
     }
 
     }
