@@ -96,14 +96,34 @@ namespace VIPS.Controllers
             return File(fileBytes, "text/plain", fileName);
         }
 
-        public IActionResult ToExcel()
-        {
-            string messageContent = "";
-            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
-            string fileName = "model_info.txt";
+        public IActionResult ToCSV()
+{
+    var csvData = _db.CSVs.ToList();
 
-            return File(fileBytes, "text/plain", fileName);
+    // Create a StringBuilder to build the CSV content
+    var csvContent = new StringBuilder();
+
+    // Add header row
+    csvContent.AppendLine("ContractID,ErrorDescription");
+
+    // Add data rows
+    foreach (var csvItem in csvData)
+    {
+        if (csvItem.Error)
+        {
+            csvContent.AppendLine($"{csvItem.ContractID},{csvItem.ErrorDescription}");
         }
+    }
+
+    // Convert the string to bytes
+    byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent.ToString());
+
+    // Set the file name
+    string fileName = "CSV_Error_Export.csv";
+    
+    // Return the CSV file
+    return File(fileBytes, "text/csv", fileName);
+}
 
 
         public async Task<IActionResult> Edit(int? id)
