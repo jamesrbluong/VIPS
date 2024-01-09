@@ -35,7 +35,8 @@ namespace VIPS.Controllers
         {
             var model = new IndexViewModel
             {
-                UserList = _userManager.Users
+                UserList = _userManager.Users,
+                AccountTotal = _userManager.Users.Count()
             };
 
             return View(model);
@@ -369,7 +370,6 @@ namespace VIPS.Controllers
                 // Send Email
                 await _userManager.UpdateSecurityStampAsync(user);
                 string resetCode = await _userManager.GeneratePasswordResetTokenAsync(user); // Guid.NewGuid().ToString();
-                Console.WriteLine(resetCode);
                 SendEmail(user.Email, resetCode, "ResetPassword");
 
                 await _userManager.UpdateAsync(user);
@@ -377,8 +377,8 @@ namespace VIPS.Controllers
 
             }
 
-            model.Sent = true;
-            return View("ForgotPassword", model);
+            TempData["success"] = "Email with further instructions was sent successfully";
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

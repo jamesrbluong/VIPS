@@ -489,3 +489,12 @@ C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Ow
 C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.Owin.Host.SystemWeb.dll
 C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Owin.dll
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\scopedcss\Views\Shared\_UploadLayout.cshtml.rz.scp.css
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\scopedcss\Views\Shared\_UploadLayout.cshtml.rz.scp.css
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Blazored.Toast.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.AspNetCore.Components.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Forms.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Web.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Microsoft.JSInterop.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\System.IO.Pipelines.dll

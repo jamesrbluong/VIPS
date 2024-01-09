@@ -28,9 +28,9 @@ nav#navBar a{
 .MenuHoriz{
 	width:100%;
 	margin:auto;
+	margin-left:60px;
 	display:flex;
 	flex-direction:row;
-	justify-content:space-between;
 	align-items:stretch;
 }
 .MenuHoriz>li{
@@ -39,8 +39,7 @@ nav#navBar a{
 	align-items:center;
 	font-size:1.075em;
 	font-weight:600;
-
-	
+	margin-left:15px;
 }
 
 header{
@@ -140,6 +139,113 @@ header input:focus{
 .search-home {
 	box-sizing: border-box;
 	width: 100%;
+}
+
+.box-container {
+	box-sizing: border-box;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	height: 500px;
+	left: 33%;
+	top: 33%;
+	background: #FFFFFF;
+	border: 1px solid #000000;
+}
+
+.box-heading {
+	text-align: center;
+}
+
+.box-form {
+	margin-left: 50px;
+	margin-right: 50px;
+}
+
+.box-forminput {
+
+}
+
+.box-button {
+	background: #0A233F;
+	border: 1px solid #000000;
+	width: 250px;
+	height: 40px;
+	margin-left: 75px;
+	margin-right: 75px;
+	font-size: 18px;
+	color: white;
+	
+	
+}
+
+.box-rememberMe {
+	-webkit-appearance: checkbox;
+	-moz-appearance: checkbox;
+	appearance: checkbox;
+	display: inline-block;
+	width: auto;
+	margin-left: 0px;
+}
+
+.box-forgotPassword {
+	display: inline-block;
+	float: right;
+	margin-right: 0px;
+
+}
+
+.box-bottomtext {
+	display: block;
+	text-align: center;
+	font-size: 14px;
+	margin-top: 2px;
+	vertical-align: top;
+}
+a.box-bottomtext {
+	margin-top: -17px;
+}
+
+.box-padding {
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+
+.account-header {
+	padding-top: 25px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.account-search {
+	font-size: 16px;
+	display: inline-block;
+}
+
+.account-edit {
+	color: black;
+	text-decoration: none;
+	float: right;
+}
+
+.account-delete {
+	color: black;
+	text-decoration: none;
+	float: right;
+	padding-left: 10px;
+}
+
+table, th, td {
+	border-collapse: collapse; 
+	border: 1px solid black;
+	border-top: 1px solid black;
+	
+}
+
+tr:nth-child(even) {
+	background-color: #EDEEEE;
+	
 }
 
 
