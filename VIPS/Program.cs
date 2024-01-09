@@ -80,7 +80,7 @@ app.MapBlazorHub();
 
 app.Run();
 
-Console.WriteLine("test gitignore");
+Console.WriteLine("test gitignore 2");
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
     Console.WriteLine("Initialize admin and roles");
