@@ -38,7 +38,6 @@ namespace VIPS.Controllers
                 UserList = _userManager.Users,
                 AccountTotal = _userManager.Users.Count()
             };
-            Console.WriteLine("")
             return View(model);
         }
 

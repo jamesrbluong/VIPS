@@ -35,7 +35,8 @@
 };
 
 var network;
-var dataUrl = '/Visualization/GetPartnerData';
+var dataUrl = '/Visualization/GetVisualizationData';
+// var dataUrl = '/Visualization/GetPartnerData';
 
 // Make an AJAX request to fetch data from the server
 $.ajax({
@@ -49,6 +50,7 @@ $.ajax({
         // Assuming the data is an array of partners
         // Modify this part based on your actual data structure
         for (var i = 0; i < data.length; i++) {
+            console.log(data[i].partnerId + data[i].name);
             nodesArray.push({
                 id: data[i].partnerId,
                 label: data[i].name

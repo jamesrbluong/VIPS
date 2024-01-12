@@ -233,9 +233,12 @@ namespace VIPS.Controllers
 
         public IActionResult OverWriteSubmit()
         {
+            DeleteVisualizationDataFromTable(); // here
             DeleteContractDataFromTable();
             DeletePartnerDataFromTable();
             PopulatePartners();
+            DeleteDepartmentDataFromTable(); // here
+            PopulateDepartments();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -252,9 +255,12 @@ namespace VIPS.Controllers
                     return RedirectToAction("Upload");
                 }
             }
+            DeleteVisualizationDataFromTable(); // here
             DeleteContractDataFromTable();
             DeletePartnerDataFromTable();
             PopulatePartners();
+            DeleteDepartmentDataFromTable(); // here
+            PopulateDepartments();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -370,6 +376,7 @@ namespace VIPS.Controllers
                 };
 
                 _db.Contracts.Add(contractItem);
+                CreateVisualizationTable(contractItem.ContractID, contractItem.Department, contractItem.AgencyName);
             }
             // Remove each record from the DbSet
             _db.CSVs.RemoveRange(csvData);
@@ -403,11 +410,66 @@ namespace VIPS.Controllers
 
         }
 
+        public void PopulateDepartments()
+        { 
+            var deptData = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.Department))
+                .Select(csv => csv.Department.Trim())
+                .Distinct()
+                .ToList();
 
-        private static string RemovePunct(string input)
-        {
-            return Regex.Replace(input, @"[.,'\-]", "");
+            foreach (var deptItem in deptData)
+            {
+                var dept = new Department
+                {
+                    Name = deptItem,
+                    SchoolId = 7
+                };
+                _db.Departments.Add(dept);
+                
+            }
+            _db.SaveChanges();
         }
+
+        public void CreateVisualizationTable(int ContractId, string DepartmentName, string PartnerName)
+        {
+            var DepartmentId = _db.Departments
+                .Where(dept => DepartmentName.Equals(dept.Name))
+                .Select(dept => dept.DepartmentId)
+                .FirstOrDefault();
+            Console.WriteLine(DepartmentId + DepartmentName);
+
+            var PartnerId = _db.Partners
+                .Where(partner => PartnerName.Equals(partner.Name))
+                .Select(partner => partner.PartnerId)
+                .FirstOrDefault();
+            Console.WriteLine(PartnerId + PartnerName);
+
+            var connection = new Visualization
+            {
+                ContractId = ContractId,
+                DeptId = DepartmentId,
+                PartnerId = PartnerId
+            };
+
+            _db.Visualizations.Add(connection);
+            _db.SaveChanges();
+        }
+
+        public void DeleteVisualizationDataFromTable()
+        {
+            var data = _db.Visualizations.ToList();
+            _db.Visualizations.RemoveRange(data);
+            _db.SaveChanges();
+        }
+
+        public void DeleteDepartmentDataFromTable()
+        {
+            var data = _db.Departments.ToList();
+            _db.Departments.RemoveRange(data);
+            _db.SaveChanges();
+        }
+
 
         public void DeletePartnerDataFromTable()
         {
@@ -416,6 +478,11 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
+
+        private static string RemovePunct(string input)
+        {
+            return Regex.Replace(input, @"[.,'\-]", "");
+        }
 
     }
 

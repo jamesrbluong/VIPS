@@ -7,10 +7,10 @@ namespace VIPS.Models.Data
     public class Visualization
     {
         
-        public string ContractId { get; set; } = string.Empty;
+        public int ContractId { get; set; } 
         
-        public string DeptId { get; set; } = string.Empty;
+        public int DeptId { get; set; }
         
-        public string PartnerId { get; set; } = string.Empty;
+        public int PartnerId { get; set; }
     }
 }

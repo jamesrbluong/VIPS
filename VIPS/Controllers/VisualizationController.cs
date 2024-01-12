@@ -26,5 +26,19 @@ namespace VIPS.Controllers
             return Json(data);
         }
 
+        public IActionResult GetDepartmentData()
+        {
+            var data = _db.Departments.ToList();
+            return Json(data);
+        }
+
+        public IActionResult GetVisualizationData()
+        {
+            var data = _db.Visualizations.ToList();
+            data.ForEach(Console.WriteLine);
+
+            return Json(data);
+        }
+
     }
 }
