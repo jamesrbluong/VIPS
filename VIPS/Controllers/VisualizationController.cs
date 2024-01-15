@@ -23,6 +23,7 @@ namespace VIPS.Controllers
         public IActionResult GetPartnerData()
         {
             var data = _db.Partners.ToList();
+            // data.ForEach(Console.WriteLine);
             return Json(data);
         }
 

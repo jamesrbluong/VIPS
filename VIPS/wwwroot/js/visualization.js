@@ -30,33 +30,151 @@
         smooth: {
             type: 'continuous', // Set type to 'continuous' for straight lines without curves
             roundness: 0 // Set roundness to 0 to remove any rounding effect
-        }
+        },
+        color: "black"
     }
 };
 
 var network;
-var dataUrl = '/Visualization/GetVisualizationData';
+
+var deptUrl = '/Visualization/GetDepartmentData';
+var partnerUrl = '/Visualization/GetPartnerData';
+var viusalizationUrl = '/Visualization/GetVisualizationData';
+
+var nodesArray = [];
+var edgesArray = [];
+
 // var dataUrl = '/Visualization/GetPartnerData';
 
-// Make an AJAX request to fetch data from the server
+
+$.when(
+    $.ajax({
+        url: deptUrl,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log(JSON.stringify(data));
+            var deptArray = [];
+            for (var i = 0; i < data.length; i++) {
+                console.log(data[i].departmentId);
+                deptArray.push({
+                    id: data[i].departmentId,
+                    label: data[i].name
+                });
+            }
+            nodesArray = nodesArray.concat(deptArray);
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    }),
+    $.ajax({
+        url: partnerUrl,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log(JSON.stringify(data));
+            var partnerArray = [];
+            for (var i = 0; i < data.length; i++) {
+                partnerArray.push({
+                    id: data[i].partnerId,
+                    label: data[i].name,
+                    color: "red"
+                });
+            }
+            nodesArray = nodesArray.concat(partnerArray);
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    }),
+    $.ajax({
+        url: viusalizationUrl,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log(JSON.stringify(data));
+            for (var i = 0; i < data.length; i++) {
+                edgesArray.push({
+                    from: data[i].deptId,
+                    to: data[i].partnerId,
+                    id: data[i].contractId
+                });
+            }
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    })
+).then(function (r1, r2, r3) {
+    var container = document.getElementById('mynetwork');
+
+    nodesArray.forEach(function (entry) {
+        console.log(entry);
+    });
+    edgesArray.forEach(function (entry) {
+        console.log(entry);
+    });
+    /*
+    var edges = new vis.DataSet([
+        { from: 42, to: 168 },
+        { from: 43, to: 164 },
+        { from: 42, to: 165 },
+        { from: 41, to: 166 }
+    ]);
+    */
+    var data = {
+        nodes: new vis.DataSet(nodesArray),
+        edges: new vis.DataSet(edgesArray)
+    };
+
+    network = new vis.Network(container, data, options);
+});
+
+
+
+/*
 $.ajax({
-    url: dataUrl,
+    url: visualizationUrl,
     type: 'GET',
     dataType: 'json',
     success: function (data) {
-        var nodesArray = [];
-        var edgesArray = [];
+        
+        
+        
+        
+
+        console.log(JSON.stringify(data));
 
         // Assuming the data is an array of partners
         // Modify this part based on your actual data structure
         for (var i = 0; i < data.length; i++) {
-            console.log(data[i].partnerId + data[i].name);
-            nodesArray.push({
+            console.log(data[i].contractId);
+            deptArray.push({
+                id: data[i].deptId,
+                label: data[i].deptId
+                // Add other properties as needed
+            });
+
+            partnerArray.push({
                 id: data[i].partnerId,
-                label: data[i].name
+                label: data[i].partnerId
+                // Add other properties as needed
+            });
+
+            
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            edgesArray.push({
+                from: data[i].deptId,
+                to: data[i].partnerId,
+                label: data[i].contractId
                 // Add other properties as needed
             });
         }
+
+        nodesArray = deptArray.concat(partnerArray);
 
         // Initialize the network with the retrieved data
         var container = document.getElementById('mynetwork');
@@ -68,25 +186,23 @@ $.ajax({
 
         network = new vis.Network(container, data, options);
     },
-    error: function (error) {
-        console.error('Error fetching data:', error);
-    }
+    
 });
+*/
 
 var newOptions = {
     nodes: {
         fixed: true
     }
+    
 }
 
 
 
 
 
-network.on("click", neighbourhoodHighlight);
-
-
-network.on("selectNode", function (params) {
+network.on('click', neighbourhoodHighlight);
+network.on('selectNode', function (params) {
     var nodeId = params.nodes[0];
     var node = network.body.nodes[nodeId];
     network.moveTo({
@@ -95,8 +211,8 @@ network.on("selectNode", function (params) {
     });
     if (nodes.get(nodeId).hiddenLabel == undefined) {
         document.getElementById("sidebarName").innerHTML = nodes.get(nodeId).label;
-        //document.getElementById("sidebarTags").innerHTML = nodes.get(nodeId).tags;
-        //document.getElementById("sidebarDesc").innerHTML = nodes.get(nodeId).desc;
+        document.getElementById("sidebarTags").innerHTML = nodes.get(nodeId).tags;
+        document.getElementById("sidebarDesc").innerHTML = nodes.get(nodeId).desc;
     }
     else {
         document.getElementById("sidebarName").innerHTML = nodes.get(nodeId).hiddenLabel;
