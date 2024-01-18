@@ -174,9 +174,9 @@ namespace VIPS.Migrations
                 name: "Visualizations",
                 columns: table => new
                 {
-                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DeptId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PartnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ContractId = table.Column<int>(type: "int", nullable: false),
+                    DeptId = table.Column<int>(type: "int", nullable: false),
+                    PartnerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
