@@ -142,7 +142,7 @@ $.when(
         network.setOptions({ physics: false });
     });
 
-    network.on('click', neighbourhoodHighlight);
+    // network.on('click', neighbourhoodHighlight);
     network.on('selectNode', function (params) {
         var nodeId = params.nodes[0];
         var node = network.body.nodes[nodeId];
@@ -150,26 +150,35 @@ $.when(
             position: { x: node.x, y: node.y },
             animation: true
         });
-        if (nodes.get(nodeId).hiddenLabel == undefined) {
-            document.getElementById("sidebarName").innerHTML = nodes.get(nodeId).label;
+        if (data.nodes.get(nodeId).hiddenLabel == undefined) {
+
+
+
+            document.getElementById("sidebarName").innerHTML = data.nodes.get(nodeId).label;
             //document.getElementById("sidebarTags").innerHTML = nodes.get(nodeId).tags;
             //document.getElementById("sidebarDesc").innerHTML = nodes.get(nodeId).desc;
         }
         else {
-            document.getElementById("sidebarName").innerHTML = nodes.get(nodeId).hiddenLabel;
+            document.getElementById("sidebarName").innerHTML = data.nodes.get(nodeId).hiddenLabel;
         }
-        document.getElementById("sidebar").style.width = "500px";
+        document.getElementById("sidebar").style.width = "30%";
         
+        // options.width = "70%";
+        // network.setOptions(options);
+        document.getElementById("mynetwork").style.width = "70%";
+        network.redraw();
     });
 
     network.on("deselectNode", function (params) {
         document.getElementById("sidebar").style.width = "0px";
+        // options.width = "100%";
+        // network.setOptions(options);
+
+        document.getElementById("mynetwork").style.width = "100%";
     });
 
-    var allNodes = nodes.get({ returnType: "Object" });
+    var allNodes = data.nodes.get({ returnType: "Object" });
     var highlightActive = false;
-
-
 
     function neighbourhoodHighlight(params) {
         // if something is selected:
@@ -226,6 +235,7 @@ $.when(
         }
         nodes.update(updateArray);
     }
+    
 });
 
 var newOptions = {

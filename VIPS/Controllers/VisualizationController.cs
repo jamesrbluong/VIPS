@@ -41,5 +41,29 @@ namespace VIPS.Controllers
             return Json(data);
         }
 
+        public IActionResult FillDepartmentData(int departmentId)
+        {
+            
+            
+            var data = "";
+            
+            return Json(data);
+        }
+
+        public IActionResult FillPartnerData()
+        {
+            var data = "";
+
+            return Json(data);
+        }
+
+        public IActionResult FillContractData(int id)
+        {
+            var data = "";
+
+            return Json(data);
+        }
+
+
     }
 }

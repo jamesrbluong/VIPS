@@ -235,6 +235,8 @@ namespace VIPS.Controllers
         {
             DeleteVisualizationDataFromTable(); // here
             DeleteContractDataFromTable();
+            DeleteSchoolDataFromTable(); // here
+            PopulateSchools();
             DeletePartnerDataFromTable();
             PopulatePartners();
             DeleteDepartmentDataFromTable(); // here
@@ -255,12 +257,10 @@ namespace VIPS.Controllers
                     return RedirectToAction("Upload");
                 }
             }
-            DeleteVisualizationDataFromTable(); // here
-            DeleteContractDataFromTable();
-            DeletePartnerDataFromTable();
-            PopulatePartners();
-            DeleteDepartmentDataFromTable(); // here
-            PopulateDepartments();
+
+            DeleteDatabaseEntries();
+            PopulateDatabaseEntries();
+
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -383,6 +383,58 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
+        public void DeleteDatabaseEntries()
+        {
+            DeleteVisualizationDataFromTable(); // here
+            DeleteContractDataFromTable();
+            DeleteDepartmentDataFromTable(); // here
+            DeletePartnerDataFromTable();
+        }
+
+        public void PopulateDatabaseEntries()
+        {
+            PopulateSchools();
+            PopulateDepartments();
+            PopulatePartners();
+        }
+
+        public List<string> GetSchoolNames()
+        {
+            List<string> schoolNames = new List<string>();
+            var folderName = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.FolderName))
+                .Select(csv => csv.FolderName.Trim())
+                .Distinct()
+                .ToList();
+
+            foreach (var folder in folderName)
+            {
+                var schoolName = Regex.Replace(folder, @"^((?:[^\\]+\\)+)[^\\]+\\[^\\]+$", "");
+                schoolName = Regex.Replace(schoolName, @"\/.*$", "");
+
+                Console.WriteLine(schoolName);
+
+                schoolNames.Add(schoolName);
+            }
+
+            return schoolNames;
+        }
+
+        public void PopulateSchools()
+        {
+            List<string> schoolNames = GetSchoolNames();
+
+            foreach (var name in schoolNames)
+            {
+                var school = new School
+                {
+                    Name = name
+                };
+                _db.Schools.Add(school);
+            }
+            
+            _db.SaveChanges();
+        }
         public void PopulatePartners()
         {
             var partnerData = _db.CSVs
@@ -391,26 +443,19 @@ namespace VIPS.Controllers
                 .Distinct()
                 .ToList();
 
-            // var existingPartners = _db.Partners.ToList();
-
-            // Populate Partner model with unique AgencyNames
             foreach (var partnerItem in partnerData)
             {
-                // Check for duplicates in memory (LINQ to Objects)
-                //if (!existingPartners.Any(p => RemovePunct(p.Name).Equals(RemovePunct(partnerItem), StringComparison.OrdinalIgnoreCase)))
-                //{
                 var partner = new Partner
                 {
                     Name = partnerItem
                 };
                 _db.Partners.Add(partner);
-                //}
             }
             _db.SaveChanges();
 
         }
 
-        public void PopulateDepartments()
+        public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
         { 
             var deptData = _db.CSVs
                 .Where(csv => !string.IsNullOrEmpty(csv.Department))
@@ -420,6 +465,8 @@ namespace VIPS.Controllers
 
             foreach (var deptItem in deptData)
             {
+                
+
                 var dept = new Department
                 {
                     Name = deptItem,
@@ -478,6 +525,12 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
+        public void DeleteSchoolDataFromTable()
+        {
+            var data = _db.Schools.ToList();
+            _db.Schools.RemoveRange(data);
+            _db.SaveChanges();
+        }
 
         private static string RemovePunct(string input)
         {
