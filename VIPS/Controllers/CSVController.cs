@@ -293,7 +293,6 @@ namespace VIPS.Controllers
         {
             if (_db.CSVs.ToList().Count > 0)
             {
-                
                 var csvData = _db.CSVs.ToList();
                 var contractData = _db.Contracts.ToList();
 
@@ -398,7 +397,27 @@ namespace VIPS.Controllers
             PopulatePartners();
         }
 
-        public List<string> GetSchoolNames()
+        public string FolderNameRegex(string FolderName)
+        {
+            var split = FolderName.Split('\\');
+            if (split.Length >= 2)
+            {
+                var result = split[split.Length - 2];
+                result = Regex.Replace(result, @"\\.*$", "");
+                return result;
+            }
+
+
+            // var schoolName = Regex.Replace(FolderName, @"^((?:[^\\]+\\)+)[^\\]+\\[^\\]+$", "");
+            // Console.WriteLine("FolderName test 0" + schoolName);
+            // schoolName = Regex.Replace(schoolName, @"\\.*$", "");
+
+            // Console.WriteLine("FolderName test 1" + schoolName);
+
+            return "";
+        }
+
+        public void PopulateSchools()
         {
             List<string> schoolNames = new List<string>();
             var folderName = _db.CSVs
@@ -409,20 +428,12 @@ namespace VIPS.Controllers
 
             foreach (var folder in folderName)
             {
-                var schoolName = Regex.Replace(folder, @"^((?:[^\\]+\\)+)[^\\]+\\[^\\]+$", "");
-                schoolName = Regex.Replace(schoolName, @"\/.*$", "");
+                var schoolName = FolderNameRegex(folder);
 
-                Console.WriteLine(schoolName);
+                Console.WriteLine("FolderName test 2" + schoolName);
 
                 schoolNames.Add(schoolName);
             }
-
-            return schoolNames;
-        }
-
-        public void PopulateSchools()
-        {
-            List<string> schoolNames = GetSchoolNames();
 
             foreach (var name in schoolNames)
             {
@@ -435,6 +446,34 @@ namespace VIPS.Controllers
             
             _db.SaveChanges();
         }
+        public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
+        {
+            var deptData = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName))
+                .Select(csv => new { dept = csv.Department, folderName = csv.FolderName })
+                .Distinct()
+                .ToList();
+
+            foreach (var item in deptData)
+            {
+                Console.WriteLine("test 999" + FolderNameRegex(item.folderName) + item.dept);
+
+                var schoolId = _db.Schools
+                    .Where(school => school.Name.Equals(FolderNameRegex(item.folderName)))
+                    .Select(school => school.SchoolId)
+                    .FirstOrDefault();
+
+                var dept = new Department
+                {
+                    Name = item.dept,
+                    SchoolId = schoolId
+                };
+                _db.Departments.Add(dept);
+
+            }
+            _db.SaveChanges();
+        }
+
         public void PopulatePartners()
         {
             var partnerData = _db.CSVs
@@ -453,29 +492,6 @@ namespace VIPS.Controllers
             }
             _db.SaveChanges();
 
-        }
-
-        public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
-        { 
-            var deptData = _db.CSVs
-                .Where(csv => !string.IsNullOrEmpty(csv.Department))
-                .Select(csv => csv.Department.Trim())
-                .Distinct()
-                .ToList();
-
-            foreach (var deptItem in deptData)
-            {
-                
-
-                var dept = new Department
-                {
-                    Name = deptItem,
-                    SchoolId = 7
-                };
-                _db.Departments.Add(dept);
-                
-            }
-            _db.SaveChanges();
         }
 
         public void CreateVisualizationTable(int ContractId, string DepartmentName, string PartnerName)
