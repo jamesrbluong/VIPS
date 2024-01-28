@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VIPS.Models.Data
 {
-    [PrimaryKey(nameof(ContractId), nameof(DeptId), nameof(PartnerId))]
+    [PrimaryKey(nameof(ContractId), nameof(FromId), nameof(ToId))]
     public class Visualization
     {
         
         public int ContractId { get; set; } 
         
-        public int DeptId { get; set; }
+        public string FromId { get; set; }
         
-        public int PartnerId { get; set; }
+        public string ToId { get; set; }
     }
 }

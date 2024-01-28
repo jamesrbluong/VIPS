@@ -738,16 +738,16 @@ namespace VIPS.Migrations
 
             modelBuilder.Entity("VIPS.Models.Data.Visualization", b =>
                 {
-                    b.Property<string>("ContractId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DeptId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("FromId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PartnerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ToId")
+                        .HasColumnType("int");
 
-                    b.HasKey("ContractId", "DeptId", "PartnerId");
+                    b.HasKey("ContractId", "FromId", "ToId");
 
                     b.ToTable("Visualizations");
                 });

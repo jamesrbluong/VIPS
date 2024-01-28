@@ -20,7 +20,7 @@
         barnesHut: {
             gravitationalConstant: -2000,
             centralGravity: 0.1,
-            springLength: 200,
+            springLength: 1000,
             springConstant: 0.05,
             damping: 0.15,
             avoidOverlap: 2
@@ -31,20 +31,25 @@
             type: 'continuous', // Set type to 'continuous' for straight lines without curves
             roundness: 0 // Set roundness to 0 to remove any rounding effect
         },
+        width: 3,
         color: "black"
     },
     interaction: {
         dragNodes: false,
         navigationButtons: true,
+        selectConnectedEdges: false,
 
         hideNodesOnDrag: false,
         hideEdgesOnDrag: false,
         hideEdgesOnZoom: false,
     }
+
+
 };
 
 var network;
 
+var schoolUrl = '/Visualization/GetSchoolData';
 var deptUrl = '/Visualization/GetDepartmentData';
 var partnerUrl = '/Visualization/GetPartnerData';
 var viusalizationUrl = '/Visualization/GetVisualizationData';
@@ -57,17 +62,40 @@ var edgesArray = [];
 
 $.when(
     $.ajax({
+        url: schoolUrl,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            var schoolArray = [];
+            console.log(JSON.stringify(data));
+            for (var i = 0; i < data.length; i++) {
+                schoolArray.push({
+                    id: "s" + data[i].schoolId,
+                    label: data[i].name,
+                    type: "school",
+                    color: "purple",
+                    size: 100
+                    
+                });
+            }
+            nodesArray = nodesArray.concat(schoolArray);
+        },
+        error: function (error) {
+            console.error('Error fetching data:', error);
+        }
+    }),
+    $.ajax({
         url: deptUrl,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            console.log(JSON.stringify(data));
             var deptArray = [];
             for (var i = 0; i < data.length; i++) {
-                console.log(data[i].departmentId);
                 deptArray.push({
-                    id: data[i].departmentId,
-                    label: data[i].name
+                    id: "d" + data[i].departmentId,
+                    label: data[i].name,
+                    schoolId: data[i].schoolId,
+                    type: "department"
                 });
             }
             nodesArray = nodesArray.concat(deptArray);
@@ -81,12 +109,12 @@ $.when(
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            console.log(JSON.stringify(data));
             var partnerArray = [];
             for (var i = 0; i < data.length; i++) {
                 partnerArray.push({
-                    id: data[i].partnerId,
+                    id: "p" + data[i].partnerId,
                     label: data[i].name,
+                    type: "partner",
                     color: "red"
                 });
             }
@@ -100,37 +128,63 @@ $.when(
         url: viusalizationUrl,
         type: 'GET',
         dataType: 'json',
-        success: function (data) {
-            console.log(JSON.stringify(data));
-            for (var i = 0; i < data.length; i++) {
-                edgesArray.push({
-                    from: data[i].deptId,
-                    to: data[i].partnerId,
-                    id: data[i].contractId
-                });
+        success: function (params) {
+            console.log(JSON.stringify(params));
+            for (var i = 0; i < params.length; i++) {
+                var tempEdge = ""
+
+                if (params[i].contractId != 0) {
+                    tempEdge =
+                    {
+                        from: params[i].fromId,
+                        to: params[i].toId,
+                        id: params[i].contractId,
+                        CreatedOn: "",
+                        ContractName: "",
+                        Owner: "",
+                        StageName: "",
+                        UpdatedOn: "",
+                        AgencyName: "",
+                        City: "",
+                        Department: "",
+                        FacultyInitiator: "",
+                        Renewal: "",
+                        State: "",
+                        Year: "",
+                        type: "contract"
+                    }
+                }
+                else {
+                    tempEdge =
+                    {
+                        from: params[i].fromId,
+                        to: params[i].toId,
+                        CreatedOn: "",
+                        ContractName: "",
+                        Owner: "",
+                        StageName: "",
+                        UpdatedOn: "",
+                        AgencyName: "",
+                        City: "",
+                        Department: "",
+                        FacultyInitiator: "",
+                        Renewal: "",
+                        State: "",
+                        Year: "",
+                        type: "contract"
+                    }
+                }
+                edgesArray.push(tempEdge);
+                
             }
         },
         error: function (error) {
             console.error('Error fetching data:', error);
         }
     })
-).then(function (r1, r2, r3) {
+).then(function () {
     var container = document.getElementById('mynetwork');
 
-    nodesArray.forEach(function (entry) {
-        console.log(entry);
-    });
-    edgesArray.forEach(function (entry) {
-        console.log(entry);
-    });
-    /*
-    var edges = new vis.DataSet([
-        { from: 42, to: 168 },
-        { from: 43, to: 164 },
-        { from: 42, to: 165 },
-        { from: 41, to: 166 }
-    ]);
-    */
     var data = {
         nodes: new vis.DataSet(nodesArray),
         edges: new vis.DataSet(edgesArray)
@@ -138,6 +192,16 @@ $.when(
 
     network = new vis.Network(container, data, options);
 
+    
+    for (i = 0; i < nodesArray.length; i++) {
+        if (nodesArray[i].type == "school") {
+            var clusterNode = network.clusterByConnection(nodesArray[i].id);
+            // console.log(clusterNode);
+            // network.clustering.updateClusteredNode(clusterNode.id, { shape: 'box', label: nodesArray[i].label });
+        }
+    }
+    
+    
     network.on("stabilizationIterationsDone", function () {
         network.setOptions({ physics: false });
     });
@@ -145,106 +209,262 @@ $.when(
     // network.on('click', neighbourhoodHighlight);
     network.on('selectNode', function (params) {
         var nodeId = params.nodes[0];
-        var node = network.body.nodes[nodeId];
+        var node = data.nodes.get(nodeId);
+        var sidebarNode = document.getElementById("sidebarNode");
+        var sidebarEdge = document.getElementById("sidebarEdge");
+        var ul = document.createElement('ul');
+
+        var nodeLocation = network.body.nodes[nodeId];
+
+        sidebarEdge.replaceChildren();
+
         network.moveTo({
-            position: { x: node.x, y: node.y },
+            position: { x: nodeLocation.x, y: nodeLocation.y },
             animation: true
         });
-        if (data.nodes.get(nodeId).hiddenLabel == undefined) {
 
-
-
-            document.getElementById("sidebarName").innerHTML = data.nodes.get(nodeId).label;
-            //document.getElementById("sidebarTags").innerHTML = nodes.get(nodeId).tags;
-            //document.getElementById("sidebarDesc").innerHTML = nodes.get(nodeId).desc;
+        if (network.isCluster(nodeId) === true) {
+            // Open the cluster associated with the clicked node
+            network.openCluster(nodeId);
         }
         else {
-            document.getElementById("sidebarName").innerHTML = data.nodes.get(nodeId).hiddenLabel;
+            if (node.hiddenLabel == undefined) {
+
+                if (node.type == 'school') {
+                    $.ajax({
+                        url: '/Visualization/FillSchoolData',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { schoolId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
+                        success: function (data) {
+                            var newElements = [];
+                            newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
+
+                            // ADD CONSTANT SCHOOL INFO
+                            newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
+                            newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+
+                            for (i = 0; i < data.length; i++) {
+                                var li = document.createElement('li')
+                                var anchor = createAnchor(data[i].departmentId, "sidebarEntry");
+                                anchor.href = '/Search/Contract/' + data[i].departmentId;
+                                anchor.setAttribute('target', '_blank');
+
+                                // newElements.push(anchor);
+                                li.appendChild(anchor);
+                                ul.appendChild(li);
+
+                            }
+                            newElements.push(ul);
+
+                            sidebarNode.replaceChildren(...newElements);
+
+
+
+                        },
+                        error: function (error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+                else if (node.type == 'department') {
+                    $.ajax({
+                        url: '/Visualization/FillDepartmentData',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { departmentId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
+                        success: function (data) {
+                            var newElements = [];
+                            newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
+
+                            // ADD CONSTANT PARTNER INFO
+
+                            newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+
+                            for (i = 0; i < data.length; i++) {
+                                var li = document.createElement('li')
+                                var anchor = createAnchor(data[i].contractId, "sidebarEntry");
+                                anchor.href = '/Search/Contract/' + data[i].contractId;
+                                anchor.setAttribute('target', '_blank');
+
+                                // newElements.push(anchor);
+                                li.appendChild(anchor);
+                                ul.appendChild(li);
+
+                            }
+                            newElements.push(ul);
+
+                            sidebarNode.replaceChildren(...newElements);
+
+
+
+                        },
+                        error: function (error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+                else if (node.type == 'partner') {
+                    $.ajax({
+                        url: '/Visualization/FillPartnerData',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { partnerId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
+                        success: function (data) {
+                            var newElements = [];
+                            newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
+
+                            // ADD CONSTANT PARTNER INFO
+
+                            newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+
+                            for (i = 0; i < data.length; i++) {
+                                var li = document.createElement('li')
+                                var anchor = createAnchor(data[i].contractId, "sidebarEntry");
+                                anchor.href = '/Search/Contract/' + data[i].contractId;
+                                anchor.setAttribute('target', '_blank');
+
+                                // newElements.push(anchor);
+                                li.appendChild(anchor);
+                                ul.appendChild(li);
+
+                            }
+                            newElements.push(ul);
+
+                            sidebarNode.replaceChildren(...newElements);
+
+                        },
+                        error: function (error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+            }
+            else {
+                document.getElementById("sidebarName").innerHTML = node.hiddenLabel;
+            }
+            openSidebar();
+            network.redraw();
         }
-        document.getElementById("sidebar").style.width = "30%";
-        
-        // options.width = "70%";
-        // network.setOptions(options);
-        document.getElementById("mynetwork").style.width = "70%";
-        network.redraw();
     });
 
     network.on("deselectNode", function (params) {
-        document.getElementById("sidebar").style.width = "0px";
-        // options.width = "100%";
-        // network.setOptions(options);
-
-        document.getElementById("mynetwork").style.width = "100%";
+        closeSidebar();
     });
 
-    var allNodes = data.nodes.get({ returnType: "Object" });
-    var highlightActive = false;
+    network.on('selectEdge', function (info) {
+        var edgeId = info.edges[0];
+        var edge = data.edges.get(edgeId);
+        var sidebarNode = document.getElementById("sidebarNode");
+        var sidebarEdge = document.getElementById("sidebarEdge");
 
-    function neighbourhoodHighlight(params) {
-        // if something is selected:
-        if (params.nodes.length > 0) {
-            highlightActive = true;
-            var i, j;
-            var selectedNode = params.nodes[0];
-            var degrees = 1;
+        sidebarNode.replaceChildren();
 
-            // mark all nodes as hard to read.
-            for (var nodeId in allNodes) {
-                allNodes[nodeId].color = "rgba(167, 168, 169,0.5)";
-                if (allNodes[nodeId].hiddenLabel === undefined) {
-                    allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
-                    allNodes[nodeId].label = undefined;
+        if (edge.hiddenLabel == undefined) {
+            $.ajax({
+                url: '/Visualization/FillContractData',
+                type: 'GET',
+                dataType: 'json',
+                data: { contractId: edge.id }, 
+                success: function (params) {
+                    var updatedEdge =
+                    {
+                        id: params.contractID,
+                        CreatedOn: params.createdOn,
+                        ContractName: params.contractName,
+                        Owner: params.owner,
+                        StageName: params.stageName,
+                        UpdatedOn: params.updatedOn,
+                        AgencyName: params.agencyName,
+                        City: params.city,
+                        Department: params.department,
+                        FacultyInitiator: params.facultyInitiator,
+                        Renewal: params.renewal,
+                        State: params.state,
+                        Year: params.year 
+                    };
+
+                    data.edges.update(updatedEdge);
+                    edge = data.edges.get(edgeId);
+
+                    var anchor = createAnchor(edge.ContractName + " [" + edge.id + "]", "sidebarTitle");
+                    anchor.href = '/Search/Contract/' + edge.id;
+                    anchor.setAttribute('target', '_blank');
+
+                    sidebarEdge.replaceChildren(
+                        anchor,
+                        createAnchor("Department: " + edge.Department, "sidebarData"),
+                        createAnchor("Partner Name: " + edge.AgencyName, "sidebarData"),
+                        createAnchor("Owner: " + edge.Owner, "sidebarData"),
+                        createAnchor("Faculty Initiator: " + edge.FacultyInitiator, "sidebarData"),
+                        createAnchor("Stage Name: " + edge.StageName, "sidebarData"),
+                        createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
+                        createAnchor("City: " + edge.City, "sidebarData"),
+                        createAnchor("State: " + edge.State, "sidebarData"),
+                        createAnchor("Year: " + edge.Year, "sidebarData"),
+                        createAnchor("Updated On: " + edge.UpdatedOn, "sidebarData"),
+                        createAnchor("Renewal: " + edge.Renewal, "sidebarData"),
+                    );
+                    
+                },
+                error: function (error) {
+                    console.error('Error fetching data:', error);
                 }
-            }
-            var connectedNodes = network.getConnectedNodes(selectedNode);
-            var allConnectedNodes = [];
-
-
-            // all first degree nodes get their own color and their label back
-            for (i = 0; i < connectedNodes.length; i++) {
-                allNodes[connectedNodes[i]].color = "rgba(10, 35, 63,1)";
-                if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
-                    allNodes[connectedNodes[i]].label =
-                        allNodes[connectedNodes[i]].hiddenLabel;
-                    allNodes[connectedNodes[i]].hiddenLabel = undefined;
-                }
-            }
-
-            // the main node gets its own color and its label back.
-            allNodes[selectedNode].color = "rgba(10, 35, 63,1)";
-            if (allNodes[selectedNode].hiddenLabel !== undefined) {
-                allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
-                allNodes[selectedNode].hiddenLabel = undefined;
-            }
-        } else if (highlightActive === true) {
-            // reset all nodes
-            for (var nodeId in allNodes) {
-                allNodes[nodeId].color = "rgba(10, 35, 63,1)";
-                if (allNodes[nodeId].hiddenLabel !== undefined) {
-                    allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
-                    allNodes[nodeId].hiddenLabel = undefined;
-                }
-            }
-            highlightActive = false;
+            });
+            
         }
-        var updateArray = [];
-        for (nodeId in allNodes) {
-            if (allNodes.hasOwnProperty(nodeId)) {
-                updateArray.push(allNodes[nodeId]);
-            }
+        else {
+            document.getElementById("sidebarName").innerHTML = edge.hiddenLabel;
         }
-        nodes.update(updateArray);
-    }
-    
+        if (!isGuid(edgeId)) {
+            openSidebar();
+        }
+        
+
+        network.redraw();
+    });
+
+    network.on("deselectEdge", function (params) {
+        closeSidebar();
+    });
+
 });
 
+function openSidebar() {
+    document.getElementById("sidebar").style.visibility = "visible";
+    document.getElementById("sidebar").style.width = "30%";
+    document.getElementById("mynetwork").style.width = "70%";
+}
+
+function closeSidebar() {
+    document.getElementById("sidebar").style.visibility = "hidden";
+    document.getElementById("sidebar").style.width = "0px";
+    document.getElementById("mynetwork").style.width = "100%";
+}
+
+function createAnchor(textContent, c) {
+    var anchor = document.createElement('a');
+    anchor.textContent = textContent;
+    anchor.className = c;
+    return anchor;
+}
+
+function isGuid(value) {
+    var regex = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i;
+    var match = regex.exec(value);
+    return match != null;
+}
+
+
+
+/*
 var newOptions = {
     nodes: {
         fixed: true
     }
     
 }
-
+*/
 
 
 

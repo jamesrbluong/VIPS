@@ -13,8 +13,9 @@
 }
 
 .sidebar {
+    visibility: hidden;
     height: 650px;
-    width: 30%;
+    width: 0px;
     position: relative;
     z-index: 1;
     top: 0;
@@ -23,27 +24,35 @@
     overflow-x: hidden;
     padding-top: 60px;
 }
+    .sidebar div:first-child {
+        padding: 8px 8px 8px 32px;
+    }
 
     .sidebar a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #111;
+        color: black;
         display: block;
-        transition: 0.3s;
+        text-decoration: none;
     }
 
-    .sidebar div {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 20px;
-        color: #111;
-        display: block;
-        transition: 0.3s;
-    }
-
-    .sidebar a:hover {
+    .sidebar a:any-link {
+        color: #0d6efd;
         text-decoration: underline;
-        color: #6495ED;
     }
+
+    .sidebar .sidebarTitle {
+        font-size: 25px;
+    }
+
+    .sidebar .sidebarData {
+        font-size: 18px;
+    }
+
+    .sidebar .sidebarEntry {
+        font-size: 18px;
+    }
+
+    
+
+
+
 

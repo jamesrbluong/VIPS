@@ -69,5 +69,12 @@ namespace VIPS.Controllers
             return View(model);
 
         }
+
+        public IActionResult Contract (int id)
+        {
+            var contract = _db.Contracts.Where(x => x.ContractID == id).FirstOrDefault();
+
+            return View(contract);
+        }
     }
 }

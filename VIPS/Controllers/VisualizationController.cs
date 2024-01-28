@@ -1,7 +1,7 @@
 ﻿using VIPS.Models;
 using Microsoft.AspNetCore.Mvc;
 using VIPS.Models.Data;
-
+using VIPS.Models.ViewModels.Search;
 
 namespace VIPS.Controllers
 {
@@ -27,41 +27,86 @@ namespace VIPS.Controllers
             return Json(data);
         }
 
+        public IActionResult GetSchoolData()
+        {
+            var data = _db.Schools.ToList();
+            // data.ForEach(Console.WriteLine);
+            return Json(data);
+        }
+
         public IActionResult GetDepartmentData()
         {
             var data = _db.Departments.ToList();
             return Json(data);
         }
 
+        [HttpGet]
         public IActionResult GetVisualizationData()
         {
             var data = _db.Visualizations.ToList();
-            data.ForEach(Console.WriteLine);
+            return Json(data);
+        }
+
+        
+        [HttpGet]
+        public JsonResult FillSchoolData(int schoolId)
+        {
+            Console.WriteLine("test dept fill" + schoolId);
+
+            // This is wrong
+            var data = _db.Departments.Where(x => x.SchoolId == schoolId).Select(x => new { departmentId = x.DepartmentId }).ToList();
+
+            return Json(data);
+        }
+        
+
+        [HttpGet]
+        public JsonResult FillDepartmentData(string departmentId)
+        {
+            Console.WriteLine("test dept fill" + departmentId);
+            
+            var data = _db.Visualizations.Where(x => x.FromId == departmentId).Select(x => new { contractId = x.ContractId } ).ToList();
+            
+            return Json(data);
+        }
+
+        [HttpGet]
+        public IActionResult FillPartnerData(string partnerId)
+        {
+            var data = _db.Visualizations.Where(x => x.ToId == partnerId).Select(x => new { contractId = x.ContractId }).ToList();
 
             return Json(data);
         }
 
-        public IActionResult FillDepartmentData(int departmentId)
+        [HttpGet]
+        public IActionResult FillContractData(int contractId)
         {
+            Console.WriteLine("test contract fill" + contractId);
+
+            var contract = _db.Contracts.Where(x => x.ContractID == contractId).FirstOrDefault();
+            if (contract != null)
+            {
+                var data = new CondensedContract
+                {
+                    ContractID = contractId,
+                    CreatedOn = contract.CreatedOn,
+                    ContractName = contract.ContractName,
+                    Owner = contract.Owner,
+                    StageName = contract.StageName,
+                    UpdatedOn = contract.UpdatedOn,
+                    AgencyName = contract.AgencyName,
+                    City = contract.City,
+                    Department = contract.Department,
+                    FacultyInitiator = contract.FacultyInitiator,
+                    Renewal = contract.Renewal,
+                    State = contract.State,
+                    Year = contract.Year
+                };
+                
+                return Json(data);
+            }
+            return Json("");
             
-            
-            var data = "";
-            
-            return Json(data);
-        }
-
-        public IActionResult FillPartnerData()
-        {
-            var data = "";
-
-            return Json(data);
-        }
-
-        public IActionResult FillContractData(int id)
-        {
-            var data = "";
-
-            return Json(data);
         }
 
 

@@ -7,6 +7,7 @@ using System.Text;
 using VIPS.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using System.Diagnostics.Contracts;
 
 namespace VIPS.Controllers
 {
@@ -314,11 +315,11 @@ namespace VIPS.Controllers
         {
             // Retrieve all records from the table
             var csvData = _db.CSVs.ToList();
-            var contractData = _db.Contracts.ToList();
+            // var contractData = _db.Contracts.ToList();
 
             foreach (var csvItem in csvData)
             {
-                var contractItem = new Contract
+                var contractItem = new Models.Data.Contract
                 {
                     ContractID = csvItem.ContractID,
                     RelatedToContractID = csvItem.RelatedToContractID,
@@ -375,11 +376,34 @@ namespace VIPS.Controllers
                 };
 
                 _db.Contracts.Add(contractItem);
-                CreateVisualizationTable(contractItem.ContractID, contractItem.Department, contractItem.AgencyName);
+
+                string from = "N/A";
+                string to = "N/A";
+
+                if (!string.IsNullOrEmpty(contractItem.Department))
+                {
+                    from = contractItem.Department;
+                    to = contractItem.AgencyName;
+                    AddVisualizationConnection(contractItem.ContractID, from, to, false);
+                }
+                else if (!string.IsNullOrEmpty(contractItem.COEHSPrograms))
+                {
+                    from = contractItem.COEHSPrograms;
+                    to = contractItem.AgencyName;
+                    AddVisualizationConnection(contractItem.ContractID, from, to, false);
+                }
+                else if (!string.IsNullOrEmpty(FolderNameRegex(contractItem.FolderName)))
+                {
+                    from = FolderNameRegex(contractItem.FolderName);
+                    to = contractItem.Department;
+                    AddVisualizationConnection(contractItem.ContractID, from, to, true);
+                }
             }
             // Remove each record from the DbSet
             _db.CSVs.RemoveRange(csvData);
             _db.SaveChanges();
+
+            AddSchoolToDepartmentConnections();
         }
 
         public void DeleteDatabaseEntries()
@@ -406,13 +430,6 @@ namespace VIPS.Controllers
                 result = Regex.Replace(result, @"\\.*$", "");
                 return result;
             }
-
-
-            // var schoolName = Regex.Replace(FolderName, @"^((?:[^\\]+\\)+)[^\\]+\\[^\\]+$", "");
-            // Console.WriteLine("FolderName test 0" + schoolName);
-            // schoolName = Regex.Replace(schoolName, @"\\.*$", "");
-
-            // Console.WriteLine("FolderName test 1" + schoolName);
 
             return "";
         }
@@ -450,14 +467,12 @@ namespace VIPS.Controllers
         {
             var deptData = _db.CSVs
                 .Where(csv => !string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName))
-                .Select(csv => new { dept = csv.Department, folderName = csv.FolderName })
+                .Select(csv => new { dept = csv.Department ?? csv.COEHSPrograms, folderName = csv.FolderName })
                 .Distinct()
                 .ToList();
 
             foreach (var item in deptData)
             {
-                Console.WriteLine("test 999" + FolderNameRegex(item.folderName) + item.dept);
-
                 var schoolId = _db.Schools
                     .Where(school => school.Name.Equals(FolderNameRegex(item.folderName)))
                     .Select(school => school.SchoolId)
@@ -494,6 +509,7 @@ namespace VIPS.Controllers
 
         }
 
+        /*
         public void CreateVisualizationTable(int ContractId, string DepartmentName, string PartnerName)
         {
             var DepartmentId = _db.Departments
@@ -516,6 +532,71 @@ namespace VIPS.Controllers
             };
 
             _db.Visualizations.Add(connection);
+            _db.SaveChanges();
+        }
+        */
+
+        public void AddVisualizationConnection(int ContractId, string FromName, string ToName, bool isSchool)
+        {
+            string FromId = "";
+            string ToId = "";
+
+            if (isSchool)
+            {
+                FromId = "s" + _db.Schools
+                .Where(school => FromName.Equals(school.Name))
+                .Select(school => school.SchoolId)
+                .FirstOrDefault();
+                ToId = "p" + _db.Partners
+                .Where(partner => ToName.Equals(partner.Name))
+                .Select(partner => partner.PartnerId)
+                .FirstOrDefault();
+            }
+            else
+            {
+                FromId = "d" + _db.Departments
+                .Where(dept => FromName.Equals(dept.Name))
+                .Select(dept => dept.DepartmentId)
+                .FirstOrDefault();
+
+                ToId = "p" + _db.Partners
+                .Where(partner => ToName.Equals(partner.Name))
+                .Select(partner => partner.PartnerId)
+                .FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(FromId) && !string.IsNullOrEmpty(ToId))
+            {
+                var connection = new Visualization
+                {
+                    ContractId = ContractId,
+                    FromId = FromId,
+                    ToId = ToId
+                };
+                _db.Visualizations.Add(connection);
+                _db.SaveChanges();
+            }
+        }
+
+        public void AddSchoolToDepartmentConnections()
+        {
+            string FromId = "N/A";
+            string ToId = "N/A";
+            
+            var departments = _db.Departments.ToList();
+            foreach (var department in departments)
+            {
+                FromId = "s" + department.SchoolId;
+                ToId = "d" + department.DepartmentId;
+
+                var connection = new Visualization
+                {
+                    ContractId = 0,
+                    FromId = FromId,
+                    ToId = ToId
+                };
+                _db.Visualizations.Add(connection);
+            }
             _db.SaveChanges();
         }
 
