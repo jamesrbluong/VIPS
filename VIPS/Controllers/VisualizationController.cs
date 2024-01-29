@@ -29,8 +29,8 @@ namespace VIPS.Controllers
 
         public IActionResult GetSchoolData()
         {
-            // var data = _db.Schools.ToList(); // if school has no depts, don't add
-            var data = _db.Schools.Where(x => x.Departments != null && x.Departments.Any());
+            var data = _db.Schools.ToList(); // if school has no depts, don't add
+            // var data = _db.Schools.Where(x => x.Departments != null && x.Departments.Any());
             return Json(data);
         }
 

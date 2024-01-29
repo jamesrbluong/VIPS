@@ -5,25 +5,30 @@
         font: {
             color: "#FFFFFF",
             align: 'center',
-            face: "open sans"
+            face: "open sans",
+            size: 62
         },
         fixed: false,
-        widthConstraint: 200,
-        heightConstraint: 100,
+        widthConstraint: 500, // 200
+        heightConstraint: 250, // 100
         shape: "circle",
+        shapeProperties: {
+            interpolation: false    // 'true' for intensive zooming
+        },
+        mass: 4,
         color: "rgba(10, 35, 63,1)"
 
     },
-
     physics: {
         enabled: true,
+        stabilizations: false,
         barnesHut: {
             gravitationalConstant: -2000,
             centralGravity: 0.1,
-            springLength: 1000,
-            springConstant: 0.05,
+            springLength: 2000,
+            springConstant: 0.01,
             damping: 0.15,
-            avoidOverlap: 2
+            avoidOverlap: 1
         }
     },
     edges: {
@@ -34,6 +39,9 @@
         width: 3,
         color: "black"
     },
+    layout: {
+        improvedLayout: true
+    },
     interaction: {
         dragNodes: false,
         navigationButtons: true,
@@ -43,6 +51,7 @@
         hideEdgesOnDrag: false,
         hideEdgesOnZoom: false,
     }
+    
 
 
 };
@@ -67,14 +76,14 @@ $.when(
         dataType: 'json',
         success: function (data) {
             var schoolArray = [];
-            console.log(JSON.stringify(data));
             for (var i = 0; i < data.length; i++) {
                 schoolArray.push({
                     id: "s" + data[i].schoolId,
                     label: data[i].name,
                     type: "school",
                     color: "purple",
-                    size: 100
+                    width: 500,
+                    height: 250
                     
                 });
             }
@@ -95,7 +104,9 @@ $.when(
                     id: "d" + data[i].departmentId,
                     label: data[i].name,
                     schoolId: data[i].schoolId,
-                    type: "department"
+                    type: "department",
+                    width: 400,
+                    height: 200
                 });
             }
             nodesArray = nodesArray.concat(deptArray);
@@ -115,7 +126,9 @@ $.when(
                     id: "p" + data[i].partnerId,
                     label: data[i].name,
                     type: "partner",
-                    color: "red"
+                    color: "red",
+                    width: 300,
+                    height: 150
                 });
             }
             nodesArray = nodesArray.concat(partnerArray);
@@ -129,7 +142,6 @@ $.when(
         type: 'GET',
         dataType: 'json',
         success: function (params) {
-            console.log(JSON.stringify(params));
             for (var i = 0; i < params.length; i++) {
                 var tempEdge = ""
 
