@@ -192,7 +192,7 @@ $.when(
 
     network = new vis.Network(container, data, options);
 
-    
+    /*
     for (i = 0; i < nodesArray.length; i++) {
         if (nodesArray[i].type == "school") {
             var clusterNode = network.clusterByConnection(nodesArray[i].id);
@@ -200,7 +200,7 @@ $.when(
             // network.clustering.updateClusteredNode(clusterNode.id, { shape: 'box', label: nodesArray[i].label });
         }
     }
-    
+    */
     
     network.on("stabilizationIterationsDone", function () {
         network.setOptions({ physics: false });
@@ -235,15 +235,27 @@ $.when(
                         url: '/Visualization/FillSchoolData',
                         type: 'GET',
                         dataType: 'json',
-                        data: { schoolId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
+                        data: { stringId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
                         success: function (data) {
+                            console.log(JSON.stringify(data));
                             var newElements = [];
                             newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
 
                             // ADD CONSTANT SCHOOL INFO
                             newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
-                            newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
 
+                            for (i = 0; i < data.length; i++) {
+                                var li = document.createElement('li')
+                                var anchor = createAnchor(data[i].departmentName, "sidebarEntry");
+
+                                // newElements.push(anchor);
+                                li.appendChild(anchor);
+                                ul.appendChild(li);
+
+                            }
+
+                            /* contract list
+                            newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
                             for (i = 0; i < data.length; i++) {
                                 var li = document.createElement('li')
                                 var anchor = createAnchor(data[i].departmentId, "sidebarEntry");
@@ -255,6 +267,7 @@ $.when(
                                 ul.appendChild(li);
 
                             }
+                            */
                             newElements.push(ul);
 
                             sidebarNode.replaceChildren(...newElements);

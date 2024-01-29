@@ -377,6 +377,8 @@ namespace VIPS.Controllers
 
                 _db.Contracts.Add(contractItem);
 
+                // Console.WriteLine("pasta" + contractItem.COEHSPrograms);
+
                 string from = "N/A";
                 string to = "N/A";
 
@@ -392,10 +394,12 @@ namespace VIPS.Controllers
                     to = contractItem.AgencyName;
                     AddVisualizationConnection(contractItem.ContractID, from, to, false);
                 }
-                else if (!string.IsNullOrEmpty(FolderNameRegex(contractItem.FolderName)))
+                else if (!string.IsNullOrEmpty(FolderNameRegex(contractItem.FolderName))) // FIX dept/coehs may be blank thats not good
                 {
+                    Console.WriteLine("isSchool test" + contractItem.Department + " " + contractItem.COEHSPrograms);
                     from = FolderNameRegex(contractItem.FolderName);
-                    to = contractItem.Department;
+                    to = contractItem.AgencyName;
+
                     AddVisualizationConnection(contractItem.ContractID, from, to, true);
                 }
             }
@@ -466,13 +470,24 @@ namespace VIPS.Controllers
         public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
         {
             var deptData = _db.CSVs
-                .Where(csv => !string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName))
-                .Select(csv => new { dept = csv.Department ?? csv.COEHSPrograms, folderName = csv.FolderName })
+                .Where(csv => !string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName)) // !string.IsNullOrEmpty(csv.Department) && 
+                .Select(csv => new { dept = csv.Department, folderName = csv.FolderName })
                 .Distinct()
                 .ToList();
 
+            var COEHSData = _db.CSVs
+                .Where(csv => string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName) && !string.IsNullOrEmpty(csv.COEHSPrograms)) 
+                .Select(csv => new { dept = csv.COEHSPrograms, folderName = csv.FolderName })
+                .Distinct()
+                .ToList();
+
+            COEHSData.ForEach(Console.WriteLine);
+
+            deptData = deptData.Concat(COEHSData).ToList();
+
             foreach (var item in deptData)
             {
+                // Console.WriteLine("howdy "+ item.dept);
                 var schoolId = _db.Schools
                     .Where(school => school.Name.Equals(FolderNameRegex(item.folderName)))
                     .Select(school => school.SchoolId)

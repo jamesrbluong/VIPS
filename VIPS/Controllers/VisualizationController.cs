@@ -29,8 +29,8 @@ namespace VIPS.Controllers
 
         public IActionResult GetSchoolData()
         {
-            var data = _db.Schools.ToList();
-            // data.ForEach(Console.WriteLine);
+            // var data = _db.Schools.ToList(); // if school has no depts, don't add
+            var data = _db.Schools.Where(x => x.Departments != null && x.Departments.Any());
             return Json(data);
         }
 
@@ -49,12 +49,27 @@ namespace VIPS.Controllers
 
         
         [HttpGet]
-        public JsonResult FillSchoolData(int schoolId)
+        public JsonResult FillSchoolData(string stringId)
         {
-            Console.WriteLine("test dept fill" + schoolId);
+            // Console.WriteLine("test dept fill" + schoolId);
 
-            // This is wrong
-            var data = _db.Departments.Where(x => x.SchoolId == schoolId).Select(x => new { departmentId = x.DepartmentId }).ToList();
+            // This is wrong?
+            // Get a list of department names AND all contracts associated with those departments
+            stringId = stringId.Remove(0,1);
+            Console.WriteLine("noooo" + stringId);
+            int intId = Int32.Parse(stringId);
+            var deptNames = _db.Departments.Where(x => x.SchoolId == intId).Select(x => new { departmentName = x.Name }).ToList();
+            
+            var data = deptNames;
+
+            // use this list of dept ids to further get the contracts using that id from visualization table (also connections from s to p)
+            /*
+            foreach (var deptId in deptData)
+            {
+                var connectionData = _db.Visualizations.Where(x => x.ToId == deptId).Select(x => new { contractId = x.ContractId }).ToList();
+            }
+            */
+            
 
             return Json(data);
         }
