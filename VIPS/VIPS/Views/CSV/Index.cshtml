@@ -111,6 +111,9 @@
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     </td>
+                    <td @(item.Error ? "style=\"border: 1px solid red;\"" : "")>
+                        @item.Error
+                    </td>
                 </tr>
             }
         </tbody>
