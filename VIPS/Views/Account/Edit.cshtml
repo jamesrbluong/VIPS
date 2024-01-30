@@ -5,11 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit Account</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditAccount" method="POST">
+<div class="box-padding">
+    <div class="box-container">
+        <br />
+        <h2 class="box-heading">Edit</h2>
+        <br />
+        <form asp-action="EditAccount" method="POST" class="box-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" value="@Model.Id" />
             <input type="hidden" asp-for="SecurityStamp" value="@Model.SecurityStamp" />
@@ -23,19 +24,21 @@
                     <option value="CCBL_Employee">CCBL Employee</option>
                     <option value="Admin">Admin</option>
                 </select>
-
             </div>
+            <br />
+            <button type="submit" class="box-button">Submit</button>
+            <br />
+            <br />
+            <a class="box-bottomtext" asp-action="Index">Return To Index</a>
+            
 
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
-            </div>
         </form>
+
     </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Return To Index</a>
-</div>
+
 
 @section Scripts {
     @{

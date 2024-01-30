@@ -174,13 +174,13 @@ namespace VIPS.Migrations
                 name: "Visualizations",
                 columns: table => new
                 {
-                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DeptId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PartnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ContractId = table.Column<int>(type: "int", nullable: false),
+                    FromId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ToId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Visualizations", x => new { x.ContractId, x.DeptId, x.PartnerId });
+                    table.PrimaryKey("PK_Visualizations", x => new { x.ContractId, x.FromId, x.ToId });
                 });
 
             migrationBuilder.CreateTable(

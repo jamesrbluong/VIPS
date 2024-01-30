@@ -7,6 +7,7 @@ using System.Text;
 using VIPS.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using System.Diagnostics.Contracts;
 
 namespace VIPS.Controllers
 {
@@ -251,9 +252,14 @@ namespace VIPS.Controllers
 
         public IActionResult OverWriteSubmit()
         {
+            DeleteVisualizationDataFromTable(); // here
             DeleteContractDataFromTable();
+            DeleteSchoolDataFromTable(); // here
+            PopulateSchools();
             DeletePartnerDataFromTable();
             PopulatePartners();
+            DeleteDepartmentDataFromTable(); // here
+            PopulateDepartments();
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -270,9 +276,10 @@ namespace VIPS.Controllers
                     return RedirectToAction("Upload");
                 }
             }
-            DeleteContractDataFromTable();
-            DeletePartnerDataFromTable();
-            PopulatePartners();
+
+            DeleteDatabaseEntries();
+            PopulateDatabaseEntries();
+
             TransferData();
             DeleteCSVDataFromTable();
             return RedirectToAction("Upload");
@@ -305,7 +312,6 @@ namespace VIPS.Controllers
         {
             if (_db.CSVs.ToList().Count > 0)
             {
-                
                 var csvData = _db.CSVs.ToList();
                 var contractData = _db.Contracts.ToList();
 
@@ -327,11 +333,11 @@ namespace VIPS.Controllers
         {
             // Retrieve all records from the table
             var csvData = _db.CSVs.ToList();
-            var contractData = _db.Contracts.ToList();
+            // var contractData = _db.Contracts.ToList();
 
             foreach (var csvItem in csvData)
             {
-                var contractItem = new Contract
+                var contractItem = new Models.Data.Contract
                 {
                     ContractID = csvItem.ContractID,
                     RelatedToContractID = csvItem.RelatedToContractID,
@@ -388,9 +394,131 @@ namespace VIPS.Controllers
                 };
 
                 _db.Contracts.Add(contractItem);
+
+                // Console.WriteLine("pasta" + contractItem.COEHSPrograms);
+
+                string from = "N/A";
+                string to = "N/A";
+
+                if (!string.IsNullOrEmpty(contractItem.Department))
+                {
+                    from = contractItem.Department;
+                    to = contractItem.AgencyName;
+                    AddVisualizationConnection(contractItem.ContractID, from, to, false);
+                }
+                else if (!string.IsNullOrEmpty(contractItem.COEHSPrograms))
+                {
+                    from = contractItem.COEHSPrograms;
+                    to = contractItem.AgencyName;
+                    AddVisualizationConnection(contractItem.ContractID, from, to, false);
+                }
+                else if (!string.IsNullOrEmpty(FolderNameRegex(contractItem.FolderName))) // FIX dept/coehs may be blank thats not good
+                {
+                    Console.WriteLine("isSchool test" + contractItem.Department + " " + contractItem.COEHSPrograms);
+                    from = FolderNameRegex(contractItem.FolderName);
+                    to = contractItem.AgencyName;
+
+                    AddVisualizationConnection(contractItem.ContractID, from, to, true);
+                }
             }
             // Remove each record from the DbSet
             _db.CSVs.RemoveRange(csvData);
+            _db.SaveChanges();
+
+            AddSchoolToDepartmentConnections();
+        }
+
+        public void DeleteDatabaseEntries()
+        {
+            DeleteVisualizationDataFromTable(); // here
+            DeleteContractDataFromTable();
+            DeleteDepartmentDataFromTable(); // here
+            DeletePartnerDataFromTable();
+        }
+
+        public void PopulateDatabaseEntries()
+        {
+            PopulateSchools();
+            PopulateDepartments();
+            PopulatePartners();
+        }
+
+        public string FolderNameRegex(string FolderName)
+        {
+            var split = FolderName.Split('\\');
+            if (split.Length >= 2)
+            {
+                var result = split[split.Length - 2];
+                result = Regex.Replace(result, @"\\.*$", "");
+                return result;
+            }
+
+            return "";
+        }
+
+        public void PopulateSchools()
+        {
+            List<string> schoolNames = new List<string>();
+            var folderName = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.FolderName))
+                .Select(csv => csv.FolderName.Trim())
+                .Distinct()
+                .ToList();
+
+            foreach (var folder in folderName)
+            {
+                var schoolName = FolderNameRegex(folder);
+
+                Console.WriteLine("FolderName test 2" + schoolName);
+
+                schoolNames.Add(schoolName);
+            }
+
+            foreach (var name in schoolNames)
+            {
+                var school = new School
+                {
+                    Name = name
+                };
+                _db.Schools.Add(school);
+            }
+            
+            _db.SaveChanges();
+        }
+        public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
+        {
+            var deptData = _db.CSVs
+                .Where(csv => !string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName)) // !string.IsNullOrEmpty(csv.Department) && 
+                .Select(csv => new { dept = csv.Department, folderName = csv.FolderName })
+                .Distinct()
+                .ToList();
+
+            var COEHSData = _db.CSVs
+                .Where(csv => string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName) && !string.IsNullOrEmpty(csv.COEHSPrograms)) 
+                .Select(csv => new { dept = csv.COEHSPrograms, folderName = csv.FolderName })
+                .Distinct()
+                .ToList();
+
+            COEHSData.ForEach(Console.WriteLine);
+
+            deptData = deptData.Concat(COEHSData).ToList();
+
+            foreach (var item in deptData)
+            {
+                // Console.WriteLine("howdy "+ item.dept);
+                var schoolId = _db.Schools
+                    .Where(school => school.Name.Equals(FolderNameRegex(item.folderName)))
+                    .Select(school => school.SchoolId)
+                    .FirstOrDefault();
+
+                var dept = new Department
+                {
+                    Name = item.dept,
+                    SchoolId = schoolId
+                };
+                _db.Departments.Add(dept);
+
+            }
             _db.SaveChanges();
         }
 
@@ -402,30 +530,123 @@ namespace VIPS.Controllers
                 .Distinct()
                 .ToList();
 
-            // var existingPartners = _db.Partners.ToList();
-
-            // Populate Partner model with unique AgencyNames
             foreach (var partnerItem in partnerData)
             {
-                // Check for duplicates in memory (LINQ to Objects)
-                //if (!existingPartners.Any(p => RemovePunct(p.Name).Equals(RemovePunct(partnerItem), StringComparison.OrdinalIgnoreCase)))
-                //{
                 var partner = new Partner
                 {
                     Name = partnerItem
                 };
                 _db.Partners.Add(partner);
-                //}
             }
             _db.SaveChanges();
 
         }
 
-
-        private static string RemovePunct(string input)
+        /*
+        public void CreateVisualizationTable(int ContractId, string DepartmentName, string PartnerName)
         {
-            return Regex.Replace(input, @"[.,'\-]", "");
+            var DepartmentId = _db.Departments
+                .Where(dept => DepartmentName.Equals(dept.Name))
+                .Select(dept => dept.DepartmentId)
+                .FirstOrDefault();
+            Console.WriteLine(DepartmentId + DepartmentName);
+
+            var PartnerId = _db.Partners
+                .Where(partner => PartnerName.Equals(partner.Name))
+                .Select(partner => partner.PartnerId)
+                .FirstOrDefault();
+            Console.WriteLine(PartnerId + PartnerName);
+
+            var connection = new Visualization
+            {
+                ContractId = ContractId,
+                DeptId = DepartmentId,
+                PartnerId = PartnerId
+            };
+
+            _db.Visualizations.Add(connection);
+            _db.SaveChanges();
         }
+        */
+
+        public void AddVisualizationConnection(int ContractId, string FromName, string ToName, bool isSchool)
+        {
+            string FromId = "";
+            string ToId = "";
+
+            if (isSchool)
+            {
+                FromId = "s" + _db.Schools
+                .Where(school => FromName.Equals(school.Name))
+                .Select(school => school.SchoolId)
+                .FirstOrDefault();
+                ToId = "p" + _db.Partners
+                .Where(partner => ToName.Equals(partner.Name))
+                .Select(partner => partner.PartnerId)
+                .FirstOrDefault();
+            }
+            else
+            {
+                FromId = "d" + _db.Departments
+                .Where(dept => FromName.Equals(dept.Name))
+                .Select(dept => dept.DepartmentId)
+                .FirstOrDefault();
+
+                ToId = "p" + _db.Partners
+                .Where(partner => ToName.Equals(partner.Name))
+                .Select(partner => partner.PartnerId)
+                .FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(FromId) && !string.IsNullOrEmpty(ToId))
+            {
+                var connection = new Visualization
+                {
+                    ContractId = ContractId,
+                    FromId = FromId,
+                    ToId = ToId
+                };
+                _db.Visualizations.Add(connection);
+                _db.SaveChanges();
+            }
+        }
+
+        public void AddSchoolToDepartmentConnections()
+        {
+            string FromId = "N/A";
+            string ToId = "N/A";
+            
+            var departments = _db.Departments.ToList();
+            foreach (var department in departments)
+            {
+                FromId = "s" + department.SchoolId;
+                ToId = "d" + department.DepartmentId;
+
+                var connection = new Visualization
+                {
+                    ContractId = 0,
+                    FromId = FromId,
+                    ToId = ToId
+                };
+                _db.Visualizations.Add(connection);
+            }
+            _db.SaveChanges();
+        }
+
+        public void DeleteVisualizationDataFromTable()
+        {
+            var data = _db.Visualizations.ToList();
+            _db.Visualizations.RemoveRange(data);
+            _db.SaveChanges();
+        }
+
+        public void DeleteDepartmentDataFromTable()
+        {
+            var data = _db.Departments.ToList();
+            _db.Departments.RemoveRange(data);
+            _db.SaveChanges();
+        }
+
 
         public void DeletePartnerDataFromTable()
         {
@@ -434,6 +655,17 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
+        public void DeleteSchoolDataFromTable()
+        {
+            var data = _db.Schools.ToList();
+            _db.Schools.RemoveRange(data);
+            _db.SaveChanges();
+        }
+
+        private static string RemovePunct(string input)
+        {
+            return Regex.Replace(input, @"[.,'\-]", "");
+        }
 
     }
 
