@@ -21,7 +21,6 @@
     },
     physics: {
         enabled: true,
-        stabilizations: false,
         barnesHut: {
             gravitationalConstant: -2000,
             centralGravity: 0.1,
@@ -67,6 +66,8 @@ var nodesArray = [];
 var edgesArray = [];
 
 // var dataUrl = '/Visualization/GetPartnerData';
+
+const nodeFilterSelector = document.getElementById("nodeFilterSelect");
 
 
 $.when(
@@ -195,12 +196,33 @@ $.when(
         }
     })
 ).then(function () {
+
+    let nodeFilterValue = "";
+
+    const nodesFilter = (node) => {
+        if (nodeFilterValue === "") {
+            return true;
+        }
+        switch (nodeFilterValue) {
+            case "partner":
+                return node.type === "partner";
+            case "department":
+                return node.type === "department";
+            case "school":
+                return node.type === "school";
+            default:
+                return true;
+        }
+    };
+
+
     var container = document.getElementById('mynetwork');
 
     var data = {
-        nodes: new vis.DataSet(nodesArray),
+        nodes: new vis.DataSet(nodesArray, { filter: nodesFilter }),
         edges: new vis.DataSet(edgesArray)
     };
+
 
     network = new vis.Network(container, data, options);
 
@@ -213,6 +235,16 @@ $.when(
         }
     }
     */
+
+    nodeFilterSelector.addEventListener("change", (e) => {
+        // set new value to filter variable
+        nodeFilterValue = e.target.value;
+        /*
+              refresh DataView,
+              so that its filter function is re-calculated with the new variable
+            */
+        nodes.refresh();
+    });
     
     network.on("stabilizationIterationsDone", function () {
         network.setOptions({ physics: false });
