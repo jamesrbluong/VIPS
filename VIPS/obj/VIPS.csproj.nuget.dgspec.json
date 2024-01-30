@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj": {}
+    "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj": {
+    "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+        "projectUniqueName": "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
         "projectName": "VIPS",
-        "projectPath": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
-        "packagesPath": "C:\\Users\\frost\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\obj\\",
+        "projectPath": "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+        "packagesPath": "C:\\Users\\casec\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\casec\\Documents\\GitHub\\VIPS\\VIPS\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\frost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\casec\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -91,8 +95,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -104,7 +107,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
