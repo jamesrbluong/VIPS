@@ -440,8 +440,8 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ZipCode)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Error)
+                <td @(item.Error ? "style=\"border: 1px solid red;\"" : "")>
+                    @item.Error
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ErrorDescription)

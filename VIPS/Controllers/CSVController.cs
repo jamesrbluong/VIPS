@@ -184,7 +184,8 @@ namespace VIPS.Controllers
         private void ErrorChecking()
         {
             //Go through every variable in the contract and check to make sure they are useable 
-            ErrorCheckingDepartments(); 
+            ErrorCheckingDepartments();
+            ErrorCheckingContractID();
 
         }
 
@@ -229,6 +230,23 @@ namespace VIPS.Controllers
         }
 
         _db.SaveChanges();
+        }
+
+        private void ErrorCheckingContractID()
+        {
+            //Go through every variable in the contract and check to make sure they are useable 
+            var csvData = _db.CSVs.ToList();
+
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.ContractID.ToString().Length != 6)
+                {
+
+                    csvItem.Error = true;
+                    csvItem.ErrorDescription += $" ContractID needs to be either TRUE or FALSE,";
+                }
+            }
+            _db.SaveChanges();
         }
 
         public IActionResult OverWriteSubmit()
