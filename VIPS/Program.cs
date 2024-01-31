@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddBlazoredToast();
 builder.Services.AddMvc();
 //@(await Html.RenderComponentAsync<Visualization>(RenderMode.Server))
 
@@ -23,7 +22,6 @@ builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddSingleton<IToastService, ToastService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     {

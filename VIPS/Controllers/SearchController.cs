@@ -55,6 +55,9 @@ namespace VIPS.Controllers
                 case "alphabetical":
                     model.ContractList = model.ContractList.OrderByDescending(c => c.ContractName).ToList();
                     break;
+                case "id":
+                    model.ContractList = model.ContractList.OrderBy(c => c.ContractID).ToList();
+                    break;
                 case "close_exp":
                     model.ContractList = model.ContractList.OrderBy(c => DateTime.Parse(c.CreatedOn)).ToList();
                     break;

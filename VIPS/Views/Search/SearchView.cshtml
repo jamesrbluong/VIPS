@@ -11,6 +11,7 @@
     <label for="sortOrder">Filter:</label>
     <select id="sortOrder" name="sortOrder">
         <option value="alphabetical">Alphabetical (A-Z)</option>
+        <option value="id">Sort by ID</option>
         <option value="close_exp">Closest to Expiration</option>
         <option value="far_exp">Furthest from Expiration</option>
     </select>
@@ -21,9 +22,6 @@
     </script>
 </form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -73,7 +71,7 @@
         {
             <tr>
                 <td>
-                    @item.ContractID
+                    <a asp-controller="Search" asp-action="Contract" asp-route-id="@item.ContractID" target=”_blank”>@item.ContractID</a>
                 </td>
                 <td>
                     @item.CreatedOn
