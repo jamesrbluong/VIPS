@@ -50,7 +50,7 @@
             @foreach (var item in Model.ContractList)
             {
                 <tr>
-                    <td>@item.ContractID</td>
+                    <td><a asp-controller="Search" asp-action="Contract" asp-route-id="@item.ContractID">@item.ContractID</a></td>
                     <td>@item.CreatedOn</td>
                     <td>@item.ContractName</td>
                     <td>@item.Owner</td>

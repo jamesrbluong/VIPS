@@ -51,8 +51,8 @@ namespace VIPS.Controllers
                         Renewal = x.Renewal,
                         State = x.State,
                         Year = x.Year,
-                        // New property for ExpirationDate
-                        ExpirationDate = x.ExpirationDate
+                        
+                      
                     }).ToListAsync();
             }
             else
@@ -73,8 +73,7 @@ namespace VIPS.Controllers
                         Renewal = x.Renewal,
                         State = x.State,
                         Year = x.Year,
-                        // New property for ExpirationDate
-                        ExpirationDate = x.ExpirationDate
+                        
                     }).ToListAsync();
             }
 
@@ -95,7 +94,7 @@ namespace VIPS.Controllers
                     return contractName;
                 }).ToList();
             }
-            else if (sortOrder == "close_exp")
+            /*else if (sortOrder == "close_exp")
             {
                 model.ContractList = model.ContractList.OrderBy(contract => contract.ExpirationDate).ToList();
             }
@@ -104,8 +103,14 @@ namespace VIPS.Controllers
                 model.ContractList = model.ContractList.OrderByDescending(contract => contract.ExpirationDate).ToList();
             }
             // Add other sorting logics for 'id' if needed...
-
+    */
             return View(model);
+        }
+        public IActionResult Contract(int id)
+        {
+            var contract = _db.Contracts.Where(x => x.ContractID == id).FirstOrDefault();
+
+            return View(contract);
         }
     }
 }
