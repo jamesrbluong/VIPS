@@ -40,9 +40,9 @@ namespace VIPS.Controllers
             return View(data);
     }
 
-        public IActionResult CSVDetail()
+        public IActionResult CSVDetail(int id)
         {
-            var data = _db.CSVs.ToList();
+            var data = _db.CSVs.Where(x => x.ContractID == id).FirstOrDefault();
             return View(data);
         }
 
