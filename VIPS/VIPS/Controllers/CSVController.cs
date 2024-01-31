@@ -8,7 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using Azure.Messaging;
-using System.Diagnostics.Contracts;
+
 
 namespace VIPS.Controllers
 {
@@ -40,7 +40,13 @@ namespace VIPS.Controllers
             return View(data);
     }
 
-    [HttpPost]
+        public IActionResult CSVDetail()
+        {
+            var data = _db.CSVs.ToList();
+            return View(data);
+        }
+
+        [HttpPost]
         public IActionResult Upload(IFormFile file)
         {
             var records = new List<CSV>();
@@ -180,6 +186,7 @@ namespace VIPS.Controllers
             //Go through every variable in the contract and check to make sure they are useable 
             ErrorCheckingDepartments();
             ErrorCheckingContractID();
+            ErrorCheckingZipCode();
         }
 
         private void ErrorCheckingDepartments()
@@ -242,6 +249,22 @@ namespace VIPS.Controllers
             _db.SaveChanges();
         }
 
+        private void ErrorCheckingZipCode()
+        {
+            //Go through every variable in the contract and check to make sure they are useable 
+            var csvData = _db.CSVs.ToList();
+
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.ZipCode.ToString().Length != 5)
+                {
+
+                    csvItem.Error = true;
+                    csvItem.ErrorDescription += $" ZipCode needs to be 5 or more,";
+                }
+            }
+            _db.SaveChanges();
+        }
 
         public IActionResult OverWriteSubmit()
         {
