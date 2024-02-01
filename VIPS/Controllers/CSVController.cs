@@ -187,7 +187,7 @@ namespace VIPS.Controllers
             //Go through every variable in the contract and check to make sure they are useable 
             ErrorCheckingDepartments();
             ErrorCheckingContractID();
-
+            ErrorCheckingZipCode();
         }
 
         private void ErrorCheckingDepartments()
@@ -245,6 +245,23 @@ namespace VIPS.Controllers
 
                     csvItem.Error = true;
                     csvItem.ErrorDescription += $" ContractID needs to be either TRUE or FALSE,";
+                }
+            }
+            _db.SaveChanges();
+        }
+
+        private void ErrorCheckingZipCode()
+        {
+            //Go through every variable in the contract and check to make sure they are useable 
+            var csvData = _db.CSVs.ToList();
+
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.ZipCode.ToString().Length != 5)
+                {
+
+                    csvItem.Error = true;
+                    csvItem.ErrorDescription += $" ZipCode needs to be 5 or more,";
                 }
             }
             _db.SaveChanges();
