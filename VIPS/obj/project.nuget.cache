@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sa8Abu9T63kak8QbSiINyDpUtR39MuVh0d+4XvXR2+95K4AJqdHhkSZQzcnl2C28hPx0Ey06IsPdvt6HvQyh+Q==",
+  "dgSpecHash": "ouOI4EX7kpmQi1U4kroXkpw1jsMUV+GeQ8B9ubvJeoVPmATQ3hAwpblTMBCSC+0eTGVUfavLKsr05n6F0Kn0uw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj",
+  "projectFilePath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Matthew\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Matthew\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
