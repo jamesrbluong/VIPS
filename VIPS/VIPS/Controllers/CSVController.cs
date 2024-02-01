@@ -187,6 +187,8 @@ namespace VIPS.Controllers
             ErrorCheckingDepartments();
             ErrorCheckingContractID();
             ErrorCheckingZipCode();
+            ErrorCheckingContractOrigin();
+            _db.SaveChanges();
         }
 
         private void ErrorCheckingDepartments()
@@ -228,8 +230,6 @@ namespace VIPS.Controllers
                 }
 
         }
-
-        _db.SaveChanges();
         }
 
         private void ErrorCheckingContractID()
@@ -246,7 +246,6 @@ namespace VIPS.Controllers
                             csvItem.ErrorDescription += $" ContractID needs to be either TRUE or FALSE,";      
                     }
             }
-            _db.SaveChanges();
         }
 
         private void ErrorCheckingZipCode()
@@ -263,7 +262,31 @@ namespace VIPS.Controllers
                     csvItem.ErrorDescription += $" ZipCode needs to be 5 or more,";
                 }
             }
-            _db.SaveChanges();
+        }
+
+        private void ErrorCheckingContractOrigin()
+        {
+            // Go through every CSV item and check the ContractOrigin property
+            var csvData = _db.CSVs.ToList();
+
+            List<string> validContractOrigins = new List<string>
+    {
+        "Bulk Loader",
+        "User",
+        "Copy"
+    };
+
+            foreach (var csvItem in csvData)
+            {
+                var contractOriginValue = csvItem.ContractOrigin;
+
+                // Check if the contractOriginValue is not in the list of valid contract origins
+                if (!validContractOrigins.Contains(contractOriginValue))
+                {
+                    csvItem.Error = true;
+                    csvItem.ErrorDescription += $" Contract Origin must be one of: {string.Join(", ", validContractOrigins)},";
+                }
+            }
         }
 
         public IActionResult OverWriteSubmit()
