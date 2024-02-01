@@ -1,4 +1,4 @@
-﻿using VIPS.Models.Data;
+﻿using VIPS.Common.Models.Entities;
 
 namespace VIPS.Models.ViewModels.Account
 {

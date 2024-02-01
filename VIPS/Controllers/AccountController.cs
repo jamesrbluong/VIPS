@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
-using VIPS.Models.Data;
+using VIPS.Common.Models.Entities;
 using VIPS.Models.ViewModels.Account;
 using VIPS.Models.ViewModels.Account.ForgotPassword;
 

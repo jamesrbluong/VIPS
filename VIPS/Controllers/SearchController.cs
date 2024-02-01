@@ -1,24 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using VIPS.Models;
+using Microsoft.EntityFrameworkCore;
+using VIPS.Common.Data;
 using VIPS.Models.ViewModels.Search;
+using VIPS.Repositories.Contracts;
 
 namespace VIPS.Controllers
 {
     public class SearchController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public SearchController(ApplicationDbContext db)
+        private readonly IContractRepository _contractsRepository;
+
+        public SearchController(ApplicationDbContext db, IContractRepository contractsRepository)
         {
             _db = db;
+            _contractsRepository = contractsRepository;
         }
-        public async Task<IActionResult> SearchView(string sortOrder, string searchString)
+
+        public async Task<IActionResult> SearchView(string sortOrder, string searchString, CancellationToken cancellationToken)
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "alphabetical" : "";
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "alphabetical" : "";
             ViewData["DateSortParm"] = sortOrder == "close_exp" ? "far_exp" : "close_exp";
             ViewData["CurrentFilter"] = searchString;
+
+            // Note: If there were a lot of actions being performed then we could have a service
+            // which consumes the repo and then spits out the below result.
+            var tempContracts = await _contractsRepository.GetListAsync(cancellationToken);
+            var contractList = tempContracts.Select(x => CondensedContract.CreateFromContract(x));
 
             var tempcontracts = _db.Contracts.Select(x => new CondensedContract
             {
@@ -43,13 +51,17 @@ namespace VIPS.Controllers
             };
 
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 model.ContractList = model.ContractList
                     .Where(c => c.ContractName.Contains(searchString))
                     .ToList();
             }
 
+            // Note: Materialization can be a fun topic. 
+            // Filter, search, etc. first then peform mat with something like ToListAsync. Saves on 
+            // cost and time.
+            // Design patterns. Gang of Four.
             switch (sortOrder)
             {
                 case "alphabetical":
@@ -73,9 +85,9 @@ namespace VIPS.Controllers
 
         }
 
-        public IActionResult Contract (int id)
+        public async Task<IActionResult> Contract (int id)
         {
-            var contract = _db.Contracts.Where(x => x.ContractID == id).FirstOrDefault();
+            var contract = await _db.Contracts.Where(x => x.ContractID == id).FirstOrDefaultAsync();
 
             return View(contract);
         }

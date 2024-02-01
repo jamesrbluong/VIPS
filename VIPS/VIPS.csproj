@@ -35,4 +35,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\VIPS.Common.csproj" />
+    <ProjectReference Include="..\ClassLibrary2\VIPS.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
-﻿using VIPS.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VIPS.Models.Data;
 using VIPS.Models.ViewModels.Search;
+using VIPS.Common.Data;
 
 namespace VIPS.Controllers
 {

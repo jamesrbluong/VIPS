@@ -1,29 +1,30 @@
-using Blazored.Toast;
-using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using VIPS.Models;
-using VIPS.Models.Data;
+using VIPS.Common.Data;
+using VIPS.Common.Models.Entities;
+using VIPS.Repositories;
+using VIPS.Repositories.Contracts;
 
 // "Server=(localdb)\\MSSQLLocalDB;Database=VIPS;Trusted_Connection=True;MultipleActiveResultSets=true"
 // "Server=tcp:vipsserver.database.windows.net,1433;Initial Catalog=vips;Persist Security Info=False;User ID=vipsadmin;Password=VIPS!unf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddMvc();
+services.AddControllersWithViews();
+services.AddServerSideBlazor();
+services.AddMvc();
 //@(await Html.RenderComponentAsync<Visualization>(RenderMode.Server))
 
-builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
+services.AddTransient<IServiceProvider, ServiceProvider>();
+RegisterRepositories(builder.Services);
 
-
-builder.Services.AddSession();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
+services.AddSession();
+services.AddHttpContextAccessor();
+services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     {
         // Lockout settings
         options.Lockout.AllowedForNewUsers = true;
@@ -31,14 +32,14 @@ builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
         options.Lockout.MaxFailedAccessAttempts = 5;
     }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
+services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";  
     options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/Login";
 });
 
-builder.Services.AddAuthentication().AddCookie();
+services.AddAuthentication().AddCookie();
 
 var app = builder.Build();
 
@@ -77,6 +78,11 @@ app.MapBlazorHub();
 
 
 app.Run();
+
+void RegisterRepositories(IServiceCollection services)
+{
+    services.AddScoped<IContractRepository, ContractRepository>();
+}
 
 Console.WriteLine("test gitignore 2");
 async Task CreateRoles(IServiceProvider serviceProvider)

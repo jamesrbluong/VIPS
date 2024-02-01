@@ -2347,6 +2347,32 @@
             "rid": "win"
           }
         }
+      },
+      "VIPS.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.22"
+        },
+        "compile": {
+          "bin/placeholder/VIPS.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VIPS.Common.dll": {}
+        }
+      },
+      "VIPS.Repositories/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "VIPS.Common": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/VIPS.Repositories.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VIPS.Repositories.dll": {}
+        }
       }
     }
   },
@@ -5506,6 +5532,16 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "VIPS.Common/1.0.0": {
+      "type": "project",
+      "path": "../ClassLibrary1/VIPS.Common.csproj",
+      "msbuildProject": "../ClassLibrary1/VIPS.Common.csproj"
+    },
+    "VIPS.Repositories/1.0.0": {
+      "type": "project",
+      "path": "../ClassLibrary2/VIPS.Repositories.csproj",
+      "msbuildProject": "../ClassLibrary2/VIPS.Repositories.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5520,23 +5556,25 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.11",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.11",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.11",
-      "Microsoft.Owin.Host.SystemWeb >= 4.2.2"
+      "Microsoft.Owin.Host.SystemWeb >= 4.2.2",
+      "VIPS.Common >= 1.0.0",
+      "VIPS.Repositories >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\frost\\.nuget\\packages\\": {}
+    "C:\\Users\\James\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
+      "projectUniqueName": "D:\\source-control\\UNF\\VIPS\\VIPS\\VIPS.csproj",
       "projectName": "VIPS",
-      "projectPath": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\VIPS.csproj",
-      "packagesPath": "C:\\Users\\frost\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\obj\\",
+      "projectPath": "D:\\source-control\\UNF\\VIPS\\VIPS\\VIPS.csproj",
+      "packagesPath": "C:\\Users\\James\\.nuget\\packages\\",
+      "outputPath": "D:\\source-control\\UNF\\VIPS\\VIPS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\frost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\James\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5549,7 +5587,14 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\source-control\\UNF\\VIPS\\ClassLibrary1\\VIPS.Common.csproj": {
+              "projectPath": "D:\\source-control\\UNF\\VIPS\\ClassLibrary1\\VIPS.Common.csproj"
+            },
+            "D:\\source-control\\UNF\\VIPS\\ClassLibrary2\\VIPS.Repositories.csproj": {
+              "projectPath": "D:\\source-control\\UNF\\VIPS\\ClassLibrary2\\VIPS.Repositories.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -5622,6 +5667,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.16, 6.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.16, 6.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.16, 6.0.16]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.16, 6.0.16]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -5630,7 +5693,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   },

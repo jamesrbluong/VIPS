@@ -1,4 +1,6 @@
-﻿@{
+﻿@model VIPS.Models.ViewModels.Search.SearchViewModel
+
+@{
     ViewData["Title"] = "Search";
 }
 
@@ -67,7 +69,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.ContractList)
+        @foreach (var item in @Model.ContractList)
         {
             <tr>
                 <td>
