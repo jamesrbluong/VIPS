@@ -1,5 +1,0 @@
-C:\Users\Josh\Documents\GitHub\VIPS\VIPS\Repositories\obj\Debug\net6.0\Repositories.csproj.AssemblyReference.cache
-C:\Users\Josh\Documents\GitHub\VIPS\VIPS\Repositories\obj\Debug\net6.0\Repositories.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Josh\Documents\GitHub\VIPS\VIPS\Repositories\obj\Debug\net6.0\Repositories.AssemblyInfoInputs.cache
-C:\Users\Josh\Documents\GitHub\VIPS\VIPS\Repositories\obj\Debug\net6.0\Repositories.AssemblyInfo.cs
-C:\Users\Josh\Documents\GitHub\VIPS\VIPS\Repositories\obj\Debug\net6.0\Repositories.csproj.CoreCompileInputs.cache
