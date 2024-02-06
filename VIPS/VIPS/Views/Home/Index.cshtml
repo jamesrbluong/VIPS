@@ -1,0 +1,53 @@
+﻿@using VIPS.Components
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Visualization of Institutional Partnerships System</h1>
+    <h4>UNF Center for Community-Based Learning</h4>
+</div>
+
+<br />
+<div>
+    <input type="text" id="searchBox" placeholder="Search..." class="search-home" />
+    <p>Search for connections between UNF Departments and our community partners</p>
+    <button onclick="searchContracts()" class="btn btn-primary">Search</button>
+</div>
+
+<div class="container border">
+    <div id="mynetwork"></div>
+    <div id="sidebar" class="sidebar">
+        <a href="#" id="sidebarName"></a>
+        <div id="sidebarTags"></div>
+        <div id="sidebarDesc"></div>
+    </div>
+</div>
+
+<script>
+    function searchContracts() {
+        var searchString = document.getElementById('searchBox').value.toLowerCase();
+
+
+        var departmentMapping = {
+            "brooks college of health": "nursing",
+            "coggin college of business": "business",
+            "college of arts and sciences": "arts",
+            "college of computing": "computing",
+            "college of engineering and construction": "engineering",
+            "college of education and human services": "education",
+            "college of construction": "construction",
+            "college of education": "education",
+            "college of human services": "human services"
+
+        };
+
+
+        if (departmentMapping.hasOwnProperty(searchString)) {
+            searchString = departmentMapping[searchString];
+        }
+
+        window.location.href = '/Search/SearchView?searchString=' + encodeURIComponent(searchString);
+    }
+</script>
