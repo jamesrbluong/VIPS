@@ -101,7 +101,7 @@ void RegisterRepositories(IServiceCollection services)
 void RegisterServices(IServiceCollection services)
 {
     services.AddScoped<IContractService, ContractService>();
-    // services.AddScoped<IAccountService, AccountService>();
+    services.AddScoped<IAccountService, AccountService>();
     services.AddScoped<ISchoolService, SchoolService>();
     services.AddScoped<IDepartmentService, DepartmentService>();
     services.AddScoped<IPartnerService, PartnerService>();

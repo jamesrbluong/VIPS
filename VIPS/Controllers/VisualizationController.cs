@@ -63,13 +63,17 @@ namespace VIPS.Controllers
         [HttpGet]
         public async Task<IActionResult> FillContractDataAsync(int contractId)
         {
-            var contract = await _visualizationService.FillContractDataAsync(contractId, ct);
-            if (contract != null)
+            if (contractId != 0)
             {
-                var data = CondensedContract.CreateFromContract(contract);
-                return Json(data);
+                var contract = await _visualizationService.FillContractDataAsync(contractId, ct);
+                if (contract != null)
+                {
+                    var data = CondensedContract.CreateFromContract(contract);
+                    return Json(data);
+                }
             }
-            return Json("");
+
+            return default;
         }
 
         [HttpGet]

@@ -11,28 +11,33 @@ using System.Net.Mail;
 using System.Web;
 using VIPS.Models.ViewModels.Account;
 using VIPS.Models.ViewModels.Account.ForgotPassword;
+using System.Threading;
+using Services.Account;
 
 namespace VIPS.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> _roleManager;
-        private readonly IHttpContextAccessor _accessor;
+        // private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
+        // private readonly SignInManager<AppUser> _signInManager;
+        private readonly IAccountService _accountService;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole<Guid>> roleManager, IHttpContextAccessor accessor)
+        private readonly CancellationTokenSource _cancellationTokenSource;
+        private CancellationToken ct;
+
+
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAccountService accountService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _accessor = accessor;
+            // _userManager = userManager;
+            // _signInManager = signInManager;
+            _accountService = accountService;
+            ct = _cancellationTokenSource.Token;
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            var temp = _userManager.Users; // change to service call
+            var temp = await _accountService.GetAccountsAsync(ct);
 
             var model = new IndexViewModel
             {
@@ -56,12 +61,7 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LoginAccount(LoginViewModel model)
         {
-            if (ValidateEmail(model.Email) == false || ValidatePassword(model.Password) == false)
-            {
-                return View("Login", model);
-            }
-
-            AppUser user = await _userManager.FindByEmailAsync(model.Email);
+            AppUser user = await _accountService.GetByEmailAsync(model.Email, ct);
 
             if (user == null)
             {
@@ -69,10 +69,10 @@ namespace VIPS.Controllers
                 return View("Login", model);
             }
 
-            await _signInManager.SignOutAsync(); // sign out current user if they are signed in
-            if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).Succeeded)
+            await _accountService.SignOutAsync(ct);
+            if (_accountService.PasswordSignInAsync(user, model.Password, false, true, ct).IsCompletedSuccessfully)
             {
-                var roleNameList = await _userManager.GetRolesAsync(user); // each user only has one role
+                var roleNameList = await _accountService.GetRolesAsync(user, ct); // each user only has one role
 
                 HttpContext.Session.SetString("CurrentEmail", user.Email);
                 HttpContext.Session.SetString("CurrentUserRole", roleNameList.FirstOrDefault());
@@ -80,10 +80,6 @@ namespace VIPS.Controllers
                 TempData["success"] = user.Email + " logged in successfully!";
 
                 return RedirectToAction("Index", "Home");
-            }
-            else if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, true)).IsLockedOut)
-            {
-                TempData["error"] = "Too many failed login attempts. Try again later.";
             }
             else
             {
@@ -93,52 +89,6 @@ namespace VIPS.Controllers
             return View("Login", model);
             
         }
-
-        
-
-        public bool ValidateEmail(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                TempData["error"] = "Email must not be empty";
-                return false;
-            }
-
-            if (!email.Contains("@unf.edu"))
-            {
-                TempData["error"] = "Email must contain \"@unf.edu\"";
-                return false;
-            }
-
-            return true;
-        }
-
-        public bool ValidatePassword(string password)
-        {
-            if (string.IsNullOrEmpty(password))
-            {
-                TempData["error"] = "Password must not be empty";
-                return false;
-            }
-
-            return true;
-        }
-        public bool ValidatePassword(string password, string confirmPassword) 
-        {
-            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
-            {
-                TempData["error"] = "Password must not be empty";
-                return false;
-            }
-            if (!password.Equals(confirmPassword))
-            {
-                TempData["error"] = "Passwords do not match";
-                return false;
-            }
-
-            return true;
-        }
-        
 
         [AllowAnonymous]
         public async Task<RedirectResult> Logout(string returnUrl = "/")
