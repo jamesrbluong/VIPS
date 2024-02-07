@@ -68,6 +68,7 @@ namespace Repositories.Accounts
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _signInManager.SignOutAsync();
+                return;
             }
             
         }
@@ -97,6 +98,7 @@ namespace Repositories.Accounts
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _userManager.AddToRoleAsync(user, name);
+                return;
             }
         }
 
@@ -105,6 +107,7 @@ namespace Repositories.Accounts
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _userManager.RemoveFromRoleAsync(user, name);
+                return;
             }
         }
 
@@ -133,6 +136,7 @@ namespace Repositories.Accounts
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _userManager.UpdateAsync(user);
+                return;
             }
         }
 
@@ -141,6 +145,7 @@ namespace Repositories.Accounts
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _userManager.UpdateSecurityStampAsync(user);
+                return;
             }
         }
 

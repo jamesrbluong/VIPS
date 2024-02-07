@@ -19,7 +19,7 @@ namespace VIPS.Controllers
     public class VisualizationController : Controller
     {
         private readonly IVisualizationService _visualizationService;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken ct;
 
         public VisualizationController(ApplicationDbContext db, IVisualizationService visualizationService)
@@ -29,39 +29,39 @@ namespace VIPS.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetVisualizationData()
+        public async Task<IActionResult> GetVisualizationDataAsync() // ?
         {
-            var data = _visualizationService.GetVisualizationsAsync(ct);
+            var data = await _visualizationService.GetVisualizationsAsync(ct);
             return Json(data);
         }
 
-        public IActionResult GetContractData()
+        public async Task<IActionResult> GetContractDataAsync()
         {
-            var data = _visualizationService.GetContractsAsync(ct);
+            var data = await _visualizationService.GetContractsAsync(ct);
             return Json(data);
         }
 
-        public IActionResult GetSchoolData()
+        public async Task<IActionResult> GetSchoolDataAsync()
         {
-            var data = _visualizationService.GetSchoolsAsync(ct); // if school has no depts, don't add
+            var data = await _visualizationService.GetSchoolsAsync(ct); // if school has no depts, don't add
             // var data = _db.Schools.Where(x => x.Departments != null && x.Departments.Any());
             return Json(data);
         }
 
-        public IActionResult GetDepartmentData()
+        public async Task<IActionResult> GetDepartmentDataAsync()
         {
-            var data = _visualizationService.GetDepartmentsAsync(ct);
+            var data = await _visualizationService.GetDepartmentsAsync(ct);
             return Json(data);
         }
 
-        public IActionResult GetPartnerData()
+        public async Task<IActionResult> GetPartnerDataAsync()
         {
-            var data = _visualizationService.GetPartnersAsync(ct);
+            var data = await _visualizationService.GetPartnersAsync(ct);
             return Json(data);
         }
 
         [HttpGet]
-        public async Task<IActionResult> FillContractDataAsync(int contractId)
+        public async Task<IActionResult> FillContractData(int contractId)
         {
             if (contractId != 0)
             {
@@ -77,11 +77,11 @@ namespace VIPS.Controllers
         }
 
         [HttpGet]
-        public JsonResult FillSchoolData(string stringId)
+        public async Task<JsonResult> FillSchoolDataAsync(string stringId)
         {
             if (!string.IsNullOrEmpty(stringId))
             {
-                var data = _visualizationService.FillSchoolDataAsync(stringId, ct);
+                var data = await _visualizationService.FillSchoolDataAsync(stringId, ct);
                 return Json(data);
             }
 
@@ -90,11 +90,11 @@ namespace VIPS.Controllers
         
 
         [HttpGet]
-        public JsonResult FillDepartmentData(string departmentId)
+        public async Task<JsonResult> FillDepartmentDataAsync(string departmentId)
         {
             if (!string.IsNullOrEmpty(departmentId))
             {
-                var data = _visualizationService.FillDepartmentData(departmentId, ct);
+                var data = await _visualizationService.FillDepartmentData(departmentId, ct);
                 return Json(data);
             }
 
@@ -102,11 +102,11 @@ namespace VIPS.Controllers
         }
 
         [HttpGet]
-        public IActionResult FillPartnerData(string partnerId)
+        public async Task<IActionResult> FillPartnerDataAsync(string partnerId)
         {
             if (!string.IsNullOrEmpty(partnerId))
             {
-                var data = _visualizationService.FillDepartmentData(partnerId, ct);
+                var data = await _visualizationService.FillPartnerData(partnerId, ct);
                 return Json(data);
             }
 

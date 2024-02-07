@@ -5463,19 +5463,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\joshu\\.nuget\\packages\\": {}
+    "C:\\Users\\Josh\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Services\\Services.csproj",
+      "projectUniqueName": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Services\\Services.csproj",
       "projectName": "Services",
-      "projectPath": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Services\\Services.csproj",
-      "packagesPath": "C:\\Users\\joshu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Services\\obj\\",
+      "projectPath": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Services\\Services.csproj",
+      "packagesPath": "C:\\Users\\Josh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Services\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\joshu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Josh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5489,11 +5489,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Common\\Common.csproj": {
-              "projectPath": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Common\\Common.csproj"
+            "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Common\\Common.csproj": {
+              "projectPath": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Common\\Common.csproj"
             },
-            "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Repositories\\Repositories.csproj": {
-              "projectPath": "C:\\Users\\joshu\\OneDrive\\Documents\\GitHub\\VIPS\\Repositories\\Repositories.csproj"
+            "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Repositories\\Repositories.csproj": {
+              "projectPath": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\Repositories\\Repositories.csproj"
             }
           }
         }
@@ -5529,7 +5529,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   },

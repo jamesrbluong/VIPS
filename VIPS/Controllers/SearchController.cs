@@ -13,7 +13,7 @@ namespace VIPS.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IContractRepository _contractRepository;
         private readonly IContractService _contractService;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken ct;
 
         public SearchController(ApplicationDbContext db, IContractRepository contractRepository, IContractService contractService)
@@ -38,7 +38,7 @@ namespace VIPS.Controllers
 
         public async Task<IActionResult> SearchView(string searchString, string sortOrder, CancellationToken cancellationToken)
         {
-            var tempContracts = await _contractRepository.GetListAsync(cancellationToken);
+            var tempContracts = await _contractService.GetContractsAsync(cancellationToken);
             var contractList = tempContracts.Select(x => CondensedContract.CreateFromContract(x));
 
             var model = new SearchViewModel();
@@ -117,9 +117,9 @@ namespace VIPS.Controllers
     */
             return View(model);
         }
-        public IActionResult Contract(int id)
+        public async Task<IActionResult> Contract(int id)
         {
-            var contract = _contractService.GetById(id, ct);
+            var contract = await _contractService.GetById(id, ct);
 
             if (contract != null)
             {
@@ -127,6 +127,7 @@ namespace VIPS.Controllers
             }
             else
             {
+                Console.WriteLine("NotFound");
                 return NotFound();
             }
             

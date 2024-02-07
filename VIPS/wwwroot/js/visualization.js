@@ -21,7 +21,6 @@
     },
     physics: {
         enabled: true,
-        stabilizations: false,
         barnesHut: {
             gravitationalConstant: -2000,
             centralGravity: 0.1,
@@ -336,6 +335,8 @@ $.when(
                         dataType: 'json',
                         data: { partnerId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
                         success: function (data) {
+                            console.log(JSON.stringify(data));
+
                             var newElements = [];
                             newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
 

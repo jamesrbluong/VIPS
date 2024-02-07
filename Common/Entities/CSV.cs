@@ -6,9 +6,6 @@ namespace Common.Entities
     public class CSV
     {
         [Key]
-        [Ignore]
-        public int Id { get; set; }
-
         [Name("Contract ID")]
         public int ContractID { get; set; }
 

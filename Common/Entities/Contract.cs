@@ -6,9 +6,6 @@ namespace Common.Entities
     public class Contract
     {
         [Key]
-        [Ignore]
-        public int Id { get; set; }
-
         [Name("Contract ID")]
         public int ContractID { get; set; }
 

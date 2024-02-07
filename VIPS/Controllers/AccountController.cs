@@ -13,29 +13,26 @@ using VIPS.Models.ViewModels.Account;
 using VIPS.Models.ViewModels.Account.ForgotPassword;
 using System.Threading;
 using Services.Account;
+using Services.Contracts;
 
 namespace VIPS.Controllers
 {
     public class AccountController : Controller
     {
-        // private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
-        // private readonly SignInManager<AppUser> _signInManager;
         private readonly IAccountService _accountService;
 
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken ct;
 
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAccountService accountService)
+        public AccountController(IAccountService accountService)
         {
-            // _userManager = userManager;
-            // _signInManager = signInManager;
             _accountService = accountService;
             ct = _cancellationTokenSource.Token;
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             var temp = await _accountService.GetAccountsAsync(ct);
 

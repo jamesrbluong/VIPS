@@ -149,7 +149,7 @@ namespace VIPS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ContractID,CreatedOn,CreatedBy,ContractName,ContractOrigin,ContractTypeName,CurrentStageAssignees,DaysInCurrStage,Description,ExternalContractReferenceID,FolderName,Locked,Owner,PrimaryDocument,RelatedToContract,RelatedToContractID,StageName,UpdatedBy,UpdatedOn,Workflow,ProgramsOrCourses,CCECMajors,AutoRenewal,ContractCategory,AgencyMailingAddress1,AgencyMailingAddress2,AgencyName,BCH_AgingServicesManagement,BCH_AthleticTraining,BCH_College,BCH_ExerciseScience,BCH_HealthAdministration,BCH_InterdisciplinaryHealthStudies,BCH_MentalHealthCounseling,BCH_NurseAnesthetist,BCH_Nursing,BCH_NutritionDietetics,BCH_PhysicalTherapy,BCH_PublicHealth,City,COEHSPrograms,Department,EmailAddress,FacultyInitiator,Graduate_Undergraduate,PhoneNumber,PrimaryContact,Renewal,State,TitleCert,Year,ZipCode,Error,ErrorDescription,Duplicate")] CSV cSV)
         {
-            if (id != cSV.Id)
+            if (id != cSV.ContractID)
             {
                 return NotFound();
             }
@@ -163,7 +163,7 @@ namespace VIPS.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CSVExists(cSV.Id))
+                    if (!CSVExists(cSV.ContractID))
                     {
                         return NotFound();
                     }
@@ -179,7 +179,7 @@ namespace VIPS.Controllers
 
         private bool CSVExists(int id)
         {
-            return (_db.CSVs?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_db.CSVs?.Any(e => e.ContractID == id)).GetValueOrDefault();
         }
 
         private void ErrorChecking()
