@@ -12,13 +12,17 @@ namespace VIPS.Controllers
         // the goal is for the controller to just communicate with service. no db or repository -joshua
         private readonly ApplicationDbContext _db;
         private readonly IContractRepository _contractRepository;
-        // private readonly IPartnerService _contractService;
+        private readonly IContractService _contractService;
+        private readonly CancellationTokenSource _cancellationTokenSource;
+        private CancellationToken ct;
 
-        public SearchController(ApplicationDbContext db, IContractRepository contractRepository, IPartnerService contractService)
+        public SearchController(ApplicationDbContext db, IContractRepository contractRepository, IContractService contractService)
         {
             _db = db;
             _contractRepository = contractRepository;
             _contractService = contractService;
+            ct = _cancellationTokenSource.Token;
+
         }
 
         /**
@@ -115,7 +119,7 @@ namespace VIPS.Controllers
         }
         public IActionResult Contract(int id)
         {
-            var contract = _contractService.GetById(id);
+            var contract = _contractService.GetById(id, ct);
 
             if (contract != null)
             {

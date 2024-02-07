@@ -624,3 +624,9 @@ C:\Users\frost\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\refint\VIPS.dll
 C:\Users\frost\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\VIPS.pdb
 C:\Users\frost\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\VIPS.genruntimeconfig.cache
 C:\Users\frost\Documents\GitHub\VIPS\VIPS\obj\Debug\net6.0\ref\VIPS.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Common.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Repositories.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Services.dll
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Common.pdb
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Repositories.pdb
+C:\Users\joshu\OneDrive\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Services.pdb

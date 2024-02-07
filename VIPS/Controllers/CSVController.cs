@@ -1,13 +1,13 @@
 ﻿using CsvHelper;
-using VIPS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
-using VIPS.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
+using Common.Data;
+using Common.Entities;
 
 namespace VIPS.Controllers
 {
@@ -376,7 +376,7 @@ namespace VIPS.Controllers
 
             foreach (var csvItem in csvData)
             {
-                var contractItem = new Models.Data.Contract
+                var contractItem = new Common.Entities.Contract
                 {
                     ContractID = csvItem.ContractID,
                     RelatedToContractID = csvItem.RelatedToContractID,

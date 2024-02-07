@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VIPS.Models;
+using Common.Data;
 
 #nullable disable
 
@@ -155,8 +155,8 @@ namespace VIPS.Migrations
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
-
-            modelBuilder.Entity("VIPS.Models.Data.AppUser", b =>
+                
+            modelBuilder.Entity("Common.Entities.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,7 +222,7 @@ namespace VIPS.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.CSV", b =>
+            modelBuilder.Entity("Common.Entities.CSV", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -451,7 +451,7 @@ namespace VIPS.Migrations
                     b.ToTable("CSVs");
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.Contract", b =>
+            modelBuilder.Entity("Common.Entities.Contract", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -671,7 +671,7 @@ namespace VIPS.Migrations
                     b.ToTable("Contracts");
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.Department", b =>
+            modelBuilder.Entity("Common.Entities.Department", b =>
                 {
                     b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
@@ -693,7 +693,7 @@ namespace VIPS.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.Partner", b =>
+            modelBuilder.Entity("Common.Entities.Partner", b =>
                 {
                     b.Property<int>("PartnerId")
                         .ValueGeneratedOnAdd()
@@ -710,7 +710,7 @@ namespace VIPS.Migrations
                     b.ToTable("Partners");
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.School", b =>
+            modelBuilder.Entity("Common.Entities.School", b =>
                 {
                     b.Property<int>("SchoolId")
                         .ValueGeneratedOnAdd()
@@ -739,7 +739,7 @@ namespace VIPS.Migrations
                     b.ToTable("Schools");
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.Visualization", b =>
+            modelBuilder.Entity("Common.Entities.Visualization", b =>
                 {
                     b.Property<string>("ContractId")
                         .HasColumnType("nvarchar(450)");
@@ -766,7 +766,7 @@ namespace VIPS.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("VIPS.Models.Data.AppUser", null)
+                    b.HasOne("Common.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -775,7 +775,7 @@ namespace VIPS.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("VIPS.Models.Data.AppUser", null)
+                    b.HasOne("Common.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -790,7 +790,7 @@ namespace VIPS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VIPS.Models.Data.AppUser", null)
+                    b.HasOne("Common.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -799,23 +799,23 @@ namespace VIPS.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("VIPS.Models.Data.AppUser", null)
+                    b.HasOne("Common.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.Department", b =>
+            modelBuilder.Entity("Common.Entities.Department", b =>
                 {
-                    b.HasOne("VIPS.Models.Data.School", null)
+                    b.HasOne("Common.Entities.School", null)
                         .WithMany("Departments")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VIPS.Models.Data.School", b =>
+            modelBuilder.Entity("Common.Entities.School", b =>
                 {
                     b.Navigation("Departments");
                 });

@@ -1,15 +1,19 @@
 ﻿using Common.Data;
 using Common.Entities;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Repositories.Accounts;
 using Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Services.Account
 {
@@ -38,14 +42,79 @@ namespace Services.Account
 
         public async Task<AppUser> GetByEmailAsync (string email, CancellationToken ct)
         {
-            if (ValidateEmail(email) == false || ValidatePassword(email) == false)
-            {
-                return default; // View("Login", model);
-            }
-
             return await _accountRepository.GetByEmailAsync(email, ct);
         }
 
+        public async Task<AppUser> GetByIdAsync(string id, CancellationToken ct)
+        {
+            return await _accountRepository.GetByIdAsync(id, ct);
+        }
+
+        public async Task<AppUser> GetCurrentUser(string id, CancellationToken ct)
+        {
+            return await _accountRepository.GetCurrentUser(id, ct);
+        }
+
+
+        public async Task<IList<string>> GetRolesAsync(AppUser user, CancellationToken ct)
+        {
+            return await _accountRepository.GetRolesAsync(user, ct);
+        }
+
+        public async Task AddToRoleAsync(AppUser user, string name, CancellationToken ct)
+        {
+            await _accountRepository.AddToRoleAsync(user, name, ct);
+        }
+
+        public async Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAccountAsync(AppUser user, string password, CancellationToken ct)
+        {
+            return await _accountRepository.CreateAccountAsync(user, password, ct);
+        }
+
+        public async Task<Microsoft.AspNetCore.Identity.IdentityResult> DeleteAccountAsync(AppUser user, CancellationToken ct)
+        {
+            return await _accountRepository.DeleteAccountAsync(user, ct);
+        }
+
+        public async Task ChangeRole(string roleName, AppUser user, CancellationToken ct)
+        {
+            var oldRoleNameList = await _accountRepository.GetRolesAsync(user, ct); // gets a list of all the roles the user is assigned to
+            var oldRoleName = oldRoleNameList.FirstOrDefault(); // gets the first element of the list, there should only be one role per user
+
+            if (!string.IsNullOrEmpty(oldRoleName) && !oldRoleName.Equals(roleName))
+            {
+                await _accountRepository.RemoveFromRoleAsync(user, oldRoleName, ct);
+                await _accountRepository.AddToRoleAsync(user, roleName, ct);
+
+                await UpdateAsync(user, ct);
+            }
+        }
+
+        public async Task UpdateAsync(AppUser user, CancellationToken ct)
+        {
+            await _accountRepository.UpdateAsync(user, ct);
+        }
+
+
+        public async Task UpdateSecurityStampAsync(AppUser user, CancellationToken ct)
+        {
+            await _accountRepository.UpdateSecurityStampAsync(user, ct);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(AppUser user, CancellationToken ct)
+        {
+            return await _accountRepository.GeneratePasswordResetTokenAsync(user, ct);
+        }
+
+        public async Task<bool> HasPasswordAsync(AppUser user, CancellationToken ct)
+        {
+            return await _accountRepository.HasPasswordAsync(user, ct);
+        }
+
+        public async Task<Microsoft.AspNetCore.Identity.IdentityResult> ResetPasswordAsync(AppUser user, string ResetCode, string NewPassword, CancellationToken ct)
+        {
+            return await _accountRepository.ResetPasswordAsync(user, ResetCode, NewPassword, ct);
+        }
 
         /**
          * signInManager Methods
@@ -57,19 +126,60 @@ namespace Services.Account
             await _accountRepository.SignOutAsync(ct);
         }
 
-        public async Task PasswordSignInAsync (AppUser user, string password, bool isPersistent, bool lockoutOnFailure, CancellationToken ct)
+        public async Task<Microsoft.AspNetCore.Identity.SignInResult> PasswordSignInAsync (AppUser user, string password, bool isPersistent, bool lockoutOnFailure, CancellationToken ct)
         {
-            await _accountRepository.PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure, ct);
+            // make identityresult
+            return await _accountRepository.PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure, ct);
         }
 
-        public async Task<IList<string>> GetRolesAsync (AppUser user, CancellationToken ct)
+        /**
+         * Email Methods
+         * 
+         */
+        public void SendEmail(string Email, string Code, string Purpose, string scheme, HostString host)
         {
-            if (user != null)
+            var fromEmail = new MailAddress("joshuastabile@gmail.com", "test"); // change email from mine
+            var toEmail = new MailAddress(Email);
+            var fromEmailPassword = "gynn cppj sxpk bxbc";
+
+            string baseUrl = string.Format("{0}://{1}", scheme, host);
+
+            var link = baseUrl + "/Account/" + Purpose + "?code=" + HttpUtility.UrlEncode(Code) + "&email=" + HttpUtility.UrlEncode(Email); // update url
+
+            string subject = "";
+            string body = "";
+
+            if (Purpose == "ResetPassword")
             {
-                return await _accountRepository.GetRolesAsync(user, ct);
+                subject = "Reset Password";
+                body = "Hello," +
+                    "<br>" +
+                    "<br>" +
+                    "We got a request to reset your account password. Please click on the link below to reset your password" +
+                    "<br>" +
+                    "<br>" +
+                    "<a href=" + link + ">Reset Password</a>";
+
             }
 
-            return default;
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword)
+            };
+
+            using (var message = new MailMessage(fromEmail, toEmail)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            })
+                smtp.Send(message);
+
         }
 
 

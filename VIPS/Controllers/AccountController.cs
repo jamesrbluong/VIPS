@@ -61,6 +61,11 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LoginAccount(LoginViewModel model)
         {
+            if (_accountService.ValidateEmail(model.Email) == false || _accountService.ValidatePassword(model.Password) == false)
+            {
+                return View("Login", model);
+            }
+
             AppUser user = await _accountService.GetByEmailAsync(model.Email, ct);
 
             if (user == null)
@@ -70,7 +75,7 @@ namespace VIPS.Controllers
             }
 
             await _accountService.SignOutAsync(ct);
-            if (_accountService.PasswordSignInAsync(user, model.Password, false, true, ct).IsCompletedSuccessfully)
+            if (_accountService.PasswordSignInAsync(user, model.Password, false, true, ct).Result.Succeeded) // compare to old code
             {
                 var roleNameList = await _accountService.GetRolesAsync(user, ct); // each user only has one role
 
@@ -80,6 +85,10 @@ namespace VIPS.Controllers
                 TempData["success"] = user.Email + " logged in successfully!";
 
                 return RedirectToAction("Index", "Home");
+            }
+            else if (_accountService.PasswordSignInAsync(user, model.Password, false, true, ct).Result.IsLockedOut)
+            {
+                TempData["error"] = "Too many failed login attempts. Try again later.";
             }
             else
             {
@@ -93,9 +102,9 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<RedirectResult> Logout(string returnUrl = "/")
         {
-            await _signInManager.SignOutAsync();
-            HttpContext.Session.SetString("CurrentEmail", String.Empty); // Empty Session Strings
-            HttpContext.Session.SetString("CurrentUserRole", String.Empty);
+            await _accountService.SignOutAsync(ct);
+            HttpContext.Session.SetString("CurrentEmail", string.Empty); // Empty Session Strings
+            HttpContext.Session.SetString("CurrentUserRole", string.Empty);
 
             return Redirect(returnUrl);
         }
@@ -111,7 +120,7 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateAccount(CreateViewModel model)
         {
-            if (ValidateEmail(model.Email) == false || ValidatePassword(model.Password, model.ConfirmPassword) == false)
+            if (_accountService.ValidateEmail(model.Email) == false || _accountService.ValidatePassword(model.Password, model.ConfirmPassword) == false)
             {
                 return RedirectToAction("Create", "Account");
             }
@@ -122,12 +131,11 @@ namespace VIPS.Controllers
                 Email = model.Email
             };
 
-            Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            Microsoft.AspNetCore.Identity.IdentityResult result = await _accountService.CreateAccountAsync(user, model.Password, ct);
 
             if (result.Succeeded)
             {
-                TempData["success"] = "Account created successfully";
-                await _userManager.AddToRoleAsync(user, "UNF_Employee");
+                await _accountService.AddToRoleAsync(user, "UNF_Employee", ct);
 
                 LoginViewModel temp = new LoginViewModel
                 {
@@ -135,6 +143,7 @@ namespace VIPS.Controllers
                     Password = model.Password
                 };
 
+                TempData["success"] = "Account created successfully";
                 return await LoginAccount(temp);
 
             }
@@ -150,19 +159,18 @@ namespace VIPS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
-            var currUser = await _userManager.FindByIdAsync(User.Identity.GetUserId());
+            var currUser = await _accountService.GetCurrentUser(User.Identity.GetUserId(), ct);
+            AppUser user = await _accountService.GetByIdAsync(id, ct);
 
-            if (currUser.Id.ToString().Equals(id))
+            if (currUser.Id.ToString().Equals(user.Id))
             {
                 TempData["error"] = "You cannot delete the account you are currently logged in to";
                 return RedirectToAction("Index", "Account");
             }
 
-            AppUser user = await _userManager.FindByIdAsync(id);
-
             if (user != null)
             {
-                Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.DeleteAsync(user);
+                Microsoft.AspNetCore.Identity.IdentityResult result = await _accountService.DeleteAccountAsync(user, ct);
                 if (result.Succeeded)
                 {
                     TempData["success"] = "User deleted successfully";
@@ -181,19 +189,18 @@ namespace VIPS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
-            var currUser = await _userManager.FindByIdAsync(User.Identity.GetUserId());
+            var currUser = await _accountService.GetCurrentUser(User.Identity.GetUserId(), ct);
+            AppUser oldUser = await _accountService.GetByIdAsync(id, ct);
 
-            if (currUser.Id.ToString().Equals(id))
+            if (currUser.Id.ToString().Equals(oldUser.Id))
             {
                 TempData["error"] = "You cannot edit the account you are currently logged in to";
                 return RedirectToAction("Index", "Account");
             }
 
-            AppUser oldUser = await _userManager.FindByIdAsync(id);
-
             if (oldUser != null)
             {
-                var roleNameList = await _userManager.GetRolesAsync(oldUser);
+                var roleNameList = await _accountService.GetRolesAsync(oldUser, ct);
 
                 var roleName = roleNameList.FirstOrDefault();
 
@@ -214,10 +221,18 @@ namespace VIPS.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAccount(EditViewModel model)
         {
-            AppUser user = await _userManager.FindByIdAsync(model.Id);
+            AppUser user = await _accountService.GetByIdAsync(model.Id, ct);
             if (user != null)
             {
-                await ChangeRole(model, user);
+                if (user == null || string.IsNullOrEmpty(model.RoleName))
+                {
+                    TempData["error"] = "No change to user role";
+                    return View("EditAccount", model.Id);
+                }
+
+                TempData["success"] = "Role for user has been updated";
+                await _accountService.ChangeRole(model.RoleName, user, ct);
+
             }
             else
             {
@@ -228,80 +243,6 @@ namespace VIPS.Controllers
 
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ChangeRole(EditViewModel model, AppUser user)
-        {
-            if (user == null || string.IsNullOrEmpty(model.RoleName))
-            {
-                TempData["error"] = "No change to user role";
-                return View("EditAccount", model.Id);
-            }
-
-            var oldRoleNameList = await _userManager.GetRolesAsync(user); // gets a list of all the roles the user is assigned to
-            var oldRoleName = oldRoleNameList.FirstOrDefault(); // gets the first element of the list, there should only be one role per user
-
-            if (!string.IsNullOrEmpty(oldRoleName) && !oldRoleName.Equals(model.RoleName))
-            {
-                await _userManager.RemoveFromRoleAsync(user, oldRoleName);
-                await _userManager.AddToRoleAsync(user, model.RoleName);
-
-                await _userManager.UpdateAsync(user);
-
-                TempData["success"] = "Role for user has been updated from " + oldRoleName + " to " + model.RoleName;
-                
-            }
-
-            return RedirectToAction("Index", "Account");
-
-        }
-
-        
-        public void SendEmail(string Email, string Code, string Purpose)
-        {
-            var fromEmail = new MailAddress("joshuastabile@gmail.com", "test"); // change email from mine
-            var toEmail = new MailAddress(Email);
-            var fromEmailPassword = "gynn cppj sxpk bxbc";
-
-            string baseUrl = string.Format("{0}://{1}", HttpContext.Request.Scheme, HttpContext.Request.Host);
-
-            var link = baseUrl + "/Account/" + Purpose + "?code=" + HttpUtility.UrlEncode(Code) + "&email=" + HttpUtility.UrlEncode(Email); // update url
-
-            string subject = "";
-            string body = "";
-
-            if (Purpose == "ResetPassword")
-            {
-                subject = "Reset Password";
-                body = "Hello," +
-                    "<br>" +
-                    "<br>" +
-                    "We got a request to reset your account password. Please click on the link below to reset your password" +
-                    "<br>" +
-                    "<br>" +
-                    "<a href=" + link + ">Reset Password</a>";
-
-            }
-            
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword)
-            };
-
-            using (var message = new MailMessage(fromEmail, toEmail)
-            {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            })
-            smtp.Send(message);
-
-        }
 
         [AllowAnonymous]
         public IActionResult ForgotPassword()
@@ -314,15 +255,15 @@ namespace VIPS.Controllers
         public async Task<IActionResult> ForgotPasswordSendEmail(ForgotPasswordViewModel model)
         {
             string Email = model.Email;
-            AppUser user = await _userManager.FindByEmailAsync(Email);
+            AppUser user = await _accountService.GetByEmailAsync(Email, ct);
             if (user != null)
             {
                 // Send Email
-                await _userManager.UpdateSecurityStampAsync(user);
-                string resetCode = await _userManager.GeneratePasswordResetTokenAsync(user); // Guid.NewGuid().ToString();
-                SendEmail(user.Email, resetCode, "ResetPassword");
+                await _accountService.UpdateSecurityStampAsync(user, ct);
+                string resetCode = await _accountService.GeneratePasswordResetTokenAsync(user, ct); // Guid.NewGuid().ToString();
+                _accountService.SendEmail(user.Email, resetCode, "ResetPassword", HttpContext.Request.Scheme, HttpContext.Request.Host);
 
-                await _userManager.UpdateAsync(user);
+                await _accountService.UpdateAsync(user, ct);
                 
 
             }
@@ -348,7 +289,7 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ResetPasswordUpdate(ResetPasswordViewModel model)
         {
-            if (ValidatePassword(model.NewPassword, model.ConfirmPassword) == false)
+            if (_accountService.ValidatePassword(model.NewPassword, model.ConfirmPassword) == false)
             {
                 return RedirectToAction("ResetPassword", "Account", new
                 {
@@ -357,14 +298,14 @@ namespace VIPS.Controllers
                 });
             }
 
-            var user = await _userManager.FindByEmailAsync(model.Email); // add email form input to view and get from view, search user for email
+            var user = await _accountService.GetByEmailAsync(model.Email, ct); // add email form input to view and get from view, search user for email
             if (user != null)
             {
-                if (await _userManager.HasPasswordAsync(user))
+                if (await _accountService.HasPasswordAsync(user, ct))
                 {
                     // Console.WriteLine("test" + model.Email + model.NewPassword + model.ResetCode);
 
-                    Microsoft.AspNetCore.Identity.IdentityResult result = await _userManager.ResetPasswordAsync(user, model.ResetCode, model.NewPassword);
+                    Microsoft.AspNetCore.Identity.IdentityResult result = await _accountService.ResetPasswordAsync(user, model.ResetCode, model.NewPassword, ct);
                     if (result.Succeeded)
                     {
                         TempData["success"] = "Password updated successfully";
