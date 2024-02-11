@@ -167,16 +167,30 @@ namespace VIPS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Visualizations",
+                name: "Edges",
                 columns: table => new
                 {
                     ContractId = table.Column<int>(type: "int", nullable: false),
                     FromId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ToId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ToId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Visualizations", x => new { x.ContractId, x.FromId, x.ToId });
+                    table.PrimaryKey("PK_Edges", x => new { x.ContractId, x.FromId, x.ToId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Nodes",
+                columns: table => new
+                {
+                    NodeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    x = table.Column<int>(type: "int", nullable: false),
+                    y = table.Column<int>(type: "int", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Nodes", x => new { x.NodeId });
                 });
 
             migrationBuilder.CreateTable(
@@ -221,7 +235,10 @@ namespace VIPS.Migrations
                 name: "Partners");
 
             migrationBuilder.DropTable(
-                name: "Visualizations");
+                name: "Edges");
+
+            migrationBuilder.DropTable(
+                name: "Nodes");
 
             migrationBuilder.DropTable(
                 name: "Schools");

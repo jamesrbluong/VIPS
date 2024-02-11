@@ -11,7 +11,8 @@ namespace Common.Data
         { }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<CSV> CSVs { get; set; }
-        public DbSet<Visualization> Visualizations { get; set; }
+        public DbSet<Node> Nodes { get; set; }
+        public DbSet<Edge> Edges { get; set; }
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<Department> Departments { get; set; }

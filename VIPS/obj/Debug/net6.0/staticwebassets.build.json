@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NJKhK46DYLh9d15SvZQ0LczoalxBeOa+C530bEgiUpk=",
+  "Hash": "FVE01xJqqtOoqnQjM0EMpgsM2mxc1/+A81f5XD930Fc=",
   "Source": "VIPS",
   "BasePath": "_content/VIPS",
   "Mode": "Default",
@@ -168,6 +168,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\CSV.js"
+    },
+    {
+      "Identity": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\loadVisualization.js",
+      "SourceId": "VIPS",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\",
+      "BasePath": "_content/VIPS",
+      "RelativePath": "js/loadVisualization.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\loadVisualization.js"
     },
     {
       "Identity": "C:\\Users\\Josh\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\site.js",

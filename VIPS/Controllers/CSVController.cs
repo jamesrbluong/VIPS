@@ -580,34 +580,6 @@ namespace VIPS.Controllers
             _db.SaveChanges();
 
         }
-
-        /*
-        public void CreateVisualizationTable(int ContractId, string DepartmentName, string PartnerName)
-        {
-            var DepartmentId = _db.Departments
-                .Where(dept => DepartmentName.Equals(dept.Name))
-                .Select(dept => dept.DepartmentId)
-                .FirstOrDefault();
-            Console.WriteLine(DepartmentId + DepartmentName);
-
-            var PartnerId = _db.Partners
-                .Where(partner => PartnerName.Equals(partner.Name))
-                .Select(partner => partner.PartnerId)
-                .FirstOrDefault();
-            Console.WriteLine(PartnerId + PartnerName);
-
-            var connection = new Visualization
-            {
-                ContractId = ContractId,
-                DeptId = DepartmentId,
-                PartnerId = PartnerId
-            };
-
-            _db.Visualizations.Add(connection);
-            _db.SaveChanges();
-        }
-        */
-
         public void AddVisualizationConnection(int ContractId, string FromName, string ToName, bool isSchool)
         {
             string FromId = "";
@@ -639,7 +611,7 @@ namespace VIPS.Controllers
 
             if (!string.IsNullOrEmpty(FromId) && !string.IsNullOrEmpty(ToId))
             {
-                var connection = new Visualization
+                var connection = new Edge
                 {
                     ContractId = ContractId,
                     FromId = FromId,
@@ -661,7 +633,7 @@ namespace VIPS.Controllers
                 FromId = "s" + department.SchoolId;
                 ToId = "d" + department.DepartmentId;
 
-                var connection = new Visualization
+                var connection = new Edge
                 {
                     ContractId = 0,
                     FromId = FromId,
@@ -709,3 +681,4 @@ namespace VIPS.Controllers
     }
 
     }
+

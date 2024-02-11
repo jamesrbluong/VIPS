@@ -36,7 +36,7 @@ RegisterServices(services);
 services.AddSession();
 services.AddHttpContextAccessor();
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("VIPS")));
 services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
     // Lockout settings
