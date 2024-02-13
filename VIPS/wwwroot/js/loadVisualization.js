@@ -68,6 +68,7 @@ var edgesArray = [];
 
 // var dataUrl = '/Visualization/GetPartnerData';
 console.log("this is loadVisualization.js");
+document.getElementById("response").innerHTML = "Updating the visualization graph...";
 
 $.when(
     $.ajax({
@@ -161,11 +162,13 @@ $.when(
             dataType: 'json',
             data: { nodes: allNodes },
             success: function (response) {
-                console.log("yadda yadda");
                 console.log('Success:', response);
+                document.getElementById("response").innerHTML = "The visualization graph has successfully been updated";
             },
             error: function (error) {
                 console.error('Error fetching data:', error);
+                document.getElementById("response").innerHTML = "ERROR: The visualization graph has not been updated. Resubmit the contract and try again. ";
+
             }
         });
     });
