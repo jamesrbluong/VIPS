@@ -12,7 +12,9 @@ namespace Services.Visualizations
         Task<object> FillSchoolDataAsync(string stringId, CancellationToken ct);
         Task<object> FillDepartmentData(string departmentId, CancellationToken ct);
         Task<object> FillPartnerData(string partnerId, CancellationToken ct);
-        Task<List<Edge>> GetNodesAsync(CancellationToken ct);
+        Task<List<Node>> GetNodesAsync(CancellationToken ct);
         Task<List<Edge>> GetEdgesAsync(CancellationToken ct);
+        Task AddNodeAsync(Node node, CancellationToken ct);
+        Task DeleteAllNodes(CancellationToken ct);
     }
 }

@@ -1,3 +1,5 @@
+/*
+
 document.getElementById("showAllButton").addEventListener("click", function () {
     showAllObjects();
 });
@@ -171,3 +173,4 @@ function showRowByContractID6(contractID) {
 
     newTable.show();
 }
+*/

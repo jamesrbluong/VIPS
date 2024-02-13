@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
+using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
@@ -11,7 +12,7 @@ using Common.Entities;
 
 namespace VIPS.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class CSVController : Controller
     {
 
@@ -291,7 +292,7 @@ namespace VIPS.Controllers
 
         public IActionResult OverWriteSubmit()
         {
-            DeleteVisualizationDataFromTable(); // here
+            DeleteEdgeDataFromTable(); // here
             DeleteContractDataFromTable();
             DeleteSchoolDataFromTable(); // here
             PopulateSchools();
@@ -299,8 +300,12 @@ namespace VIPS.Controllers
             PopulatePartners();
             DeleteDepartmentDataFromTable(); // here
             PopulateDepartments();
+
+            SetNodeDataJavascipt();
+
             TransferData();
             DeleteCSVDataFromTable();
+
             return RedirectToAction("Upload");
         }
 
@@ -462,14 +467,14 @@ namespace VIPS.Controllers
             }
             // Remove each record from the DbSet
             _db.CSVs.RemoveRange(csvData);
-            _db.SaveChanges();
-
             AddSchoolToDepartmentConnections();
+
+            _db.SaveChanges();
         }
 
         public void DeleteDatabaseEntries()
         {
-            DeleteVisualizationDataFromTable(); // here
+            DeleteEdgeDataFromTable(); // here
             DeleteContractDataFromTable();
             DeleteDepartmentDataFromTable(); // here
             DeletePartnerDataFromTable();
@@ -617,7 +622,7 @@ namespace VIPS.Controllers
                     FromId = FromId,
                     ToId = ToId
                 };
-                _db.Visualizations.Add(connection);
+                _db.Edges.Add(connection);
                 _db.SaveChanges();
             }
         }
@@ -628,6 +633,7 @@ namespace VIPS.Controllers
             string ToId = "N/A";
             
             var departments = _db.Departments.ToList();
+            Console.WriteLine("test 1");
             foreach (var department in departments)
             {
                 FromId = "s" + department.SchoolId;
@@ -639,15 +645,26 @@ namespace VIPS.Controllers
                     FromId = FromId,
                     ToId = ToId
                 };
-                _db.Visualizations.Add(connection);
+                Console.WriteLine("test 2" + connection.FromId + " and " + connection.ToId);
+
+                _db.Edges.Add(connection);
             }
+
             _db.SaveChanges();
         }
 
-        public void DeleteVisualizationDataFromTable()
+        public void SetNodeDataJavascipt()
         {
-            var data = _db.Visualizations.ToList();
-            _db.Visualizations.RemoveRange(data);
+            var filePath = @"wwwroot\js\loadVisualization.js";
+            string script = System.IO.File.ReadAllText(filePath);
+
+            TempData["loadVisualization"] = script;
+        }
+
+        public void DeleteEdgeDataFromTable()
+        {
+            var data = _db.Edges.ToList();
+            _db.Edges.RemoveRange(data);
             _db.SaveChanges();
         }
 

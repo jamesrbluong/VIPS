@@ -1,7 +1,7 @@
 ﻿using Common.Data;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +27,7 @@ namespace Repositories.Edges
             return default;
         }
 
-        public async Task<Common.Entities.Edge> GetByIdAsync(string id, CancellationToken cancellationToken)
+        public async Task<Common.Entities.Edge> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -61,11 +61,11 @@ namespace Repositories.Edges
 
         public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            var visualizationToDelete = await _dbContext.Edges.FindAsync(id);
+            var edgeToDelete = await _dbContext.Edges.FindAsync(id);
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                _dbContext.Edges.Remove(visualizationToDelete);
+                _dbContext.Edges.Remove(edgeToDelete);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 return;

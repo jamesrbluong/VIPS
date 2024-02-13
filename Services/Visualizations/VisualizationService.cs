@@ -1,4 +1,5 @@
-﻿using Services.Contracts;
+﻿using Common.Entities;
+using Services.Contracts;
 using Services.Departments;
 using Services.Edges;
 using Services.Nodes;
@@ -88,14 +89,22 @@ namespace Services.Visualizations
 
         public async Task<List<Common.Entities.Edge>> GetEdgesAsync(CancellationToken ct)
         {
-            return await _edgeService.GetListAsync(ct);
+            return await _edgeService.GetEdgesAsync(ct);
         }
 
         public async Task<List<Common.Entities.Node>> GetNodesAsync(CancellationToken ct)
         {
-            return await _nodeService.GetListAsync(ct);
+            return await _nodeService.GetNodesAsync(ct);
         }
 
+        public async Task AddNodeAsync(Node node, CancellationToken ct)
+        {
+            await _nodeService.AddNodeAsync(node, ct);
+        }
+        public async Task DeleteAllNodes(CancellationToken cancellationToken)
+        {
+            await _nodeService.DeleteAllNodes(cancellationToken);
+        }
     }
 }
 

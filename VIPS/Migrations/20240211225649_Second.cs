@@ -188,7 +188,7 @@ namespace VIPS.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Edges", x => new { x.ContractId, x.FromId, x.ToId });
+                    table.PrimaryKey("PK_Edges", x => new { x.ContractId, x.FromId, x.ToId } );
                 });
 
             migrationBuilder.CreateTable(
@@ -196,8 +196,10 @@ namespace VIPS.Migrations
                 columns: table => new
                 {
                     NodeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    x = table.Column<int>(type: "int", nullable: true),
-                    y = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    x = table.Column<int>(type: "int", nullable: false),
+                    y = table.Column<int>(type: "int", nullable: false),
+                    SchoolId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {

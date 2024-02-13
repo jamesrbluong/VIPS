@@ -13,8 +13,11 @@ using Services.Partners;
 using Services.Schools;
 using Services.Departments;
 using Services.Account;
-using Repositories.Visualizations;
 using Services.Visualizations;
+using Services.Nodes;
+using Services.Edges;
+using Repositories.Edges;
+using Repositories.Nodes;
 
 // "Server=(localdb)\\MSSQLLocalDB;Database=VIPS;Trusted_Connection=True;MultipleActiveResultSets=true"
 // "Server=tcp:vipsserver.database.windows.net,1433;Initial Catalog=vips;Persist Security Info=False;User ID=vipsadmin;Password=VIPS!unf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
@@ -99,7 +102,8 @@ void RegisterRepositories(IServiceCollection services)
     services.AddScoped<ISchoolRepository, SchoolRepository>();
     services.AddScoped<IDepartmentRepository, DepartmentRepository>();
     services.AddScoped<IPartnerRepository, PartnerRepository>();
-    services.AddScoped<IVisualizationRepository, VisualizationRepository>();
+    services.AddScoped<IEdgeRepository, EdgeRepository>();
+    services.AddScoped<INodeRepository, NodeRepository>();
 }
 
 void RegisterServices(IServiceCollection services)
@@ -110,6 +114,8 @@ void RegisterServices(IServiceCollection services)
     services.AddScoped<IDepartmentService, DepartmentService>();
     services.AddScoped<IPartnerService, PartnerService>();
     services.AddScoped<IVisualizationService, VisualizationService>();
+    services.AddScoped<IEdgeService, EdgeService>();
+    services.AddScoped<INodeService, NodeService>();
 }
 
 Console.WriteLine("test gitignore 2");

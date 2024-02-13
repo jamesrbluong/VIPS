@@ -13,50 +13,58 @@ using Services.Departments;
 using System.Threading;
 using Common.Entities;
 using Services.Edges;
+using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace VIPS.Controllers
 {
     public class VisualizationController : Controller
     {
-        private readonly IEdgeService _edgeService;
+        private readonly IVisualizationService _visualizationService;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private CancellationToken ct;
 
-        public VisualizationController(ApplicationDbContext db, IEdgeService edgeService)
+        public VisualizationController(ApplicationDbContext db, IVisualizationService visualizationService)
         {
-            _edgeService = edgeService;
             ct = _cancellationTokenSource.Token;
+            _visualizationService = visualizationService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetVisualizationDataAsync() // ?
+        public async Task<IActionResult> GetEdgeDataAsync() // ?
         {
-            var data = await _edgeService.GetVisualizationsAsync(ct);
+            var data = await _visualizationService.GetEdgesAsync(ct);
+            return Json(data);
+        }
+        public async Task<IActionResult> GetNodeDataAsync() // ?
+        {
+            var data = await _visualizationService.GetNodesAsync(ct);
             return Json(data);
         }
 
         public async Task<IActionResult> GetContractDataAsync()
         {
-            var data = await _edgeService.GetContractsAsync(ct);
+            var data = await _visualizationService.GetContractsAsync(ct);
             return Json(data);
         }
 
         public async Task<IActionResult> GetSchoolDataAsync()
         {
-            var data = await _edgeService.GetSchoolsAsync(ct); // if school has no depts, don't add
+            var data = await _visualizationService.GetSchoolsAsync(ct); // if school has no depts, don't add
             // var data = _db.Schools.Where(x => x.Departments != null && x.Departments.Any());
             return Json(data);
         }
 
         public async Task<IActionResult> GetDepartmentDataAsync()
         {
-            var data = await _edgeService.GetDepartmentsAsync(ct);
+            var data = await _visualizationService.GetDepartmentsAsync(ct);
             return Json(data);
         }
 
         public async Task<IActionResult> GetPartnerDataAsync()
         {
-            var data = await _edgeService.GetPartnersAsync(ct);
+            var data = await _visualizationService.GetPartnersAsync(ct);
             return Json(data);
         }
 
@@ -65,7 +73,7 @@ namespace VIPS.Controllers
         {
             if (contractId != 0)
             {
-                var contract = await _edgeService.FillContractDataAsync(contractId, ct);
+                var contract = await _visualizationService.FillContractDataAsync(contractId, ct);
                 if (contract != null)
                 {
                     var data = CondensedContract.CreateFromContract(contract);
@@ -81,7 +89,7 @@ namespace VIPS.Controllers
         {
             if (!string.IsNullOrEmpty(stringId))
             {
-                var data = await _edgeService.FillSchoolDataAsync(stringId, ct);
+                var data = await _visualizationService.FillSchoolDataAsync(stringId, ct);
                 return Json(data);
             }
 
@@ -94,7 +102,7 @@ namespace VIPS.Controllers
         {
             if (!string.IsNullOrEmpty(departmentId))
             {
-                var data = await _edgeService.FillDepartmentData(departmentId, ct);
+                var data = await _visualizationService.FillDepartmentData(departmentId, ct);
                 return Json(data);
             }
 
@@ -106,7 +114,7 @@ namespace VIPS.Controllers
         {
             if (!string.IsNullOrEmpty(partnerId))
             {
-                var data = await _edgeService.FillPartnerData(partnerId, ct);
+                var data = await _visualizationService.FillPartnerData(partnerId, ct);
                 return Json(data);
             }
 
@@ -114,14 +122,36 @@ namespace VIPS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetNodes (Node node)
+        public async Task<JsonResult> SetNodes (string nodes)
         {
-            if (node != null)
-            {
+            List<Node> nodeList = JsonConvert.DeserializeObject<List<Node>>(nodes);
 
+            if (!string.IsNullOrEmpty(nodes))
+            {
+                await _visualizationService.DeleteAllNodes(ct);
+                
+                foreach (var item in nodeList)
+                {
+                    Console.WriteLine(item.NodeId + " " + item.Name + " " + item.x + " " + item.y + " " + item.SchoolId);
+
+                    Node node = new Node
+                    {
+                        NodeId = item.NodeId,
+                        Name = item.Name,
+                        x = item.x,
+                        y = item.y,
+                        SchoolId = item.SchoolId
+                    };
+
+                    await _visualizationService.AddNodeAsync(node, ct);
+
+                }
+                
+                
             }
 
-            return default;
+
+            return Json("success");
         }
         
 

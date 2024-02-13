@@ -9,6 +9,7 @@ namespace Services.Edges
 {
     public interface IEdgeService
     {
-        
+        Task<Edge> GetById(int edgeId, CancellationToken ct);
+        Task<List<Edge>> GetEdgesAsync(CancellationToken ct);
     }
 }

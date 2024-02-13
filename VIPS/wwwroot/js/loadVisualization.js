@@ -1,3 +1,4 @@
+
 var options = {
     autoResize: true,
     height: '100%',
@@ -39,7 +40,7 @@ var options = {
         color: "black"
     },
     layout: {
-        improvedLayout: true
+        improvedLayout: false
     },
     interaction: {
         dragNodes: false,
@@ -60,13 +61,13 @@ var network;
 var schoolUrl = '/Visualization/GetSchoolData';
 var deptUrl = '/Visualization/GetDepartmentData';
 var partnerUrl = '/Visualization/GetPartnerData';
-var viusalizationUrl = '/Visualization/GetVisualizationData';
+var edgeUrl = '/Visualization/GetEdgeData';
 
 var nodesArray = [];
 var edgesArray = [];
 
 // var dataUrl = '/Visualization/GetPartnerData';
-
+console.log("this is loadVisualization.js");
 
 $.when(
     $.ajax({
@@ -83,6 +84,7 @@ $.when(
                     color: "purple",
                     width: 500,
                     height: 250
+
 
                 });
             }
@@ -135,63 +137,6 @@ $.when(
         error: function (error) {
             console.error('Error fetching data:', error);
         }
-    }),
-    $.ajax({
-        url: viusalizationUrl,
-        type: 'GET',
-        dataType: 'json',
-        success: function (params) {
-            for (var i = 0; i < params.length; i++) {
-                var tempEdge = ""
-
-                if (params[i].contractId != 0) {
-                    tempEdge =
-                    {
-                        from: params[i].fromId,
-                        to: params[i].toId,
-                        id: params[i].contractId,
-                        CreatedOn: "",
-                        ContractName: "",
-                        Owner: "",
-                        StageName: "",
-                        UpdatedOn: "",
-                        AgencyName: "",
-                        City: "",
-                        Department: "",
-                        FacultyInitiator: "",
-                        Renewal: "",
-                        State: "",
-                        Year: "",
-                        type: "contract"
-                    }
-                }
-                else {
-                    tempEdge =
-                    {
-                        from: params[i].fromId,
-                        to: params[i].toId,
-                        CreatedOn: "",
-                        ContractName: "",
-                        Owner: "",
-                        StageName: "",
-                        UpdatedOn: "",
-                        AgencyName: "",
-                        City: "",
-                        Department: "",
-                        FacultyInitiator: "",
-                        Renewal: "",
-                        State: "",
-                        Year: "",
-                        type: "contract"
-                    }
-                }
-                edgesArray.push(tempEdge);
-
-            }
-        },
-        error: function (error) {
-            console.error('Error fetching data:', error);
-        }
     })
 ).then(function () {
     var container = document.getElementById('mynetwork');
@@ -202,29 +147,32 @@ $.when(
     };
 
     network = new vis.Network(container, data, options);
+    console.log("test 1");
     network.on("stabilizationIterationsDone", function () {
-        network.setOptions({ physics: false });
+        // network.setOptions({ physics: false });
+        network.storePositions();
+        var allNodes = data.nodes.get();
+        allNodes = JSON.stringify(allNodes);
+        console.log(allNodes);
+
+        $.ajax({
+            url: '/Visualization/SetNodes',
+            type: 'POST',
+            dataType: 'json',
+            data: { nodes: allNodes },
+            success: function (response) {
+                console.log("yadda yadda");
+                console.log('Success:', response);
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
     });
-
-    // stringify result and send to hidden html value
-
-    var positions = getPositions();
-    positions = JSON.stringify(positions);
-
-    $.ajax({
-        url: '/Visualization/SetNodes',
-        type: 'POST',
-        dataType: 'json',
-        data: positions,
-        success: function (response) {
-            console.error('Success:', response);
-        },
-        error: function (error) {
-            console.error('Error fetching data:', error);
-        }
-    })
-
 });
+
+
+
 
 
 
