@@ -16,14 +16,72 @@
     <button onclick="searchContracts()" class="btn btn-primary">Search</button>
 </div>
 
-<div class="container border">
+<div class="visualization-container">
     <div id="mynetwork"></div>
     <div id="sidebar" class="sidebar">
-        <a href="#" id="sidebarName"></a>
-        <div id="sidebarTags"></div>
-        <div id="sidebarDesc"></div>
+        <div id="sidebarNode">
+        </div>
+        <div id="sidebarEdge">
+        </div>
     </div>
 </div>
+
+<div id="visnavbar" class="visnavbar">
+    <button id="filterbtn" type="button">Filters</button>
+    <div class="filtermenu menu-container menu-container-upwards">
+        <a href="#">Option 1</a>
+        <a href="#">Option 2</a>
+        <a href="#">Option 3</a>
+    </div>
+    <button id="legendbtn" type="button">Legend</button>
+    <div class="legendmenu menu-container menu-container-upwards">
+        <a href="#">Option 1</a>
+        <a href="#">Option 2</a>
+        <a href="#">Option 3</a>
+    </div>
+    <button id="settingsbtn" type="button">Settings</button>
+    <div class="settingsmenu menu-container menu-container-upwards">
+        <a href="#">Option 1</a>
+        <a href="#">Option 2</a>
+        <a href="#">Option 3</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('filterbtn').addEventListener('click', function () {
+        toggleMenu('filtermenu');
+        closeOtherMenus('filtermenu');
+    });
+
+    document.getElementById('legendbtn').addEventListener('click', function () {
+        toggleMenu('legendmenu');
+        closeOtherMenus('legendmenu');
+    });
+
+    document.getElementById('settingsbtn').addEventListener('click', function () {
+        toggleMenu('settingsmenu');
+        closeOtherMenus('settingsmenu');
+    });
+
+    function toggleMenu(menuClass) {
+        var menu = document.querySelector('.' + menuClass);
+        menu.classList.toggle('active');
+    }
+
+    function closeOtherMenus(activeMenu) {
+        var menus = ['filtermenu', 'legendmenu', 'settingsmenu'];
+        menus.forEach(function (menu) {
+            if (menu !== activeMenu) {
+                var otherMenu = document.querySelector('.' + menu);
+                if (otherMenu.classList.contains('active')) {
+                    otherMenu.classList.remove('active');
+                }
+            }
+        });
+    }
+</script>
+
+
 
 <script>
     function searchContracts() {

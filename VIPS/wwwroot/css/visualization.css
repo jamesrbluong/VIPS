@@ -12,6 +12,46 @@
     
 }
 
+#visnavbar {
+    height: 50px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    bottom: 0;
+    background-color: #0a233f;
+}
+
+    #visnavbar button {
+        padding: 5px 10px;
+        margin: 5px 5px;
+        height: 80%;
+        align-content: center;
+        text-align: center;
+    }
+
+.menu-container {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    bottom: 100%; 
+}
+
+    .menu-container a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .menu-container.active {
+        display: block;
+    }
+
+
+
 .sidebar {
     visibility: hidden;
     height: 650px;

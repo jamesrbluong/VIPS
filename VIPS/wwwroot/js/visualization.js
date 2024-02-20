@@ -21,7 +21,6 @@
     },
     physics: {
         enabled: true,
-        stabilizations: false,
         barnesHut: {
             gravitationalConstant: -2000,
             centralGravity: 0.1,
@@ -213,6 +212,7 @@ $.when(
         }
     }
     */
+
     
     network.on("stabilizationIterationsDone", function () {
         network.setOptions({ physics: false });
