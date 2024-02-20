@@ -15,58 +15,32 @@ namespace Repositories.Contracts
 
         public Task<List<Common.Entities.Contract>> GetListAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return _dbContext.Contracts.ToListAsync(cancellationToken);
-            }
-
-            return default;
+            return _dbContext.Contracts.ToListAsync(cancellationToken);
         }
 
         public async Task<Common.Entities.Contract> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return await _dbContext.Contracts.FindAsync(id);
-            }
-
-            return default;
-
+            return await _dbContext.Contracts.FindAsync(id);
         }
 
         public async Task AddAsync(Common.Entities.Contract contract, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Contracts.Add(contract);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Contracts.Add(contract);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(Common.Entities.Contract contract, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Contracts.Update(contract);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Contracts.Update(contract);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var contractToDelete = await _dbContext.Contracts.FindAsync(id);
+            var contractToDelete = await _dbContext.Contracts.FindAsync(id);
 
-                _dbContext.Contracts.Remove(contractToDelete);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Contracts.Remove(contractToDelete);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

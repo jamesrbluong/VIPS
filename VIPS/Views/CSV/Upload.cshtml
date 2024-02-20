@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_UploadLayout.cshtml";
+    ViewData["Title"] = "Upload";
 }
 
 @model IEnumerable<Common.Entities.CSV>
@@ -465,9 +466,15 @@
 }
 <div id="mynetwork" style="display: none;"></div>
 <p id="response"></p>
+<div id="progressContainer" class="progress" style="display:none;">
+    <div id="progressBar" class="progress-bar" role="progressbar" style="width:100%;" >
+        100%
+    </div>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script>
     $(document).ready(function () {
         // Attach click event handler to each row
@@ -484,6 +491,7 @@
             showRowByContractID6(contractID);
         });
     });
+
     @if (TempData["loadVisualization"] != null)
     {
         @Html.Raw(TempData["loadVisualization"]);

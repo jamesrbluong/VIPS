@@ -28,7 +28,7 @@ nav#navBar a{
 .MenuHoriz{
 	width:100%;
 	margin:auto;
-	margin-left:60px;
+	margin-left:250px;
 	display:flex;
 	flex-direction:row;
 	align-items:stretch;

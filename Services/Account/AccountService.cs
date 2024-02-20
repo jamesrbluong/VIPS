@@ -30,51 +30,7 @@ namespace Services.Account
             // _signInManager = signInManager;
             
         }
-
-        /**
-         * Repository Methods
-         * 
-         */
-        public async Task<List<Common.Entities.AppUser>> GetAccountsAsync(CancellationToken ct)
-        {
-            return await _accountRepository.GetListAsync(ct);
-        }
-
-        public async Task<AppUser> GetByEmailAsync (string email, CancellationToken ct)
-        {
-            return await _accountRepository.GetByEmailAsync(email, ct);
-        }
-
-        public async Task<AppUser> GetByIdAsync(string id, CancellationToken ct)
-        {
-            return await _accountRepository.GetByIdAsync(id, ct);
-        }
-
-        public async Task<AppUser> GetCurrentUser(string id, CancellationToken ct)
-        {
-            return await _accountRepository.GetCurrentUser(id, ct);
-        }
-
-
-        public async Task<IList<string>> GetRolesAsync(AppUser user, CancellationToken ct)
-        {
-            return await _accountRepository.GetRolesAsync(user, ct);
-        }
-
-        public async Task AddToRoleAsync(AppUser user, string name, CancellationToken ct)
-        {
-            await _accountRepository.AddToRoleAsync(user, name, ct);
-        }
-
-        public async Task<Microsoft.AspNetCore.Identity.IdentityResult> CreateAccountAsync(AppUser user, string password, CancellationToken ct)
-        {
-            return await _accountRepository.CreateAccountAsync(user, password, ct);
-        }
-
-        public async Task<Microsoft.AspNetCore.Identity.IdentityResult> DeleteAccountAsync(AppUser user, CancellationToken ct)
-        {
-            return await _accountRepository.DeleteAccountAsync(user, ct);
-        }
+        
 
         public async Task ChangeRole(string roleName, AppUser user, CancellationToken ct)
         {
@@ -86,56 +42,10 @@ namespace Services.Account
                 await _accountRepository.RemoveFromRoleAsync(user, oldRoleName, ct);
                 await _accountRepository.AddToRoleAsync(user, roleName, ct);
 
-                await UpdateAsync(user, ct);
+                await _accountRepository.UpdateAsync(user, ct);
             }
         }
 
-        public async Task UpdateAsync(AppUser user, CancellationToken ct)
-        {
-            await _accountRepository.UpdateAsync(user, ct);
-        }
-
-
-        public async Task UpdateSecurityStampAsync(AppUser user, CancellationToken ct)
-        {
-            await _accountRepository.UpdateSecurityStampAsync(user, ct);
-        }
-
-        public async Task<string> GeneratePasswordResetTokenAsync(AppUser user, CancellationToken ct)
-        {
-            return await _accountRepository.GeneratePasswordResetTokenAsync(user, ct);
-        }
-
-        public async Task<bool> HasPasswordAsync(AppUser user, CancellationToken ct)
-        {
-            return await _accountRepository.HasPasswordAsync(user, ct);
-        }
-
-        public async Task<Microsoft.AspNetCore.Identity.IdentityResult> ResetPasswordAsync(AppUser user, string ResetCode, string NewPassword, CancellationToken ct)
-        {
-            return await _accountRepository.ResetPasswordAsync(user, ResetCode, NewPassword, ct);
-        }
-
-        /**
-         * signInManager Methods
-         * 
-         */
-
-        public async Task SignOutAsync (CancellationToken ct)
-        {
-            await _accountRepository.SignOutAsync(ct);
-        }
-
-        public async Task<Microsoft.AspNetCore.Identity.SignInResult> PasswordSignInAsync (AppUser user, string password, bool isPersistent, bool lockoutOnFailure, CancellationToken ct)
-        {
-            // make identityresult
-            return await _accountRepository.PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure, ct);
-        }
-
-        /**
-         * Email Methods
-         * 
-         */
         public void SendEmail(string Email, string Code, string Purpose, string scheme, HostString host)
         {
             var fromEmail = new MailAddress("joshuastabile@gmail.com", "test"); // change email from mine
@@ -181,12 +91,6 @@ namespace Services.Account
                 smtp.Send(message);
 
         }
-
-
-        /**
-         * Input Validation Methods
-         * 
-         */
 
         public bool ValidateEmail(string email)
         {

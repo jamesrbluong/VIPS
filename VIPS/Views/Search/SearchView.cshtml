@@ -1,7 +1,7 @@
 ﻿@model VIPS.Models.ViewModels.Search.SearchViewModel
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Search";
 }
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <h1>View</h1>
+    <h1>Search</h1>
 
     <form method="get" asp-action="SearchView">
         <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">

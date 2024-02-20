@@ -458,7 +458,7 @@ namespace VIPS.Controllers
                 }
                 else if (!string.IsNullOrEmpty(FolderNameRegex(contractItem.FolderName))) // FIX dept/coehs may be blank thats not good
                 {
-                    Console.WriteLine("isSchool test" + contractItem.Department + " " + contractItem.COEHSPrograms);
+                    // Console.WriteLine("isSchool test" + contractItem.Department + " " + contractItem.COEHSPrograms);
                     from = FolderNameRegex(contractItem.FolderName);
                     to = contractItem.AgencyName;
 
@@ -513,7 +513,7 @@ namespace VIPS.Controllers
             {
                 var schoolName = FolderNameRegex(folder);
 
-                Console.WriteLine("FolderName test 2" + schoolName);
+                // Console.WriteLine("FolderName test 2" + schoolName);
 
                 schoolNames.Add(schoolName);
             }
@@ -543,7 +543,7 @@ namespace VIPS.Controllers
                 .Distinct()
                 .ToList();
 
-            COEHSData.ForEach(Console.WriteLine);
+            // COEHSData.ForEach(Console.WriteLine);
 
             deptData = deptData.Concat(COEHSData).ToList();
 
@@ -633,7 +633,7 @@ namespace VIPS.Controllers
             string ToId = "N/A";
             
             var departments = _db.Departments.ToList();
-            Console.WriteLine("test 1");
+            // Console.WriteLine("test 1");
             foreach (var department in departments)
             {
                 FromId = "s" + department.SchoolId;

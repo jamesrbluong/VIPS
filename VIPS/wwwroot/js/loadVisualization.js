@@ -1,4 +1,3 @@
-
 var options = {
     autoResize: true,
     height: '100%',
@@ -70,6 +69,8 @@ var edgesArray = [];
 console.log("this is loadVisualization.js");
 document.getElementById("response").innerHTML = "Updating the visualization graph...";
 
+updateProgressBar(0);
+
 $.when(
     $.ajax({
         url: schoolUrl,
@@ -90,6 +91,7 @@ $.when(
                 });
             }
             nodesArray = nodesArray.concat(schoolArray);
+            updateProgressBar(15);
         },
         error: function (error) {
             console.error('Error fetching data:', error);
@@ -112,6 +114,7 @@ $.when(
                 });
             }
             nodesArray = nodesArray.concat(deptArray);
+            updateProgressBar(25);
         },
         error: function (error) {
             console.error('Error fetching data:', error);
@@ -134,6 +137,7 @@ $.when(
                 });
             }
             nodesArray = nodesArray.concat(partnerArray);
+            updateProgressBar(40);
         },
         error: function (error) {
             console.error('Error fetching data:', error);
@@ -148,14 +152,13 @@ $.when(
     };
 
     network = new vis.Network(container, data, options);
-    console.log("test 1");
+    updateProgressBar(50);
     network.on("stabilizationIterationsDone", function () {
         // network.setOptions({ physics: false });
         network.storePositions();
         var allNodes = data.nodes.get();
         allNodes = JSON.stringify(allNodes);
-        console.log(allNodes);
-
+        updateProgressBar(75);
         $.ajax({
             url: '/Visualization/SetNodes',
             type: 'POST',
@@ -164,6 +167,7 @@ $.when(
             success: function (response) {
                 console.log('Success:', response);
                 document.getElementById("response").innerHTML = "The visualization graph has successfully been updated";
+                updateProgressBar(100);
             },
             error: function (error) {
                 console.error('Error fetching data:', error);
@@ -174,6 +178,19 @@ $.when(
     });
 });
 
+function updateProgressBar(n) {
+    var progressBar = document.getElementById("progressBar");
+    var progressContainer = document.getElementById("progressContainer");
+    if (progressContainer.style.display === 'none') {
+        progressContainer.style.display = 'initial'
+    }
+    progressBar.innerHTML = n;
+    progressBar.setAttribute("style", "width:" + n + "%");
+    if (n === 100) {
+        progressContainer.style.transition = 'opacity 5s ease';
+        progressContainer.style.opacity = '0';
+    }
+}
 
 
 

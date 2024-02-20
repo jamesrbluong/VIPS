@@ -65,12 +65,6 @@
     var nodesArray = [];
     var edgesArray = [];
 
-    /**
-     * x: 100 + (i * 1.25),
-     * y: 100 + (i * 1.25)
-     * 
-     */
-
 
     $.when(
         $.ajax({
@@ -239,7 +233,9 @@
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
 
-                                if (data === undefined) {
+                                console.log(data.length);
+
+                                if (data !== undefined && data.length != 0) {
 
                                     // ADD CONSTANT SCHOOL INFO
                                     newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
