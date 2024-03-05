@@ -26,3 +26,79 @@
     </div>
 </div>
 
+
+    <div id="visnavbar" class="visnavbar">
+    <button id="filterbtn" type="button">Filters</button>
+    <div class="filtermenu menu-container menu-container-upwards">
+        <a href="#">fOption 1</a>
+        <a href="#">Option 2</a>
+        <div id="list1" class="dropdown-check-list" tabindex="100">
+            <span class="anchor">Departments:</span>
+            <ul class="items">
+                <li><input type="checkbox" />a </li>
+                <li><input type="checkbox" />b</li>
+                <li><input type="checkbox" />c </li>
+                <li><input type="checkbox" />d </li>
+                <li><input type="checkbox" />e </li>
+                <li><input type="checkbox" />f </li>
+                <li><input type="checkbox" />g</li>
+            </ul>
+        </div>
+    </div>
+    <button id="legendbtn" type="button">Legend</button>
+    <div class="legendmenu menu-container menu-container-upwards">
+        <a href="#">lOption 1</a>
+        <a href="#">Option 2</a>
+        <a href="#">Option 3</a>
+    </div>
+    <button id="settingsbtn" type="button">Settings</button>
+    <div class="settingsmenu menu-container menu-container-upwards">
+        <a href="#">sOption 1</a>
+        <a href="#">Option 2</a>
+        <a href="#">Option 3</a>
+    </div>
+</div>
+
+<script>
+
+    var checkList = document.getElementById('list1');
+    checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
+        if (checkList.classList.contains('visible'))
+            checkList.classList.remove('visible');
+        else
+            checkList.classList.add('visible');
+    }
+
+    document.getElementById('filterbtn').addEventListener('click', function () {
+        toggleMenu('filtermenu');
+        closeOtherMenus('filtermenu');
+    });
+
+    document.getElementById('legendbtn').addEventListener('click', function () {
+        toggleMenu('legendmenu');
+        closeOtherMenus('legendmenu');
+    });
+
+    document.getElementById('settingsbtn').addEventListener('click', function () {
+        toggleMenu('settingsmenu');
+        closeOtherMenus('settingsmenu');
+    });
+
+    function toggleMenu(menuClass) {
+        var menu = document.querySelector('.' + menuClass);
+        menu.classList.toggle('active');
+    }
+
+    function closeOtherMenus(activeMenu) {
+        var menus = ['filtermenu', 'legendmenu', 'settingsmenu'];
+        menus.forEach(function (menu) {
+            if (menu !== activeMenu) {
+                var otherMenu = document.querySelector('.' + menu);
+                if (otherMenu.classList.contains('active')) {
+                    otherMenu.classList.remove('active');
+                }
+            }
+        });
+    }
+</script>
+

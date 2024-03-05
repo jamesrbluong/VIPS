@@ -636,3 +636,9 @@ C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Services.dll
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Common.pdb
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Repositories.pdb
 C:\Users\Josh\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Services.pdb
+C:\Users\frost\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Common.dll
+C:\Users\frost\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Repositories.dll
+C:\Users\frost\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Services.dll
+C:\Users\frost\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Common.pdb
+C:\Users\frost\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Repositories.pdb
+C:\Users\frost\Documents\GitHub\VIPS\VIPS\bin\Debug\net6.0\Services.pdb
