@@ -39,13 +39,22 @@ namespace Services.Visualizations
         public async Task<object> FillSchoolDataAsync(string stringId, CancellationToken ct)
         {
             // remove the letter identifier from the front of id
-            stringId = stringId.Remove(0, 1);
+            stringId = IsolateNodeId(stringId);
             int schoolId = Int32.Parse(stringId);
 
             var depts = await _departmentService.GetDepartmentsAsync(ct);
             var deptNames = depts.Where(x => x.SchoolId == schoolId).Select(x => new { departmentName = x.Name }).ToList();
 
-            return deptNames;
+            var connections = await GetEdgesAsync(ct);
+            var contracts = connections.Where(x => x.FromId == "s" + schoolId && x.ContractId != 0).Select(x => new { contractId = x.ContractId }).ToList();
+
+            var result = new
+            {
+                Depts = deptNames,
+                Contracts = contracts
+            };
+
+            return result;
         }
 
         public async Task<object> FillDepartmentData(string departmentId, CancellationToken ct)
@@ -63,6 +72,36 @@ namespace Services.Visualizations
 
             return contracts;
         }
+
+        public string IsolateContractId (string input)
+        {
+            Console.WriteLine("IsolateId: " + input);
+
+
+            if (input.Length > 0 && char.IsLetter(input[0]))
+            {
+                input = input.Substring(1);
+            }
+            
+
+            Console.WriteLine(input);
+
+            return input;
+
+        }
+
+        public string IsolateNodeId (string input)
+        {
+            Console.WriteLine("IsolateNodeId: " + input);
+            if (input.Length > 0 && char.IsLetter(input[0]))
+            {
+                input = input.Substring(1);
+            }
+            Console.WriteLine("IsolateNodeId: " + input);
+
+            return input;
+        }
+
 
 
         // Other services methods

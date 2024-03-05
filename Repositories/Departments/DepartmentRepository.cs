@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
 
-namespace Repositories.Contracts
+namespace Repositories.Departments
 {
     public class DepartmentRepository : IDepartmentRepository
     {

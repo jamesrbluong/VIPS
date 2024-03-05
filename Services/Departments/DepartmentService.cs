@@ -1,5 +1,5 @@
 ﻿using Common.Data;
-using Repositories.Contracts;
+using Repositories.Departments;
 using Repositories.Schools;
 using Services.Schools;
 

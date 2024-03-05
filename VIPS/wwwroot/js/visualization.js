@@ -36,7 +36,7 @@
                 type: 'continuous', // Set type to 'continuous' for straight lines without curves
                 roundness: 0 // Set roundness to 0 to remove any rounding effect
             },
-            width: 3,
+            width: 16,
             color: "black"
         },
         layout: {
@@ -44,7 +44,7 @@
         },
         interaction: {
             dragNodes: false,
-            navigationButtons: true,
+            navigationButtons: false,
             selectConnectedEdges: false,
 
             hideNodesOnDrag: false,
@@ -128,9 +128,11 @@
                     if (params[i].contractId != 0) {
                         tempEdge =
                         {
+                            id: i,
                             from: params[i].fromId,
                             to: params[i].toId,
-                            id: params[i].contractId,
+                            ContractId: params[i].contractId,
+                            ExpirationDate: params[i].expirationDate,
                             CreatedOn: "",
                             ContractName: "",
                             Owner: "",
@@ -151,6 +153,7 @@
                         {
                             from: params[i].fromId,
                             to: params[i].toId,
+                            ExpirationDate: params[i].expirationDate,
                             CreatedOn: "",
                             ContractName: "",
                             Owner: "",
@@ -182,16 +185,20 @@
             edges: new vis.DataSet(edgesArray)
         };
 
+        data.edges.forEach(function (edge) {
+            var color = checkExpiration(edge.ExpirationDate);
+            edge.color = color;
+            
+        });
+
         network = new vis.Network(container, data, options);
 
         /*
-        for (i = 0; i < nodesArray.length; i++) {
-            if (nodesArray[i].type == "school") {
-                var clusterNode = network.clusterByConnection(nodesArray[i].id);
-                // console.log(clusterNode);
-                // network.clustering.updateClusteredNode(clusterNode.id, { shape: 'box', label: nodesArray[i].label });
+        data.nodes.forEach(function (node) {
+            if (node.type === "school") {
+                network.clusterByConnection(node.id);
             }
-        }
+        });
         */
 
         network.on("stabilizationIterationsDone", function () {
@@ -200,6 +207,7 @@
 
         // network.on('click', neighbourhoodHighlight);
         network.on('selectNode', function (params) {
+            console.log("selectNode");
             var nodeId = params.nodes[0];
             var node = data.nodes.get(nodeId);
             var sidebarNode = document.getElementById("sidebarNode");
@@ -209,7 +217,7 @@
             var nodeLocation = network.body.nodes[nodeId];
 
             sidebarEdge.replaceChildren();
-            console.log(nodeId + " " + nodeLocation.x + " " + nodeLocation.y);
+
             network.moveTo({
                 position: { x: nodeLocation.x, y: nodeLocation.y },
                 animation: true
@@ -218,10 +226,10 @@
             if (network.isCluster(nodeId) === true) {
                 // Open the cluster associated with the clicked node
                 network.openCluster(nodeId);
+
             }
             else {
                 if (node.hiddenLabel == undefined) {
-
                     if (node.type == 'school') {
                         $.ajax({
                             url: '/Visualization/FillSchoolData',
@@ -230,29 +238,62 @@
                             data: { stringId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
                             success: function (data) {
                                 console.log(JSON.stringify(data));
+
+                                var depts = data.depts;
+                                var contracts = data.contracts;
+
+                                console.log(JSON.stringify(depts));
+                                console.log(JSON.stringify(contracts));
+
+
+
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
 
-                                console.log(data.length);
 
                                 if (data !== undefined && data.length != 0) {
 
                                     // ADD CONSTANT SCHOOL INFO
-                                    newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
 
-                                    for (i = 0; i < data.length; i++) {
-                                        var li = document.createElement('li')
-                                        var anchor = createAnchor(data[i].departmentName, "sidebarEntry");
+                                    if (depts.length > 0) {
+                                        newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
 
-                                        // newElements.push(anchor);
-                                        li.appendChild(anchor);
-                                        ul.appendChild(li);
+                                        var ulDepts = document.createElement('ul');
+
+                                        for (i = 0; i < depts.length; i++) {
+                                            var li = document.createElement('li')
+                                            var anchor = createAnchor(depts[i].departmentName, "sidebarEntry");
+
+                                            // newElements.push(anchor);
+                                            li.appendChild(anchor);
+                                            ulDepts.appendChild(li);
+
+                                        }
+                                        newElements.push(ulDepts);
 
                                     }
 
-                                    newElements.push(ul);
+                                    
 
+                                    if (contracts.length > 0) {
+                                        newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
 
+                                        var ulContracts = document.createElement('ul');
+
+                                        for (i = 0; i < contracts.length; i++) {
+                                            var li = document.createElement('li')
+                                            var anchor = createAnchor(contracts[i].contractId, "sidebarEntry");
+                                            anchor.href = '/Search/Contract/' + contracts[i].contractId;
+                                            anchor.setAttribute('target', '_blank');
+
+                                            // newElements.push(anchor);
+                                            li.appendChild(anchor);
+                                            ulContracts.appendChild(li);
+
+                                        }
+                                        newElements.push(ulContracts);
+
+                                    }
                                 }
                                 else {
                                     newElements.push(createAnchor("No departments", "sidebarData")); 
@@ -365,11 +406,12 @@
                     url: '/Visualization/FillContractData',
                     type: 'GET',
                     dataType: 'json',
-                    data: { contractId: edge.id },
+                    data: { contractId: edge.ContractId },
                     success: function (params) {
                         var updatedEdge =
                         {
-                            id: params.contractID,
+                            id: edgeId,
+                            ContractId: params.contractID,
                             CreatedOn: params.createdOn,
                             ContractName: params.contractName,
                             Owner: params.owner,
@@ -385,10 +427,10 @@
                         };
 
                         data.edges.update(updatedEdge);
-                        edge = data.edges.get(edgeId);
+                        var edge = data.edges.get(edgeId);
 
-                        var anchor = createAnchor(edge.ContractName + " [" + edge.id + "]", "sidebarTitle");
-                        anchor.href = '/Search/Contract/' + edge.id;
+                        var anchor = createAnchor(edge.ContractName + " [" + edge.ContractId + "]", "sidebarTitle");
+                        anchor.href = '/Search/Contract/' + edge.ContractId;
                         anchor.setAttribute('target', '_blank');
 
                         sidebarEdge.replaceChildren(
@@ -414,7 +456,7 @@
 
             }
             else {
-                document.getElementById("sidebarName").innerHTML = edge.hiddenLabel;
+                document.getElementById("sidebarName").innerHTML = beforeEdge.hiddenLabel;
             }
             if (!isGuid(edgeId)) {
                 openSidebar();
@@ -427,6 +469,8 @@
         network.on("deselectEdge", function (params) {
             closeSidebar();
         });
+
+        
 
     });
 
@@ -450,10 +494,33 @@
     }
 
     function isGuid(value) {
-        var regex = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i;
+        var regex = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/;
         var match = regex.exec(value);
         return match != null;
     }
+
+    function checkExpiration(expirationDate) {
+        if (expirationDate == null) {
+            return 'black';
+        }
+        expirationDate = Date.parse(expirationDate);
+        var today = new Date();
+        var oneMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        // var twoMonth = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
+
+        if (expirationDate <= today) { // already expired
+            return 'red';
+        }
+        else if (expirationDate <= oneMonth) { // will expire within the month
+            return 'orange';
+        }
+        else {
+            return 'black';
+        }
+        
+        
+    }
+    
 }
 else {
     console.log("mynetwork not in html");

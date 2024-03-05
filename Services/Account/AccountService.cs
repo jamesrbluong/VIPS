@@ -31,6 +31,13 @@ namespace Services.Account
             
         }
         
+        public async Task<List<AppUser>> SearchAccounts (string query, CancellationToken ct)
+        {
+            var result = (await _accountRepository.GetListAsync(ct))
+                .Where(a => a.Email.ToLower().Contains(query.ToLower())).ToList();
+
+            return result;
+        }
 
         public async Task ChangeRole(string roleName, AppUser user, CancellationToken ct)
         {

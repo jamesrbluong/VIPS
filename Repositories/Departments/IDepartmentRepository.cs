@@ -1,6 +1,6 @@
 ﻿using Common.Entities;
 
-namespace Repositories.Contracts
+namespace Repositories.Departments
 {
     public interface IDepartmentRepository
     {

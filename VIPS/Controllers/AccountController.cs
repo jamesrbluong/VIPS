@@ -44,6 +44,24 @@ namespace VIPS.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> SearchAccounts (string query, CancellationToken ct)
+        {
+            if (!string.IsNullOrEmpty(query))
+            {
+                var temp = await _accountService.SearchAccounts(query, ct);
+
+                var model = new IndexViewModel
+                {
+                    UserList = temp,
+                    AccountTotal = temp.Count()
+                };
+                return View("Index", model);
+            }
+
+            return RedirectToAction("Index");
+            
+        }
+
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
@@ -161,7 +179,7 @@ namespace VIPS.Controllers
             var currUser = await _accountRepository.GetCurrentUser(User.Identity.GetUserId(), ct);
             AppUser user = await _accountRepository.GetByIdAsync(id, ct);
 
-            if (currUser.Id.ToString().Equals(user.Id))
+            if (currUser.Id.Equals(user.Id))
             {
                 TempData["error"] = "You cannot delete the account you are currently logged in to";
                 return RedirectToAction("Index", "Account");
@@ -191,7 +209,7 @@ namespace VIPS.Controllers
             var currUser = await _accountRepository.GetCurrentUser(User.Identity.GetUserId(), ct);
             AppUser oldUser = await _accountRepository.GetByIdAsync(id, ct);
 
-            if (currUser.Id.ToString().Equals(oldUser.Id))
+            if (currUser.Id.Equals(oldUser.Id))
             {
                 TempData["error"] = "You cannot edit the account you are currently logged in to";
                 return RedirectToAction("Index", "Account");

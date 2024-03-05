@@ -76,6 +76,8 @@ namespace VIPS.Controllers
         [HttpGet]
         public async Task<IActionResult> FillContractData(int contractId)
         {
+            contractId = Int32.Parse(_visualizationService.IsolateContractId(contractId.ToString()));
+            Console.WriteLine("FillContractData: " + contractId);
             if (contractId != 0)
             {
                 var contract = await _visualizationService.FillContractDataAsync(contractId, ct);
@@ -85,6 +87,7 @@ namespace VIPS.Controllers
                     return Json(data);
                 }
             }
+            Console.WriteLine("uh oh: ");
 
             return default;
         }

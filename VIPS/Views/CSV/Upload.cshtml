@@ -464,6 +464,7 @@
     <div id="containerId5"></div>
     <div id="containerId6"></div>
 }
+<button id="runButton">Load Visualization</button>
 <div id="mynetwork" style="display: none;"></div>
 <p id="response"></p>
 <div id="progressContainer" class="progress" style="display:none;">
@@ -491,13 +492,17 @@
             showRowByContractID6(contractID);
         });
     });
-
-    @if (TempData["loadVisualization"] != null)
-    {
-        @Html.Raw(TempData["loadVisualization"]);
-    }
-    
 </script> 
+
+<script>
+    document.getElementById("runButton").addEventListener("click", function () {
+        var scriptElement = document.createElement("script");
+
+        scriptElement.src = "/js/loadVisualization.js";
+
+        document.head.appendChild(scriptElement);
+    });
+</script>
 
 
 @if (TempData["AlertMessage"] != null)

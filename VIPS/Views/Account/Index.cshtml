@@ -9,11 +9,16 @@
 
 <div class="account-header">
     <h2>Account List</h2>
-    
+    <form asp-action="SearchAccounts" asp-controller="Account" method="POST">
     <div class="searchBar">
         <a>@Model.AccountTotal accounts</a>
-        <input type="text" placeholder="Search..." />
+        
+            <input type="text" name="query" placeholder="Search..." />
+            <button type="submit">Search</button>
+        
+        
     </div>
+    </form>
 </div>
 
 
