@@ -17,6 +17,7 @@
                 interpolation: false    // 'true' for intensive zooming
             },
             mass: 4,
+            borderWidth: 2,
             color: "rgba(10, 35, 63,1)"
 
         },
@@ -94,7 +95,8 @@
                             schoolId: data[i].schoolId,
                             x: data[i].x,
                             y: data[i].y,
-                            type: "department"
+                            type: "department",
+                            color: "#0A233F"
                         });
                     }
                     else if (type === "p") {
@@ -188,7 +190,6 @@
         data.edges.forEach(function (edge) {
             var color = checkExpiration(edge.ExpirationDate);
             edge.color = color;
-            
         });
 
         network = new vis.Network(container, data, options);
@@ -203,7 +204,50 @@
 
         network.on("stabilizationIterationsDone", function () {
             network.setOptions({ physics: false });
+
         });
+
+        function countConnectionsPartner(nodeId) {
+            var connectedNodes = network.getConnectedNodes(nodeId);
+
+            var connectedNodesCount = connectedNodes.length;
+
+            return connectedNodesCount;
+        }
+
+        function countConnectionsDepartment(nodeId) {
+            var connectedNodes = network.getConnectedNodes(nodeId);
+            var connectedNodesCount = 0;
+            connectedNodes.forEach(function (nodeId) {
+                if (data.nodes.get(nodeId).type == "partner") {
+                    connectedNodesCount++;
+                }
+            });
+
+            return connectedNodesCount;
+
+        }
+
+        function countConnectionsSchool(nodeId) {
+            var connectedNodes = network.getConnectedNodes(nodeId);
+
+            var connectedNodesCount = 0;
+            connectedNodes.forEach(function (nodeId) {
+                if (data.nodes.get(nodeId).type == "partner") {
+                    connectedNodesCount++;
+                }
+                var neighbors = network.getConnectedNodes(nodeId);
+                neighbors.forEach(function (nodeId) {
+                    if (data.nodes.get(nodeId).type == "partner") {
+                        connectedNodesCount++;
+                    }
+
+                });
+            });
+
+            return connectedNodesCount;
+
+        }
 
         // network.on('click', neighbourhoodHighlight);
         network.on('selectNode', function (params) {
@@ -249,7 +293,7 @@
 
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
-
+                                newElements.push(createAnchor("Number of Connections: " + countConnectionsSchool(node.id), "sidebarEntry"));
 
                                 if (data !== undefined && data.length != 0) {
 
@@ -299,7 +343,6 @@
                                     newElements.push(createAnchor("No departments", "sidebarData")); 
                                 }
 
-                                newElements.push(createAnchor("Neighbor Nodes Count: " + countNeighborNodes(node.id), "sidebarEntry"));
 
                                 sidebarNode.replaceChildren(...newElements);
                             },
@@ -317,6 +360,7 @@
                             success: function (data) {
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
+                                newElements.push(createAnchor("Number of Connections: " + countConnectionsDepartment(node.id), "sidebarEntry"));
 
                                 // ADD CONSTANT PARTNER INFO
 
@@ -334,7 +378,6 @@
 
                                 }
                                 newElements.push(ul);
-                                newElements.push(createAnchor("Neighbor Nodes Count: " + countNeighborNodes(node.id), "sidebarEntry"));
 
                                 sidebarNode.replaceChildren(...newElements);
 
@@ -357,6 +400,7 @@
 
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
+                                newElements.push(createAnchor("Number of Connections: " + countConnectionsPartner(node.id), "sidebarEntry"));
 
                                 // ADD CONSTANT PARTNER INFO
 
@@ -374,7 +418,6 @@
 
                                 }
                                 newElements.push(ul);
-                                newElements.push(createAnchor("Neighbor Nodes Count: " + countNeighborNodes(node.id), "sidebarEntry"));
 
                                 sidebarNode.replaceChildren(...newElements);
 
@@ -444,10 +487,10 @@
                             edge.Owner && createAnchor("Owner: " + edge.Owner, "sidebarData"),
                             edge.FacultyInitiator && createAnchor("Faculty Initiator: " + edge.FacultyInitiator, "sidebarData"),
                             edge.StageName && createAnchor("Stage Name: " + edge.StageName, "sidebarData"),
-                            edge.CreatedOn && createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
                             edge.City && createAnchor("City: " + edge.City, "sidebarData"),
                             edge.State && createAnchor("State: " + edge.State, "sidebarData"),
                             edge.Year && createAnchor("Year: " + edge.Year, "sidebarData"),
+                            edge.CreatedOn && createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
                             edge.UpdatedOn && createAnchor("Updated On: " + edge.UpdatedOn, "sidebarData"),
                             edge.Renewal && createAnchor("Renewal: " + edge.Renewal, "sidebarData")
                         );
@@ -503,28 +546,23 @@
         return match != null;
     }
 
-    function countNeighborNodes(nodeId) {
-        var neighbors = network.getConnectedNodes(nodeId);
-        return neighbors.length;
-    }
-
     function checkExpiration(expirationDate) {
         if (expirationDate == null) {
-            return 'black';
+            return '76BC43'; // UNF Leaf
         }
         expirationDate = Date.parse(expirationDate);
         var today = new Date();
         var sixMonths = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
         // var twoMonth = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
 
-        if (expirationDate <= today) { // already expired
-            return 'red';
+        if (expirationDate < today) { // already expired
+            return '#C41F4B'; // UNF Sunset
         }
-        else if (expirationDate <= sixMonths) { // will expire within the month
-            return 'yellow';
+        else if (expirationDate < sixMonths) { // will expire within the month
+            return 'FFC62F'; // UNF Sunshine
         }
         else {
-            return 'black';
+            return '76BC43'; // UNF Leaf
         }
         
         

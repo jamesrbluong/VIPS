@@ -63,7 +63,7 @@ namespace Services.CSV
                 }
                 else if (!string.IsNullOrEmpty(schoolName)) // FIX dept/coehs may be blank thats not good
                 {
-                    from = GetSchoolName(contractItem.ContractTypeName, schoolName);
+                    from = schoolName; // changed might be wrong
                     isSchool = true;
                 }
                 else
@@ -159,7 +159,7 @@ namespace Services.CSV
             {
                 Console.WriteLine(BCHTrue.Count + "BCH is TRUE" + contractItem.ContractID);
                 string from;
-                if (!string.IsNullOrEmpty(contractItem.Department))
+                if (!string.IsNullOrEmpty(contractItem.Department) && !contractItem.Department.Equals("College"))
                 {
                     isSchool = false;
                     from = contractItem.Department; // only have to check department because COEHSProgram and CCECMajor are for different colleges and were handled earlier
@@ -280,8 +280,8 @@ namespace Services.CSV
                            c.Department :
                            !string.IsNullOrEmpty(c.COEHSPrograms) ?
                                 c.COEHSPrograms :
-                                (!string.IsNullOrEmpty(c.CCECMajors) ?
-                                    c.CCECMajors : "")
+                                !string.IsNullOrEmpty(c.CCECMajors) ?
+                                    c.CCECMajors : ""
                 })
                 .GroupBy(item => item.dept ) // Group by both school and dept
                 .Select(group => group.First()) // Take the first item from each group
@@ -300,13 +300,18 @@ namespace Services.CSV
                         .Select(school => school.SchoolId)
                         .FirstOrDefault();
 
-                        var dept = new Department
+                        if (!item.dept.Equals("College")) // the college department name is not valid
                         {
-                            Name = item.dept,
-                            SchoolId = schoolId
-                        };
+                            var dept = new Department
+                            {
+                                Name = item.dept,
+                                SchoolId = schoolId
+                            };
 
-                        await _departmentRepository.AddAsync(dept, ct);
+                            await _departmentRepository.AddAsync(dept, ct);
+                        }
+
+                        
                     }
 
                     
