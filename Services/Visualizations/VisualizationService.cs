@@ -46,7 +46,8 @@ namespace Services.Visualizations
             var deptNames = depts.Where(x => x.SchoolId == schoolId).Select(x => new { departmentName = x.Name }).ToList();
 
             var connections = await GetEdgesAsync(ct);
-            var contracts = connections.Where(x => x.FromId == "s" + schoolId && x.ContractId != 0).Select(x => new { contractId = x.ContractId }).ToList();
+            var contracts = connections.Where(x => x.FromId == "s" + schoolId && x.ContractId != 0)
+                .Select(x => new { contractId = x.ContractId }).Distinct().ToList();
 
             var result = new
             {
@@ -60,7 +61,8 @@ namespace Services.Visualizations
         public async Task<object> FillDepartmentData(string departmentId, CancellationToken ct)
         {
             var connections = await GetEdgesAsync(ct);
-            var contracts = connections.Where(x => x.FromId == departmentId).Select(x => new { contractId = x.ContractId }).ToList();
+            var contracts = connections.Where(x => x.FromId == departmentId)
+                .Select(x => new { contractId = x.ContractId }).Distinct().ToList();
 
             return contracts;
         }
@@ -68,7 +70,8 @@ namespace Services.Visualizations
         public async Task<object> FillPartnerData(string partnerId, CancellationToken ct)
         {
             var connections = await GetEdgesAsync(ct);
-            var contracts = connections.Where(x => x.ToId == partnerId).Select(x => new { contractId = x.ContractId }).ToList();
+            var contracts = connections.Where(x => x.ToId == partnerId)
+                .Select(x => new { contractId = x.ContractId }).Distinct().ToList();
 
             return contracts;
         }

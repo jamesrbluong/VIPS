@@ -16,8 +16,9 @@
             <input type="hidden" asp-for="SecurityStamp" value="@Model.SecurityStamp" />
             <div class="form-group">
                 <div>
-                    <b>Current Role: @Model.RoleName</b>
+                    <b>Current Role: </b>@Model.RoleName
                 </div>
+                <b>New Role: </b>
                 <select name="RoleName" id="RoleNameDDL" value="@Model.RoleName">
                     <option hidden disabled selected> -- Select A Role -- </option>
                     <option value="UNF_Employee">UNF Employee</option>

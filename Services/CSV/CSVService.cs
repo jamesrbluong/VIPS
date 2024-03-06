@@ -74,17 +74,17 @@ namespace Services.CSV
             }
             else
             {
-                await BCHBruteForceAsync(contractItem, to, exp, isSchool, ct);
+                await BCHBruteForceAsync(contractItem, to, isSchool, exp, ct);
             }
 
         }
 
-        public async Task BCHBruteForceAsync(Contract contractItem, string to, DateTime? exp, bool isSchool, CancellationToken ct)
+        public async Task BCHBruteForceAsync(Contract contractItem, string to, bool isSchool, DateTime? exp, CancellationToken ct)
         {
             Console.WriteLine("BCHBruteForce: " + contractItem.ContractName + ", " + to);
+
             List<string> BCHDepts = new List<string>
             {
-                "BCH_College",
                 "BCH_AgingServicesManagement",
                 "BCH_AthleticTraining",
                 "BCH_ExerciseScience",
@@ -93,85 +93,96 @@ namespace Services.CSV
                 "BCH_MentalHealthCounseling",
                 "BCH_NurseAnesthetist",
                 "BCH_Nursing",
-                "BCH_NutritionDietetics",
+                "BCH_NutritionDietetics", // edited
                 "BCH_PhysicalTherapy",
                 "BCH_PublicHealth"
             };
 
-            if (contractItem.BCH_College.Equals("TRUE"))
-            {
-                Console.WriteLine("BCH_College is TRUE");
-                string formattedName = "Brooks College of Health";
-                isSchool = true;
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
-                return;
-            }
+            List<string> BCHTrue = new List<string>();
 
             if (contractItem.BCH_AgingServicesManagement.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[1]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[0]));
             }
 
             if (contractItem.BCH_AthleticTraining.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[2]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[1]));
             }
 
             if (contractItem.BCH_ExerciseScience.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[3]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[2]));
             }
 
             if (contractItem.BCH_HealthAdministration.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[4]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[3]));
             }
 
             if (contractItem.BCH_InterdisciplinaryHealthStudies.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[5]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[4]));
             }
 
             if (contractItem.BCH_MentalHealthCounseling.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[6]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[5]));
             }
 
             if (contractItem.BCH_NurseAnesthetist.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[7]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[6]));
             }
 
             if (contractItem.BCH_Nursing.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[8]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[7]));
             }
 
             if (contractItem.BCH_NutritionDietetics.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[9]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add("Nutrition & Dietetics"); // altered to fit along with the department column having an ampersand (&)
             }
 
             if (contractItem.BCH_PhysicalTherapy.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[10]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[9]));
             }
 
             if (contractItem.BCH_PublicHealth.Equals("TRUE"))
             {
-                string formattedName = FormatBCHName(BCHDepts[11]);
-                await AddEdgeAsync(contractItem.ContractID, formattedName, to, exp, isSchool, ct);
+                BCHTrue.Add(FormatBCHName(BCHDepts[10]));
             }
+
+            if (BCHTrue.Count == 0 /* && contractItem.BCH_College.Equals("TRUE") */ || BCHTrue.Count == BCHDepts.Count )
+            {
+                Console.WriteLine(BCHTrue.Count + "BCH is TRUE" + contractItem.ContractID);
+                string from;
+                if (!string.IsNullOrEmpty(contractItem.Department))
+                {
+                    isSchool = false;
+                    from = contractItem.Department; // only have to check department because COEHSProgram and CCECMajor are for different colleges and were handled earlier
+                }
+                else // id not filled, default to the school
+                {
+                    isSchool = true;
+                    from = "Brooks College of Health";
+                }
+
+                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct); // is school
+                
+            }
+            else
+            {
+                isSchool = false;
+                foreach (var item in BCHTrue)
+                {
+                    await AddEdgeAsync(contractItem.ContractID, item, to, exp, isSchool, ct); // is not school
+                }
+            }
+
+            
         }
 
         public async Task AddSchoolToDepartmentConnectionsAsync(CancellationToken cancellationToken)
@@ -282,7 +293,7 @@ namespace Services.CSV
                 {
                     var schoolName = GetSchoolName(item.school, "");
 
-                    if (!schoolName.Equals("Brooks College of Health"))
+                    if (/*!schoolName.Equals("Brooks College of Health")*/true)
                     {
                         var schoolId = (await _schoolRepository.GetListAsync(ct))
                         .Where(school => school.Name.Equals(schoolName))
@@ -312,27 +323,31 @@ namespace Services.CSV
                 "BCH_MentalHealthCounseling",
                 "BCH_NurseAnesthetist",
                 "BCH_Nursing",
-                "BCH_NutritionDietetics",
+                // "BCH_NutritionDietetics", removed to fit with department column (added an &)
                 "BCH_PhysicalTherapy",
                 "BCH_PublicHealth"
             };
 
             foreach (var item in BCHDepts)
             {
-                var schoolId = (await _schoolRepository.GetListAsync(ct))
+                string name = FormatBCHName(item);
+                var existingDepartment = await _departmentRepository.GetByNameAsync(name, ct);
+
+                if (existingDepartment == null)
+                {
+                    var schoolId = (await _schoolRepository.GetListAsync(ct))
                     .Where(school => school.Name.Equals("Brooks College of Health"))
                     .Select(school => school.SchoolId)
                     .FirstOrDefault();
 
-                string name = FormatBCHName(item);
+                    var dept = new Department
+                    {
+                        Name = name,
+                        SchoolId = schoolId
+                    };
 
-                var dept = new Department
-                {
-                    Name = name,
-                    SchoolId = schoolId
-                };
-
-                await _departmentRepository.AddAsync(dept, ct);
+                    await _departmentRepository.AddAsync(dept, ct);
+                }
             }
 
         }
@@ -385,7 +400,7 @@ namespace Services.CSV
 
             if (!string.IsNullOrEmpty(program) && (name.Equals("AA ADMIN")))
             {
-                if (IsHonors(program))
+                if (program.ToLower().Contains("honor"))
                 {
                     return "Hicks Honors College";
                 }
@@ -412,11 +427,6 @@ namespace Services.CSV
             }
             return "GetSchoolName - invalid";
             
-        }
-
-        public bool IsHonors(string program)
-        {
-            return program.ToLower().Contains("honor") ? true : false;
         }
 
         public int GetYearsUntilExpiration(Common.Entities.Contract contract)

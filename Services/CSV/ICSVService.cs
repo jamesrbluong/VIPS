@@ -10,7 +10,6 @@ namespace Services.CSV
         Task DeleteDatabaseEntries(CancellationToken ct);
         string GetSchoolName(string name, string program);
         int GetYearsUntilExpiration(Contract contract);
-        bool IsHonors(string program);
         Task PopulateDepartmentsAsync(CancellationToken ct);
         Task PopulateEdges(Contract contractItem, CancellationToken ct);
         Task PopulatePartnersAsync(CancellationToken ct);

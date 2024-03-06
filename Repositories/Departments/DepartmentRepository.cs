@@ -1,4 +1,5 @@
 ﻿using Common.Data;
+using Common.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
 
@@ -20,7 +21,12 @@ namespace Repositories.Departments
 
         public async Task<Common.Entities.Department> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            return await _dbContext.Departments.FindAsync(id);
+            return await _dbContext.Departments.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<Department> GetByNameAsync(string name, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Departments.Where(d => d.Name.Equals(name)).FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task AddAsync(Common.Entities.Department department, CancellationToken cancellationToken)

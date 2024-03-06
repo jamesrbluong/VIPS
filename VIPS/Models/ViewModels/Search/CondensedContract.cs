@@ -27,7 +27,9 @@ namespace VIPS.Models.ViewModels.Search
                 ContractID = contract.ContractID,
                 ContractName = contract.ContractName,
                 CreatedOn = contract.CreatedOn,
-                Department = contract.Department,
+                Department = !string.IsNullOrEmpty(contract.Department) ? contract.Department :
+                             !string.IsNullOrEmpty(contract.COEHSPrograms) ? contract.COEHSPrograms :
+                             !string.IsNullOrEmpty(contract.CCECMajors) ? contract.CCECMajors : "condensed contract testing...",
                 FacultyInitiator = contract.FacultyInitiator,
                 Owner = contract.Owner,
                 Renewal = contract.Renewal,
@@ -37,6 +39,8 @@ namespace VIPS.Models.ViewModels.Search
                 Year = contract.Year
             };
         }
+
+
 
     }
 }

@@ -299,6 +299,8 @@
                                     newElements.push(createAnchor("No departments", "sidebarData")); 
                                 }
 
+                                newElements.push(createAnchor("Neighbor Nodes Count: " + countNeighborNodes(node.id), "sidebarEntry"));
+
                                 sidebarNode.replaceChildren(...newElements);
                             },
                             error: function (error) {
@@ -332,6 +334,7 @@
 
                                 }
                                 newElements.push(ul);
+                                newElements.push(createAnchor("Neighbor Nodes Count: " + countNeighborNodes(node.id), "sidebarEntry"));
 
                                 sidebarNode.replaceChildren(...newElements);
 
@@ -371,6 +374,7 @@
 
                                 }
                                 newElements.push(ul);
+                                newElements.push(createAnchor("Neighbor Nodes Count: " + countNeighborNodes(node.id), "sidebarEntry"));
 
                                 sidebarNode.replaceChildren(...newElements);
 
@@ -435,17 +439,17 @@
 
                         sidebarEdge.replaceChildren(
                             anchor,
-                            createAnchor("Department: " + edge.Department, "sidebarData"),
-                            createAnchor("Partner Name: " + edge.AgencyName, "sidebarData"),
-                            createAnchor("Owner: " + edge.Owner, "sidebarData"),
-                            createAnchor("Faculty Initiator: " + edge.FacultyInitiator, "sidebarData"),
-                            createAnchor("Stage Name: " + edge.StageName, "sidebarData"),
-                            createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
-                            createAnchor("City: " + edge.City, "sidebarData"),
-                            createAnchor("State: " + edge.State, "sidebarData"),
-                            createAnchor("Year: " + edge.Year, "sidebarData"),
-                            createAnchor("Updated On: " + edge.UpdatedOn, "sidebarData"),
-                            createAnchor("Renewal: " + edge.Renewal, "sidebarData"),
+                            edge.Department && createAnchor("Department: " + edge.Department, "sidebarData"),
+                            edge.AgencyName && createAnchor("Partner Name: " + edge.AgencyName, "sidebarData"),
+                            edge.Owner && createAnchor("Owner: " + edge.Owner, "sidebarData"),
+                            edge.FacultyInitiator && createAnchor("Faculty Initiator: " + edge.FacultyInitiator, "sidebarData"),
+                            edge.StageName && createAnchor("Stage Name: " + edge.StageName, "sidebarData"),
+                            edge.CreatedOn && createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
+                            edge.City && createAnchor("City: " + edge.City, "sidebarData"),
+                            edge.State && createAnchor("State: " + edge.State, "sidebarData"),
+                            edge.Year && createAnchor("Year: " + edge.Year, "sidebarData"),
+                            edge.UpdatedOn && createAnchor("Updated On: " + edge.UpdatedOn, "sidebarData"),
+                            edge.Renewal && createAnchor("Renewal: " + edge.Renewal, "sidebarData")
                         );
 
                     },
@@ -499,20 +503,25 @@
         return match != null;
     }
 
+    function countNeighborNodes(nodeId) {
+        var neighbors = network.getConnectedNodes(nodeId);
+        return neighbors.length;
+    }
+
     function checkExpiration(expirationDate) {
         if (expirationDate == null) {
             return 'black';
         }
         expirationDate = Date.parse(expirationDate);
         var today = new Date();
-        var oneMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        var sixMonths = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
         // var twoMonth = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
 
         if (expirationDate <= today) { // already expired
             return 'red';
         }
-        else if (expirationDate <= oneMonth) { // will expire within the month
-            return 'orange';
+        else if (expirationDate <= sixMonths) { // will expire within the month
+            return 'yellow';
         }
         else {
             return 'black';
