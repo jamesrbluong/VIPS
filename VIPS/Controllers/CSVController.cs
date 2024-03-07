@@ -695,6 +695,22 @@ namespace VIPS.Controllers
             return Regex.Replace(input, @"[.,'\-]", "");
         }
 
+        public async Task<IActionResult> ContractDetailView(int id)
+        {
+            var contract = await _db.CSVs.FindAsync(id);
+
+            if (contract != null)
+            {
+                return View("Search/Contract", contract);
+            }
+            else
+            {
+                Console.WriteLine("NotFound");
+                return NotFound();
+            }
+
+        }
+
     }
 
     }

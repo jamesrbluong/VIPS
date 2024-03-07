@@ -1,8 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\VIPS"
+    "\\Common",
+    "\\Common\\Entities",
+    "\\Services",
+    "\\Services\\obj",
+    "\\VIPS",
+    "\\VIPS\\Models",
+    "\\VIPS\\Models\\ViewModels",
+    "\\VIPS\\Models\\ViewModels\\Account",
+    "\\VIPS\\Models\\ViewModels\\Search"
   ],
-  "SelectedNode": "\\VIPS\\appsettings.json",
+  "SelectedNode": "\\VIPS.sln",
   "PreviewInSolutionExplorer": false
 }

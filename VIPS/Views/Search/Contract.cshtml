@@ -1,116 +1,78 @@
 ﻿@model Common.Entities.Contract
 
-<table>
-    <thead>
-        <tr>
-            <th>ContractID</th>
-            <th>CreatedOn</th>
-            <th>CreatedBy</th>
-            <th>ContractName</th>
-            <th>ContractOrigin</th>
-            <th>ContractTypeName</th>
-            <th>CurrentStageAssignees</th>
-            <th>DaysInCurrStage</th>
-            <th>Description</th>
-            <th>ExternalContractReferenceID</th>
-            <th>FolderName</th>
-            <th>Locked</th>
-            <th>Owner</th>
-            <th>PrimaryDocument</th>
-            <th>RelatedToContract</th>
-            <th>RelatedToContractID</th>
-            <th>StageName</th>
-            <th>UpdatedBy</th>
-            <th>UpdatedOn</th>
-            <th>Workflow</th>
-            <th>ProgramsOrCourses</th>
-            <th>CCECMajors</th>
-            <th>AutoRenewal</th>
-            <th>ContractCategory</th>
-            <th>AgencyMailingAddress1</th>
-            <th>AgencyMailingAddress2</th>
-            <th>AgencyName</th>
-            <th>BCH_AgingServicesManagement</th>
-            <th>BCH_AthleticTraining</th>
-            <th>BCH_College</th>
-            <th>BCH_ExerciseScience</th>
-            <th>BCH_HealthAdministration</th>
-            <th>BCH_InterdisciplinaryHealthStudies</th>
-            <th>BCH_MentalHealthCounseling</th>
-            <th>BCH_NurseAnesthetist</th>
-            <th>BCH_Nursing</th>
-            <th>BCH_NutritionDietetics</th>
-            <th>BCH_PhysicalTherapy</th>
-            <th>BCH_PublicHealth</th>
-            <th>City</th>
-            <th>COEHSPrograms</th>
-            <th>Department</th>
-            <th>EmailAddress</th>
-            <th>FacultyInitiator</th>
-            <th>Graduate_Undergraduate</th>
-            <th>PhoneNumber</th>
-            <th>PrimaryContact</th>
-            <th>Renewal</th>
-            <th>State</th>
-            <th>TitleCert</th>
-            <th>Year</th>
-            <th>ZipCode</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@Model.ContractID</td>
-            <td>@Model.CreatedOn</td>
-            <td>@Model.CreatedBy</td>
-            <td>@Model.ContractName</td>
-            <td>@Model.ContractOrigin</td>
-            <td>@Model.ContractTypeName</td>
-            <td>@Model.CurrentStageAssignees</td>
-            <td>@Model.DaysInCurrStage</td>
-            <td>@Model.Description</td>
-            <td>@Model.ExternalContractReferenceID</td>
-            <td>@Model.FolderName</td>
-            <td>@Model.Locked</td>
-            <td>@Model.Owner</td>
-            <td>@Model.PrimaryDocument</td>
-            <td>@Model.RelatedToContract</td>
-            <td>@Model.RelatedToContractID</td>
-            <td>@Model.StageName</td>
-            <td>@Model.UpdatedBy</td>
-            <td>@Model.UpdatedOn</td>
-            <td>@Model.Workflow</td>
-            <td>@Model.ProgramsOrCourses</td>
-            <td>@Model.CCECMajors</td>
-            <td>@Model.AutoRenewal</td>
-            <td>@Model.ContractCategory</td>
-            <td>@Model.AgencyMailingAddress1</td>
-            <td>@Model.AgencyMailingAddress2</td>
-            <td>@Model.AgencyName</td>
-            <td>@Model.BCH_AgingServicesManagement</td>
-            <td>@Model.BCH_AthleticTraining</td>
-            <td>@Model.BCH_College</td>
-            <td>@Model.BCH_ExerciseScience</td>
-            <td>@Model.BCH_HealthAdministration</td>
-            <td>@Model.BCH_InterdisciplinaryHealthStudies</td>
-            <td>@Model.BCH_MentalHealthCounseling</td>
-            <td>@Model.BCH_NurseAnesthetist</td>
-            <td>@Model.BCH_Nursing</td>
-            <td>@Model.BCH_NutritionDietetics</td>
-            <td>@Model.BCH_PhysicalTherapy</td>
-            <td>@Model.BCH_PublicHealth</td>
-            <td>@Model.City</td>
-            <td>@Model.COEHSPrograms</td>
-            <td>@Model.Department</td>
-            <td>@Model.EmailAddress</td>
-            <td>@Model.FacultyInitiator</td>
-            <td>@Model.Graduate_Undergraduate</td>
-            <td>@Model.PhoneNumber</td>
-            <td>@Model.PrimaryContact</td>
-            <td>@Model.Renewal</td>
-            <td>@Model.State</td>
-            <td>@Model.TitleCert</td>
-            <td>@Model.Year</td>
-            <td>@Model.ZipCode</td>
-        </tr>
-    </tbody>
-</table>
+<h2>Contract Number @Model.ContractID</h2>
+<h2>List with Warning Font Color</h2>
+
+<style>
+.card-body {
+        padding-left: 10px; /* Add padding to the card body */
+    }
+
+    .card-title {
+        padding-left: 10px; /* Add padding to the card body */
+    }
+
+    </style>
+<div class="container">
+    <ul class="list-group">
+        <li class="list-group-item text-danger">This is the example of something wrong.</li>
+        <li class="list-group-item text-danger">This is the example of something wrong.</li>
+        <li class="list-group-item text-danger">Item 2</li>
+        <li class="list-group-item text-warning">This is an example of a warning</li>
+        <li class="list-group-item text-warning">This is an example of a warning</li>
+    </ul>
+</div>
+
+<hr>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Critical Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Information about Card 1 goes here.</p>
+                    <p class="card-content">Contract ID: 58974</p>
+                    <p class="card-content">Contract Name: AA  - Tampa General Hospital (CRNA&ARNP Program)</p>
+                    <p class="card-content">Date Created: 8/24/5</p>
+                    <p class="card-content">Owner: Carolyn Smith</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Description</h2>
+                <p class="card-content">Information about Card 2 goes here.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Department Info</h2>
+                <p class="card-content">Information about Card 1 goes here.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Agency Information</h2>
+                <p class="card-content">Agency Name: Tampa General Hospital (CRNA &amp; ARNP) Program</p>
+                <p class="card-content">Mailing Address: Davis Island P.O. Box 1289</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Card 1</h2>
+                <p class="card-content">Information about Card 1 goes here.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Card 2</h2>
+                <p class="card-content">Information about Card 2 goes here.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Add more rows and cards as needed -->
+</div>
