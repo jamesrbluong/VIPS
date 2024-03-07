@@ -16,13 +16,18 @@
     <button onclick="searchContracts()" class="btn btn-primary">Search</button>
 </div>
 
-<div class="visualization-container">
+<div id="visualizationContainer" class="visualization-container">
     <div id="mynetwork"></div>
-    <div id="sidebar" class="sidebar">
-        <div id="sidebarNode">
-        </div>
-        <div id="sidebarEdge">
-        </div>
+    <div id="overlay" class="overlay">
+        <div id="totalNodes" class="totalEdges"></div>
+        <div id="totalEdges" class="totalEdges"></div>
     </div>
+    <div id="sidebar" class="sidebar">
+        <div id="sidebarNode"></div>
+        <div id="sidebarEdge"></div>
+    </div>
+
 </div>
+
+
 

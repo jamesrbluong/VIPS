@@ -86,6 +86,7 @@
                             y: data[i].y,
                             type: "school",
                             color: "purple",
+                            title: data[i].name
                         });
                     }
                     else if (type === "d") {
@@ -96,7 +97,8 @@
                             x: data[i].x,
                             y: data[i].y,
                             type: "department",
-                            color: "#0A233F"
+                            color: "#0A233F",
+                            title: data[i].name
                         });
                     }
                     else if (type === "p") {
@@ -106,7 +108,8 @@
                             x: data[i].x,
                             y: data[i].y,
                             type: "partner",
-                            color: "red"
+                            color: "red",
+                            title: data[i].name
                         });
                     }
                     else {
@@ -187,6 +190,16 @@
             edges: new vis.DataSet(edgesArray)
         };
 
+        data.nodes.forEach(function (node) {
+            var maxLength = 30; 
+            if (node.title.length > maxLength) {
+                node.title = node.title.substring(0, maxLength) + '...'; 
+            }
+            else {
+                node.title = node.title;
+            }
+        });
+
         data.edges.forEach(function (edge) {
             var color = checkExpiration(edge.ExpirationDate);
             edge.color = color;
@@ -194,18 +207,25 @@
 
         network = new vis.Network(container, data, options);
 
-        /*
-        data.nodes.forEach(function (node) {
-            if (node.type === "school") {
-                network.clusterByConnection(node.id);
-            }
-        });
-        */
+        document.getElementById("totalNodes").innerHTML = "Number of Nodes: " + data.nodes.length;
+        document.getElementById("totalEdges").innerHTML = "Number of Edges: " + data.edges.length;
+        document.getElementById("overlay").style.visibility = "visible";
 
         network.on("stabilizationIterationsDone", function () {
             network.setOptions({ physics: false });
 
         });
+
+        var visualizationContainer = document.getElementById("visualizationContainer");
+
+        function handleClickOutside(event) {
+            if (!visualizationContainer.contains(event.target)) {
+                console.log('Clicked outside of the Vis.js network.');
+                closeSidebar();
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside);
 
         function countConnectionsPartner(nodeId) {
             var connectedNodes = network.getConnectedNodes(nodeId);
@@ -285,12 +305,6 @@
 
                                 var depts = data.depts;
                                 var contracts = data.contracts;
-
-                                console.log(JSON.stringify(depts));
-                                console.log(JSON.stringify(contracts));
-
-
-
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
                                 newElements.push(createAnchor("Number of Connections: " + countConnectionsSchool(node.id), "sidebarEntry"));
@@ -316,8 +330,9 @@
                                         newElements.push(ulDepts);
 
                                     }
-
-                                    
+                                    else {
+                                        // newElements.push(createAnchor("No Departments", "sidebarData")); // work on
+                                    }
 
                                     if (contracts.length > 0) {
                                         newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
@@ -338,10 +353,11 @@
                                         newElements.push(ulContracts);
 
                                     }
+                                    else {
+                                        // newElements.push(createAnchor("No Contracts", "sidebarData")); // work on
+                                    }
                                 }
-                                else {
-                                    newElements.push(createAnchor("No departments", "sidebarData")); 
-                                }
+                                
 
 
                                 sidebarNode.replaceChildren(...newElements);
@@ -364,7 +380,12 @@
 
                                 // ADD CONSTANT PARTNER INFO
 
-                                newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                if (data.length > 0) {
+                                    newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                }
+                                else {
+                                    newElements.push(createAnchor("No Contracts ", "sidebarData"));
+                                }
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
@@ -404,7 +425,12 @@
 
                                 // ADD CONSTANT PARTNER INFO
 
-                                newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                if (data.length > 0) {
+                                    newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                }
+                                else {
+                                    newElements.push(createAnchor("No Contracts ", "sidebarData"));
+                                }
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')

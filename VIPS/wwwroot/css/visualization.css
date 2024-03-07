@@ -11,6 +11,15 @@
     position: relative;
 }
 
+.overlay {
+    position: absolute;
+    visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    border: 3px solid lightgrey;
+}
+
 .sidebar {
     visibility: hidden;
     height: 650px;
