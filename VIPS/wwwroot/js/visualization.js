@@ -73,6 +73,13 @@
             dataType: 'json',
             success: function (data) {
                 console.log(JSON.stringify(data));
+                var deptList = document.getElementById("deptList");
+                var deptItems = [];
+                var schoolList = [];
+                var partnerList = [];
+                
+                var ul = document.createElement('ul');
+                
 
                 for (var i = 0; i < data.length; i++) {
                     var type = data[i].nodeId.slice(0,1);
@@ -86,6 +93,8 @@
                             type: "school",
                             color: "purple",
                         });
+
+
                     }
                     else if (type === "d") {
                         nodesArray.push({
@@ -96,6 +105,18 @@
                             y: data[i].y,
                             type: "department"
                         });
+
+                        var li = document.createElement('li');
+                        li.style.listStyle = 'none';
+                        
+                        var anchor = createFilter(data[i].nodeId, data[i].name, "deptEntry");
+
+                        li.appendChild(anchor[0]);
+                        li.appendChild(anchor[1]);
+                        ul.appendChild(li);
+
+                        deptItems.push(ul);
+
                     }
                     else if (type === "p") {
                         nodesArray.push({
@@ -110,7 +131,10 @@
                     else {
 
                     }
-                    
+
+
+                    deptList.replaceChildren(...deptItems);
+
                 }
             },
             error: function (error) {
@@ -196,6 +220,7 @@
 
         network.on("stabilizationIterationsDone", function () {
             network.setOptions({ physics: false });
+
         });
 
         // network.on('click', neighbourhoodHighlight);
@@ -348,6 +373,38 @@
             }
         });
 
+        function refreshNetwork() {
+            var selectedNodes = [];
+            document.querySelectorAll('.deptEntry:checked').forEach(function (checkbox) {
+                selectedNodes.push(checkbox.id);
+            });
+
+            var allNodes = network.body.data.nodes.get();
+            allNodes.forEach(function (node) {
+                if (selectedNodes.length === 0 || selectedNodes.includes(node.id)) {
+                    network.body.data.nodes.update({ id: node.id, hidden: false });
+                } else {
+                    network.body.data.nodes.update({ id: node.id, hidden: true });
+                }
+            });
+
+
+            selectedNodes.forEach(function (selectedNodeId) {
+                var connectedEdges = network.getConnectedEdges(selectedNodeId);
+                connectedEdges.forEach(function (edgeId) {
+                    var edge = network.body.data.edges.get(edgeId);
+                    network.body.data.nodes.update({ id: edge.from, hidden: false });
+                    network.body.data.nodes.update({ id: edge.to, hidden: false });
+                });
+            });
+        }
+
+
+        var checkboxes = document.querySelectorAll('.deptEntry');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', refreshNetwork);
+        });
+
         network.on("deselectNode", function (params) {
             closeSidebar();
         });
@@ -447,6 +504,20 @@
         anchor.textContent = textContent;
         anchor.className = c;
         return anchor;
+    }
+
+    function createFilter(filterId, textContent, c) {
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.id = filterId;
+        checkbox.className = c;
+
+        var label = document.createElement('label');
+        label.textContent = textContent;
+
+        var filterArray = [checkbox, label];
+
+        return filterArray;
     }
 
     function isGuid(value) {

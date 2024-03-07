@@ -185,12 +185,14 @@ namespace VIPS.Migrations
                 columns: table => new
                 {
                     NodeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     x = table.Column<int>(type: "int", nullable: false),
                     y = table.Column<int>(type: "int", nullable: false),
+                    SchoolId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Nodes", x => new { x.NodeId });
+                    table.PrimaryKey("PK_Nodes", x => x.NodeId);
                 });
 
             migrationBuilder.CreateTable(
