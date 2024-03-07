@@ -1,10 +1,10 @@
-﻿@model Common.Entities.Contract
+﻿@model Common.Entities.CSV
 
-<h2>Contract Number @Model.ContractID</h2>
+
 <h2>List with Warning Font Color</h2>
 
 <style>
-.card-body {
+    .card-body {
         padding-left: 10px; /* Add padding to the card body */
     }
 
@@ -12,14 +12,10 @@
         padding-left: 10px; /* Add padding to the card body */
     }
 
-    </style>
+</style>
 <div class="container">
     <ul class="list-group">
-        <li class="item.</li>
-        <li class="list-group-item text-danger">This is the example of something wrong.</li>
-        <li class="list-group-item text-danger">Item 2</li>
-        <li class="list-group-item text-warning">This is an example of a warning</li>
-        <li class="list-group-item text-warning">This is an example of a warning</li>
+        <li class="list-group-item text-danger">@Model.ErrorDescription</li>
     </ul>
 </div>
 

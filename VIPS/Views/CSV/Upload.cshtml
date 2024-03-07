@@ -66,7 +66,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.ContractID)</td>
+                    <td><a href="/CSV/DetailView/@item.ContractID" class="btn btn-primary" target="_blank">@item.ContractID</a></td>
                     <td>@Html.DisplayFor(modelItem => item.CreatedOn)</td>
                     <td>@Html.DisplayFor(modelItem => item.ContractName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Owner)</td>
@@ -99,34 +99,18 @@
         $("#objectTable tbody tr").click(function () {
             // Get the contractID from the clicked row
             var contractID = $(this).find("td:first-child").text().trim();
-
-            // Call the showRowByContractID function with the contractID
-            showRowByContractID1(contractID);
-            showRowByContractID2(contractID);
-            showRowByContractID3(contractID);
-            showRowByContractID4(contractID);
-            showRowByContractID5(contractID);
-            showRowByContractID6(contractID);
-
             // Make an AJAX request to call ContractDetailView with the contract ID
             $.ajax({
-                url: '/Contract/ContractDetailView/' + contractID,
+                url: '/CSV/DetailView/' + contractId,
                 type: 'GET',
                 success: function (response) {
-                    // Optionally, you can handle the response here if needed
-                    console.log(response);
+                    window.location.href = '/Contract/Detail?id=' + contractId;
                 },
                 error: function (error) {
                     console.error('Error fetching data:', error);
-                }
             });
         });
     });
-    @if (TempData["loadVisualization"] != null)
-    {
-        @Html.Raw(TempData["loadVisualization"])
-        ;
-    }
 </script>
 
 
