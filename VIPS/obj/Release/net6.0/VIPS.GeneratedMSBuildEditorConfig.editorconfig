@@ -9,81 +9,105 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = VIPS
 build_property.RootNamespace = VIPS
-build_property.ProjectDir = C:\Users\Josh\Source\Repos\jamesrbluong\VIPS\VIPS\
+build_property.ProjectDir = C:\Users\Matthew\source\repos\jamesrbluong\VIPS\VIPS\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Josh\Source\Repos\jamesrbluong\VIPS\VIPS
+build_property.MSBuildProjectDirectory = C:\Users\Matthew\source\repos\jamesrbluong\VIPS\VIPS
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Components/Counter.razor]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Components/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Components/Sidebar.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaWRlYmFyLnJhem9y
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Components/ErrorToast.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xFcnJvclRvYXN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Components/Visualization.razor]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Components/SuccessToast.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTdWNjZXNzVG9hc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Components/Visualization.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xWaXN1YWxpemF0aW9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/_Imports.razor]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Create.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Edit.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/ForgotPassword.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Index.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Login.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/ResetPassword.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Account/ResetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Admin/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/CSV/CSV.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXENTVi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Home/Index.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/CSV/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/CSV/Upload.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ1NWXFVwbG9hZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Home/Privacy.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/Error.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Search/Contract.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VhcmNoXENvbnRyYWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Search/SearchView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VhcmNoXFNlYXJjaFZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/_ViewImports.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/_ViewStart.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Josh/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/_Layout.cshtml]
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-nkuqh3yaeg
+
+[C:/Users/Matthew/Source/Repos/jamesrbluong/VIPS/VIPS/Views/Shared/_UploadLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9VcGxvYWRMYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-tl8pqzos9c
