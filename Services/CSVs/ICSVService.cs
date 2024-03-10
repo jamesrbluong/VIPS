@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Services.CSVs
     {
         public Task<CSV> GetById(int contractId, CancellationToken ct);
         public Task<List<Common.Entities.CSV>> GetCSVsAsync(CancellationToken ct);
+        public void UploadCSVFile(IFormFile file);
     }
 }

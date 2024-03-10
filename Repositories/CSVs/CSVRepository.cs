@@ -1,4 +1,5 @@
 ﻿using Common.Data;
+using Common.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Contracts;
 using System;
@@ -73,6 +74,11 @@ namespace Repositories.CSVs
 
                 return;
             }
+        }
+
+        public void AddRange(IEnumerable<CSV> records)
+        {
+            _dbContext.CSVs.AddRange(records);
         }
     }
 }

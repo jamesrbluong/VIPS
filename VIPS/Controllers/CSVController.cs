@@ -20,7 +20,7 @@ namespace VIPS.Controllers
     public class CSVController : Controller
     {
 
-        // the goal is for the controller to just communicate with service. no db or repository -joshua
+        // "the goal is for the controller to just communicate with service. no db or repository -joshua" - matthew
         private readonly ApplicationDbContext _db;
         private readonly ICSVRepository _csvRepository;
         private readonly ICSVService _csvService;
@@ -35,7 +35,6 @@ namespace VIPS.Controllers
             ct = _cancellationTokenSource.Token;
         }
 
-
         public async Task<IActionResult> Upload()
         {
             
@@ -48,38 +47,15 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-
     [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
-            var records = new List<CSV>();
-
-            if (file != null)
-            {
-                using (var streamReader = new StreamReader(file.OpenReadStream()))
-                using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
-                {
-                    streamReader.ReadLine();
-                    streamReader.ReadLine();
-                    records = csvReader.GetRecords<CSV>().ToList();
-                }
-
-
-                // Save the records to the database
-                _db.CSVs.AddRange(records);
-                _db.SaveChanges();
+            _csvService.UploadCSVFile(file);
 
                 CheckForDuplicates();
-                _db.SaveChanges();
 
                 ErrorChecking();
                 _db.SaveChanges();
-            }
-            else
-            {
-                TempData["error"] = "No file uploaded";
-            }
-            
 
             return RedirectToAction("Upload", "CSV");
         } 
