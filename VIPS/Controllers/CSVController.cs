@@ -36,10 +36,10 @@ namespace VIPS.Controllers
         }
 
 
-        public IActionResult Upload()
+        public async Task<IActionResult> Upload()
         {
             
-            var data = _db.CSVs.ToList();
+            var data = await _csvService.GetCSVsAsync(ct);
             ViewBag.Count = data.Count;
 
             int countOfDuplicates = data.Count(model => model.Duplicate);

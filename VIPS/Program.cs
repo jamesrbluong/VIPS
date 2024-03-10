@@ -16,8 +16,13 @@ using Services.Account;
 using Services.Visualizations;
 using Services.Nodes;
 using Services.Edges;
+using Services.CSVs;
 using Repositories.Edges;
 using Repositories.Nodes;
+using Repositories.CSVs;
+
+
+
 
 // "Server=(localdb)\\MSSQLLocalDB;Database=VIPS;Trusted_Connection=True;MultipleActiveResultSets=true"
 // "Server=tcp:vipsserver.database.windows.net,1433;Initial Catalog=vips;Persist Security Info=False;User ID=vipsadmin;Password=VIPS!unf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
@@ -104,6 +109,7 @@ void RegisterRepositories(IServiceCollection services)
     services.AddScoped<IPartnerRepository, PartnerRepository>();
     services.AddScoped<IEdgeRepository, EdgeRepository>();
     services.AddScoped<INodeRepository, NodeRepository>();
+    services.AddScoped<ICSVRepository, CSVRepository>();
 }
 
 void RegisterServices(IServiceCollection services)
@@ -116,6 +122,7 @@ void RegisterServices(IServiceCollection services)
     services.AddScoped<IVisualizationService, VisualizationService>();
     services.AddScoped<IEdgeService, EdgeService>();
     services.AddScoped<INodeService, NodeService>();
+    services.AddScoped<ICSVService, CSVService>();
 }
 
 Console.WriteLine("test gitignore 2");
