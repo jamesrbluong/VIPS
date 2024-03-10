@@ -48,11 +48,6 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-        public IActionResult CSV()
-        {
-            var data = _db.CSVs.ToList();
-            return View(data);
-    }
 
     [HttpPost]
         public IActionResult UploadFile(IFormFile file)
