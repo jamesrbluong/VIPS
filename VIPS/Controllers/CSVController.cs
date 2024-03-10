@@ -37,7 +37,7 @@ namespace VIPS.Controllers
 
         public async Task<IActionResult> Upload()
         {
-            
+
             var data = await _csvService.GetCSVsAsync(ct);
             ViewBag.Count = data.Count;
 
@@ -47,48 +47,32 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-    [HttpPost]
+        [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
             _csvService.UploadCSVFile(file);
+            _db.SaveChanges();
 
-                CheckForDuplicates();
+            CheckForDuplicates();
 
-                ErrorChecking();
-                _db.SaveChanges();
+            ErrorChecking();
+            _db.SaveChanges();
 
             return RedirectToAction("Upload", "CSV");
-        } 
-
-
-        public IActionResult ToCSV()
-{
-    var csvData = _db.CSVs.ToList();
-
-    // Create a StringBuilder to build the CSV content
-    var csvContent = new StringBuilder();
-
-    // Add header row
-    csvContent.AppendLine("ContractID,ErrorDescription");
-
-    // Add data rows
-    foreach (var csvItem in csvData)
-    {
-        if (csvItem.Error)
-        {
-            csvContent.AppendLine($"{csvItem.ContractID},{csvItem.ErrorDescription}");
         }
-    }
 
-    // Convert the string to bytes
-    byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent.ToString());
 
-    // Set the file name
-    string fileName = "CSV_Error_Export.csv";
-    
-    // Return the CSV file
-    return File(fileBytes, "text/csv", fileName);
-}
+        public async Task<IActionResult> ErrorExportCSVAsync()
+        {
+
+            byte[] fileBytes = await _csvService.ErrorExportCSVAsync(ct);
+
+            // Set the file name
+            string fileName = "CSV_Error_Export.csv";
+
+            // Return the CSV file
+            return File(fileBytes, "text/csv", fileName);
+        }
 
 
         public async Task<IActionResult> Edit(int? id)
@@ -193,7 +177,7 @@ namespace VIPS.Controllers
                     }
                 }
 
-        }
+            }
         }
 
         private void ErrorCheckingContractID()
@@ -234,11 +218,11 @@ namespace VIPS.Controllers
             var csvData = _db.CSVs.ToList();
 
             List<string> validContractOrigins = new List<string>
-    {
-        "Bulk Loader",
-        "User",
-        "Copy"
-    };
+                    {
+                "Bulk Loader",
+                "User",
+                "Copy"
+                };
 
             foreach (var csvItem in csvData)
             {
@@ -313,7 +297,7 @@ namespace VIPS.Controllers
             _db.SaveChanges();
             return RedirectToAction("Upload");
         }
-        
+
 
         public void CheckForDuplicates()
         {
@@ -489,7 +473,7 @@ namespace VIPS.Controllers
                 };
                 _db.Schools.Add(school);
             }
-            
+
             _db.SaveChanges();
         }
         public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
@@ -501,7 +485,7 @@ namespace VIPS.Controllers
                 .ToList();
 
             var COEHSData = _db.CSVs
-                .Where(csv => string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName) && !string.IsNullOrEmpty(csv.COEHSPrograms)) 
+                .Where(csv => string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName) && !string.IsNullOrEmpty(csv.COEHSPrograms))
                 .Select(csv => new { dept = csv.COEHSPrograms, folderName = csv.FolderName })
                 .Distinct()
                 .ToList();
@@ -594,7 +578,7 @@ namespace VIPS.Controllers
         {
             string FromId = "N/A";
             string ToId = "N/A";
-            
+
             var departments = _db.Departments.ToList();
             Console.WriteLine("test 1");
             foreach (var department in departments)
@@ -676,5 +660,5 @@ namespace VIPS.Controllers
 
     }
 
-    }
+}
 

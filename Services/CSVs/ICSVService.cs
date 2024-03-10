@@ -13,5 +13,6 @@ namespace Services.CSVs
         public Task<CSV> GetById(int contractId, CancellationToken ct);
         public Task<List<Common.Entities.CSV>> GetCSVsAsync(CancellationToken ct);
         public void UploadCSVFile(IFormFile file);
+        Task<byte[]> ErrorExportCSVAsync(CancellationToken cancellationToken);
     }
 }
