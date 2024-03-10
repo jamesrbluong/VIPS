@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
 using Common.Data;
 using Common.Entities;
+using Repositories.Contracts;
+using Services.Contracts;
+using Repositories.CSVs;
+using Services.CSVs;
 
 namespace VIPS.Controllers
 {
@@ -16,12 +20,22 @@ namespace VIPS.Controllers
     public class CSVController : Controller
     {
 
+        // the goal is for the controller to just communicate with service. no db or repository -joshua
         private readonly ApplicationDbContext _db;
-        public CSVController(ApplicationDbContext db)
+        private readonly ICSVRepository _csvRepository;
+        private readonly ICSVService _csvService;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationToken ct;
+
+        public CSVController(ApplicationDbContext db, ICSVRepository csvRepository, ICSVService csvService)
         {
             _db = db;
+            _csvRepository = csvRepository;
+            _csvService = csvService;
+            ct = _cancellationTokenSource.Token;
         }
-        
+
+
         public IActionResult Upload()
         {
             

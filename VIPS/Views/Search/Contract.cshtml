@@ -1,7 +1,7 @@
 ﻿@model Common.Entities.Contract
 
-<h2>Contract Number @Model.ContractID</h2>
-<h2>List with Warning Font Color</h2>
+
+<h2>Contract @Model.ContractID, @Model.ContractName</h2>
 
 <style>
 .card-body {
@@ -13,17 +13,9 @@
     }
 
     </style>
-<div class="container">
-    <ul class="list-group">
-        <li class="item.</li>
-        <li class="list-group-item text-danger">This is the example of something wrong.</li>
-        <li class="list-group-item text-danger">Item 2</li>
-        <li class="list-group-item text-warning">This is an example of a warning</li>
-        <li class="list-group-item text-warning">This is an example of a warning</li>
-    </ul>
-</div>
 
 <hr>
+
 
 <div class="container">
     <div class="row">
@@ -32,47 +24,163 @@
                 <h2 class="card-title">Critical Information</h2>
                 <div class="card-body">
                     <!-- Add class for card body -->
-                    <p class="card-content">Information about Card 1 goes here.</p>
-                    <p class="card-content">Contract ID: 58974</p>
-                    <p class="card-content">Contract Name: AA  - Tampa General Hospital (CRNA&ARNP Program)</p>
-                    <p class="card-content">Date Created: 8/24/5</p>
-                    <p class="card-content">Owner: Carolyn Smith</p>
+                    <p class="card-content">Contract ID: @Model.ContractID</p>
+                    <p class="card-content">Contract Name: @Model.ContractName</p>
+                    <p class="card-content">Date Created: @Model.CreatedOn</p>
+                    <p class="card-content">Owner: @Model.Owner</p>
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-4">
             <div class="card">
-                <h2 class="card-title">Description</h2>
-                <p class="card-content">Information about Card 2 goes here.</p>
+                <h2 class="card-title">Contract Details</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Contract Origin: @Model.ContractOrigin</p>
+                    <p class="card-content">Contract Type Name: @Model.ContractTypeName</p>
+                </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-4">
             <div class="card">
-                <h2 class="card-title">Department Info</h2>
-                <p class="card-content">Information about Card 1 goes here.</p>
+                <h2 class="card-title">Workflow Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Current Stage Assignees: @Model.CurrentStageAssignees</p>
+                    <p class="card-content">Days in Current Stage: @Model.DaysInCurrStage</p>
+                    <p class="card-content">Stage Name: @Model.StageName</p>
+                    <p class="card-content">Updated By: @Model.UpdatedBy</p>
+                    <p class="card-content">Updated On: @Model.UpdatedOn</p>
+                    <p class="card-content">Workflow: @Model.Workflow</p>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card">
+                <h2 class="card-title">Related Contracts</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Related To Contract: @Model.RelatedToContract</p>
+                    <p class="card-content">Related To Contract ID: @Model.RelatedToContractID</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Document Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Folder Name: @Model.FolderName</p>
+                    <p class="card-content">Primary Document: @Model.PrimaryDocument</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
                 <h2 class="card-title">Agency Information</h2>
-                <p class="card-content">Agency Name: Tampa General Hospital (CRNA &amp; ARNP) Program</p>
-                <p class="card-content">Mailing Address: Davis Island P.O. Box 1289</p>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <h2 class="card-title">Card 1</h2>
-                <p class="card-content">Information about Card 1 goes here.</p>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <h2 class="card-title">Card 2</h2>
-                <p class="card-content">Information about Card 2 goes here.</p>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Agency Name: @Model.AgencyName</p>
+                    <p class="card-content">Agency Mailing Address 1: @Model.AgencyMailingAddress1</p>
+                    <p class="card-content">Agency Mailing Address 2: @Model.AgencyMailingAddress2</p>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Add more rows and cards as needed -->
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">BCH Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">BCH - Aging Services Management: @Model.BCH_AgingServicesManagement</p>
+                    <p class="card-content">BCH - Athletic Training: @Model.BCH_AthleticTraining</p>
+                    <p class="card-content">BCH - College: @Model.BCH_College</p>
+                    <p class="card-content">BCH - Exercise Science: @Model.BCH_ExerciseScience</p>
+                    <p class="card-content">BCH - Health Administration: @Model.BCH_HealthAdministration</p>
+                    <p class="card-content">BCH - Interdisciplinary Health Studies: @Model.BCH_InterdisciplinaryHealthStudies</p>
+                    <p class="card-content">BCH - Mental Health Counseling: @Model.BCH_MentalHealthCounseling</p>
+                    <p class="card-content">BCH - Nurse Anesthetist: @Model.BCH_NurseAnesthetist</p>
+                    <p class="card-content">BCH - Nursing: @Model.BCH_Nursing</p>
+                    <p class="card-content">BCH - Nutrition & Dietetics: @Model.BCH_NutritionDietetics</p>
+                    <p class="card-content">BCH - Physical Therapy: @Model.BCH_PhysicalTherapy</p>
+                    <p class="card-content">BCH - Public Health: @Model.BCH_PublicHealth</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Location Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">City: @Model.City</p>
+                    <p class="card-content">State: @Model.State</p>
+                    <p class="card-content">Zip Code: @Model.ZipCode</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Contact Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Department: @Model.Department</p>
+                    <p class="card-content">COEHS Programs: @Model.COEHSPrograms</p>
+                    <p class="card-content">Email Address: @Model.EmailAddress</p>
+                    <p class="card-content">Faculty Initiator: @Model.FacultyInitiator</p>
+                    <p class="card-content">Graduate or Undergraduate: @Model.Graduate_Undergraduate</p>
+                    <p class="card-content">Phone Number: @Model.PhoneNumber</p>
+                    <p class="card-content">Primary Contact: @Model.PrimaryContact</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Renewal Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Auto Renewal: @Model.AutoRenewal</p>
+                    <p class="card-content">Renewal: @Model.Renewal</p>
+                    <p class="card-content">Year: @Model.Year</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Additional Information</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Contract Category: @Model.ContractCategory</p>
+                    <p class="card-content">Title Cert: @Model.TitleCert</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display error and duplicate information if available -->
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2 class="card-title">Description</h2>
+                <div class="card-body">
+                    <!-- Add class for card body -->
+                    <p class="card-content">Duplicate: @Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
