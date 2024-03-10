@@ -42,5 +42,6 @@ namespace Repositories.Contracts
             _dbContext.Contracts.Remove(contractToDelete);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+
     }
 }

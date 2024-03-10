@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
 using Common.Data;
 using Common.Entities;
+using Repositories.Contracts;
+using Services.Contracts;
+using Repositories.CSVs;
+using Services.CSVs;
 using static Azure.Core.HttpHeader;
 using System.Xml.Linq;
 using System.Data.Entity;
@@ -21,7 +25,9 @@ namespace VIPS.Controllers
     public class CSVController : Controller
     {
 
+        // "the goal is for the controller to just communicate with service. no db or repository -joshua" - matthew
         private readonly ApplicationDbContext _db;
+
         private readonly ICSVService _CSVService;
         private readonly ICSVRepository _CSVRepository;
 
@@ -33,9 +39,10 @@ namespace VIPS.Controllers
         }
 
         public IActionResult Upload()
+
         {
-            
-            var data = _db.CSVs.ToList();
+
+            var data = await _csvService.GetCSVsAsync(ct);
             ViewBag.Count = data.Count;
 
             int countOfDuplicates = data.Count(model => model.Duplicate);
@@ -44,98 +51,32 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-        public IActionResult CSV()
-        {
-            var data = _db.CSVs.ToList();
-            return View(data);
-        }
-
         [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
-            var records = new List<CSV>();
+            _csvService.UploadCSVFile(file);
+            _db.SaveChanges();
 
-            if (file != null)
-            {
-                using (var streamReader = new StreamReader(file.OpenReadStream()))
-                using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
-                {
-                    streamReader.ReadLine();
-                    streamReader.ReadLine();
-                    records = csvReader.GetRecords<CSV>().ToList();
-                }
+            CheckForDuplicates();
 
-
-                // Save the records to the database
-                _db.CSVs.AddRange(records);
-                _db.SaveChanges();
-
-                CheckForDuplicates();
-                _db.SaveChanges();
-
-                ErrorChecking();
-                _db.SaveChanges();
-            }
-            else
-            {
-                TempData["error"] = "No file uploaded";
-            }
-            
+            ErrorChecking();
+            _db.SaveChanges();
 
             return RedirectToAction("Upload", "CSV");
-        } 
+        }
 
-        public IActionResult ToNotepad()
+
+        public async Task<IActionResult> ErrorExportCSVAsync()
         {
-            var csvData = _db.CSVs.ToList();
-            string messageContent = "";
 
-            foreach (var csvItem in csvData)
-            {
-                if (csvItem.Error)
-                {
-                    messageContent += csvItem.ContractID + " ";
-                    messageContent += csvItem.ErrorDescription + " " + "\n";
-                }
-                
-            }
-            // Convert the string to bytes
-            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
+            byte[] fileBytes = await _csvService.ErrorExportCSVAsync(ct);
 
             // Set the file name
-            string fileName = "model_info.txt";
+            string fileName = "CSV_Error_Export.csv";
 
-            return File(fileBytes, "text/plain", fileName);
+            // Return the CSV file
+            return File(fileBytes, "text/csv", fileName);
         }
-
-        public IActionResult ToCSV()
-{
-    var csvData = _db.CSVs.ToList();
-
-    // Create a StringBuilder to build the CSV content
-    var csvContent = new StringBuilder();
-
-    // Add header row
-    csvContent.AppendLine("ContractID,ErrorDescription");
-
-    // Add data rows
-    foreach (var csvItem in csvData)
-    {
-        if (csvItem.Error)
-        {
-            csvContent.AppendLine($"{csvItem.ContractID},{csvItem.ErrorDescription}");
-        }
-    }
-
-    // Convert the string to bytes
-    byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent.ToString());
-
-    // Set the file name
-    string fileName = "CSV_Error_Export.csv";
-    
-    // Return the CSV file
-    return File(fileBytes, "text/csv", fileName);
-}
 
 
         public async Task<IActionResult> Edit(int? id)
@@ -237,7 +178,7 @@ namespace VIPS.Controllers
                     }
                 }
 
-        }
+            }
         }
 
         private void ErrorCheckingContractID()
@@ -278,11 +219,11 @@ namespace VIPS.Controllers
             var csvData = _db.CSVs.ToList();
 
             List<string> validContractOrigins = new List<string>
-    {
-        "Bulk Loader",
-        "User",
-        "Copy"
-    };
+                    {
+                "Bulk Loader",
+                "User",
+                "Copy"
+                };
 
             foreach (var csvItem in csvData)
             {
@@ -362,7 +303,23 @@ namespace VIPS.Controllers
             return Regex.Replace(input, @"[.,'\-]", "");
         }
 
-    }
+        public async Task<IActionResult> DetailView(int id)
+        {
+            var contract = await _db.CSVs.FindAsync(id);
+
+            if (contract != null)
+            {
+                return View(contract);
+            }
+            else
+            {
+                Console.WriteLine("NotFound");
+                return NotFound();
+            }
+
+        }
 
     }
+
+}
 
