@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using VIPS.Models.ViewModels.Search;
 using Repositories.Contracts;
 using Services.Contracts;
+using VIPS.Models.ViewModels.Account;
 
 namespace VIPS.Controllers
 {
@@ -39,58 +40,16 @@ namespace VIPS.Controllers
         public async Task<IActionResult> SearchView(string searchString, string sortOrder, CancellationToken cancellationToken)
         {
             var tempContracts = await _contractService.GetContractsAsync(cancellationToken);
-            var contractList = tempContracts.Select(x => CondensedContract.CreateFromContract(x));
+            var contractList = tempContracts.Select(x => CondensedContract.CreateFromContract(x)).ToList();
 
-            var model = new SearchViewModel();
-
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
-                model.ContractList = await _db.Contracts
-                    .Where(c => c.Department.ToLower() == searchString.ToLower() || c.ContractName.ToLower().Contains(searchString.ToLower()))
-                    .Select(x => new CondensedContract
-                    {
-                        ContractID = x.ContractID,
-                        CreatedOn = x.CreatedOn,
-                        ContractName = x.ContractName,
-                        Owner = x.Owner,
-                        StageName = x.StageName,
-                        UpdatedOn = x.UpdatedOn,
-                        AgencyName = x.AgencyName,
-                        City = x.City,
-                        Department = x.Department,
-                        FacultyInitiator = x.FacultyInitiator,
-                        Renewal = x.Renewal,
-                        State = x.State,
-                        Year = x.Year,
-                        
-                      
-                    }).ToListAsync();
-            }
-            else
-            {
-                model.ContractList = await _db.Contracts
-                    .Select(x => new CondensedContract
-                    {
-                        ContractID = x.ContractID,
-                        CreatedOn = x.CreatedOn,
-                        ContractName = x.ContractName,
-                        Owner = x.Owner,
-                        StageName = x.StageName,
-                        UpdatedOn = x.UpdatedOn,
-                        AgencyName = x.AgencyName,
-                        City = x.City,
-                        Department = x.Department,
-                        FacultyInitiator = x.FacultyInitiator,
-                        Renewal = x.Renewal,
-                        State = x.State,
-                        Year = x.Year,
-                        
-                    }).ToListAsync();
+                contractList.Where(c => c.Department.ToLower() == searchString.ToLower() || c.ContractName.ToLower().Contains(searchString.ToLower()));
             }
 
             if (sortOrder == "alphabetical")
             {
-                model.ContractList = model.ContractList.OrderBy(contract => {
+                contractList = contractList.OrderBy(contract => {
                     var contractName = contract.ContractName;
                     var index = contractName.IndexOf("AA - ");
                     if (index >= 0 && contractName.Length > index + 5)
@@ -105,16 +64,12 @@ namespace VIPS.Controllers
                     return contractName;
                 }).ToList();
             }
-            /*else if (sortOrder == "close_exp")
+            var model = new SearchViewModel
             {
-                model.ContractList = model.ContractList.OrderBy(contract => contract.ExpirationDate).ToList();
-            }
-            else if (sortOrder == "far_exp")
-            {
-                model.ContractList = model.ContractList.OrderByDescending(contract => contract.ExpirationDate).ToList();
-            }
-            // Add other sorting logics for 'id' if needed...
-    */
+                ContractList = contractList,
+                SearchQuery = searchString
+            };
+
             return View(model);
         }
         public async Task<IActionResult> Contract(int id)
@@ -130,7 +85,7 @@ namespace VIPS.Controllers
                 Console.WriteLine("NotFound");
                 return NotFound();
             }
-            
+
         }
     }
 }

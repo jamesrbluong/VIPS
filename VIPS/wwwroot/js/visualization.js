@@ -195,9 +195,6 @@
             if (node.title.length > maxLength) {
                 node.title = node.title.substring(0, maxLength) + '...'; 
             }
-            else {
-                node.title = node.title;
-            }
         });
 
         data.edges.forEach(function (edge) {

@@ -248,10 +248,43 @@ table, th, td {
 	
 }
 
+
+/*
 tr:nth-child(even) {
 	background-color: #EDEEEE;
 	
 }
+
+*/
+
+.search-home {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.search-container {
+	display: flex;
+	align-items: center;
+}
+
+.search-home {
+	margin-right: 5px;
+}
+
+tr:nth-child(even) {
+	background-color: #a7a8a9;
+	color: #000;
+}
+
+tr:nth-child(odd) {
+	background-color: #0a233f;
+	color: #fff;
+}
+
 
 
 

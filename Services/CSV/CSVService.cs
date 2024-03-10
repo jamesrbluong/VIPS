@@ -61,7 +61,7 @@ namespace Services.CSV
                 {
                     from = contractItem.CCECMajors;
                 }
-                else if (!string.IsNullOrEmpty(schoolName)) // FIX dept/coehs may be blank thats not good
+                else if (!string.IsNullOrEmpty(schoolName)) 
                 {
                     from = schoolName; // changed might be wrong
                     isSchool = true;
@@ -430,7 +430,7 @@ namespace Services.CSV
             {
                 return SchoolNames[name];
             }
-            return "GetSchoolName - invalid";
+            return "GetSchoolName - invalid"; // this is not good
             
         }
 
