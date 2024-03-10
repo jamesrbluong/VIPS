@@ -30,6 +30,11 @@ namespace VIPS.Controllers
             ct = _cancellationTokenSource.Token;
             _visualizationService = visualizationService;
         }
+        
+        public IActionResult Index ()
+        {
+            return View();
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetEdgeDataAsync() // ?
@@ -71,6 +76,8 @@ namespace VIPS.Controllers
         [HttpGet]
         public async Task<IActionResult> FillContractData(int contractId)
         {
+            contractId = Int32.Parse(_visualizationService.IsolateContractId(contractId.ToString()));
+            Console.WriteLine("FillContractData: " + contractId);
             if (contractId != 0)
             {
                 var contract = await _visualizationService.FillContractDataAsync(contractId, ct);
@@ -80,6 +87,7 @@ namespace VIPS.Controllers
                     return Json(data);
                 }
             }
+            Console.WriteLine("uh oh: ");
 
             return default;
         }
@@ -124,10 +132,12 @@ namespace VIPS.Controllers
         [HttpPost]
         public async Task<JsonResult> SetNodes (string nodes)
         {
-            List<Node> nodeList = JsonConvert.DeserializeObject<List<Node>>(nodes);
+            Console.WriteLine("pizza " + nodes);
 
             if (!string.IsNullOrEmpty(nodes))
             {
+                List<Node> nodeList = JsonConvert.DeserializeObject<List<Node>>(nodes);
+
                 await _visualizationService.DeleteAllNodes(ct);
                 
                 foreach (var item in nodeList)
@@ -146,11 +156,9 @@ namespace VIPS.Controllers
                     await _visualizationService.AddNodeAsync(node, ct);
 
                 }
-                
-                
             }
 
-
+            TempData["loadVisualization"] = null;
             return Json("success");
         }
         

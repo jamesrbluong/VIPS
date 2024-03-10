@@ -17,6 +17,7 @@
                 interpolation: false    // 'true' for intensive zooming
             },
             mass: 4,
+            borderWidth: 2,
             color: "rgba(10, 35, 63,1)"
 
         },
@@ -36,7 +37,7 @@
                 type: 'continuous', // Set type to 'continuous' for straight lines without curves
                 roundness: 0 // Set roundness to 0 to remove any rounding effect
             },
-            width: 3,
+            width: 16,
             color: "black"
         },
         layout: {
@@ -44,7 +45,7 @@
         },
         interaction: {
             dragNodes: false,
-            navigationButtons: true,
+            navigationButtons: false,
             selectConnectedEdges: false,
 
             hideNodesOnDrag: false,
@@ -64,12 +65,6 @@
 
     var nodesArray = [];
     var edgesArray = [];
-
-    /**
-     * x: 100 + (i * 1.25),
-     * y: 100 + (i * 1.25)
-     * 
-     */
 
 
     $.when(
@@ -91,6 +86,7 @@
                             y: data[i].y,
                             type: "school",
                             color: "purple",
+                            title: data[i].name
                         });
                     }
                     else if (type === "d") {
@@ -100,7 +96,9 @@
                             schoolId: data[i].schoolId,
                             x: data[i].x,
                             y: data[i].y,
-                            type: "department"
+                            type: "department",
+                            color: "#0A233F",
+                            title: data[i].name
                         });
                     }
                     else if (type === "p") {
@@ -110,7 +108,8 @@
                             x: data[i].x,
                             y: data[i].y,
                             type: "partner",
-                            color: "red"
+                            color: "red",
+                            title: data[i].name
                         });
                     }
                     else {
@@ -134,9 +133,11 @@
                     if (params[i].contractId != 0) {
                         tempEdge =
                         {
+                            id: i,
                             from: params[i].fromId,
                             to: params[i].toId,
-                            id: params[i].contractId,
+                            ContractId: params[i].contractId,
+                            ExpirationDate: params[i].expirationDate,
                             CreatedOn: "",
                             ContractName: "",
                             Owner: "",
@@ -157,6 +158,7 @@
                         {
                             from: params[i].fromId,
                             to: params[i].toId,
+                            ExpirationDate: params[i].expirationDate,
                             CreatedOn: "",
                             ContractName: "",
                             Owner: "",
@@ -188,24 +190,85 @@
             edges: new vis.DataSet(edgesArray)
         };
 
+        data.nodes.forEach(function (node) {
+            var maxLength = 30; 
+            if (node.title.length > maxLength) {
+                node.title = node.title.substring(0, maxLength) + '...'; 
+            }
+        });
+
+        data.edges.forEach(function (edge) {
+            var color = checkExpiration(edge.ExpirationDate);
+            edge.color = color;
+        });
+
         network = new vis.Network(container, data, options);
 
-        /*
-        for (i = 0; i < nodesArray.length; i++) {
-            if (nodesArray[i].type == "school") {
-                var clusterNode = network.clusterByConnection(nodesArray[i].id);
-                // console.log(clusterNode);
-                // network.clustering.updateClusteredNode(clusterNode.id, { shape: 'box', label: nodesArray[i].label });
-            }
-        }
-        */
+        document.getElementById("totalNodes").innerHTML = "Number of Nodes: " + data.nodes.length;
+        document.getElementById("totalEdges").innerHTML = "Number of Edges: " + data.edges.length;
+        document.getElementById("overlay").style.visibility = "visible";
 
         network.on("stabilizationIterationsDone", function () {
             network.setOptions({ physics: false });
+
         });
+
+        var visualizationContainer = document.getElementById("visualizationContainer");
+
+        function handleClickOutside(event) {
+            if (!visualizationContainer.contains(event.target)) {
+                console.log('Clicked outside of the Vis.js network.');
+                closeSidebar();
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside);
+
+        function countConnectionsPartner(nodeId) {
+            var connectedNodes = network.getConnectedNodes(nodeId);
+
+            var connectedNodesCount = connectedNodes.length;
+
+            return connectedNodesCount;
+        }
+
+        function countConnectionsDepartment(nodeId) {
+            var connectedNodes = network.getConnectedNodes(nodeId);
+            var connectedNodesCount = 0;
+            connectedNodes.forEach(function (nodeId) {
+                if (data.nodes.get(nodeId).type == "partner") {
+                    connectedNodesCount++;
+                }
+            });
+
+            return connectedNodesCount;
+
+        }
+
+        function countConnectionsSchool(nodeId) {
+            var connectedNodes = network.getConnectedNodes(nodeId);
+
+            var connectedNodesCount = 0;
+            connectedNodes.forEach(function (nodeId) {
+                if (data.nodes.get(nodeId).type == "partner") {
+                    connectedNodesCount++;
+                }
+                var neighbors = network.getConnectedNodes(nodeId);
+                neighbors.forEach(function (nodeId) {
+                    if (data.nodes.get(nodeId).type == "partner") {
+                        connectedNodesCount++;
+                    }
+
+                });
+            });
+
+            return connectedNodesCount;
+
+        }
 
         // network.on('click', neighbourhoodHighlight);
         network.on('selectNode', function (params) {
+            console.log("selectNode");
             var nodeId = params.nodes[0];
             var node = data.nodes.get(nodeId);
             var sidebarNode = document.getElementById("sidebarNode");
@@ -215,7 +278,7 @@
             var nodeLocation = network.body.nodes[nodeId];
 
             sidebarEdge.replaceChildren();
-            console.log(nodeId + " " + nodeLocation.x + " " + nodeLocation.y);
+
             network.moveTo({
                 position: { x: nodeLocation.x, y: nodeLocation.y },
                 animation: true
@@ -224,10 +287,10 @@
             if (network.isCluster(nodeId) === true) {
                 // Open the cluster associated with the clicked node
                 network.openCluster(nodeId);
+
             }
             else {
                 if (node.hiddenLabel == undefined) {
-
                     if (node.type == 'school') {
                         $.ajax({
                             url: '/Visualization/FillSchoolData',
@@ -236,31 +299,63 @@
                             data: { stringId: node.id }, // JSON.stringify( { departmentId: data.nodes.get(nodeId).id } )
                             success: function (data) {
                                 console.log(JSON.stringify(data));
+
+                                var depts = data.depts;
+                                var contracts = data.contracts;
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push school name
+                                newElements.push(createAnchor("Number of Connections: " + countConnectionsSchool(node.id), "sidebarEntry"));
 
-                                if (data === undefined) {
+                                if (data !== undefined && data.length != 0) {
 
                                     // ADD CONSTANT SCHOOL INFO
-                                    newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
 
-                                    for (i = 0; i < data.length; i++) {
-                                        var li = document.createElement('li')
-                                        var anchor = createAnchor(data[i].departmentName, "sidebarEntry");
+                                    if (depts.length > 0) {
+                                        newElements.push(createAnchor("Associated Departments: ", "sidebarData")); // work on
 
-                                        // newElements.push(anchor);
-                                        li.appendChild(anchor);
-                                        ul.appendChild(li);
+                                        var ulDepts = document.createElement('ul');
+
+                                        for (i = 0; i < depts.length; i++) {
+                                            var li = document.createElement('li')
+                                            var anchor = createAnchor(depts[i].departmentName, "sidebarEntry");
+
+                                            // newElements.push(anchor);
+                                            li.appendChild(anchor);
+                                            ulDepts.appendChild(li);
+
+                                        }
+                                        newElements.push(ulDepts);
 
                                     }
+                                    else {
+                                        // newElements.push(createAnchor("No Departments", "sidebarData")); // work on
+                                    }
 
-                                    newElements.push(ul);
+                                    if (contracts.length > 0) {
+                                        newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
 
+                                        var ulContracts = document.createElement('ul');
 
+                                        for (i = 0; i < contracts.length; i++) {
+                                            var li = document.createElement('li')
+                                            var anchor = createAnchor(contracts[i].contractId, "sidebarEntry");
+                                            anchor.href = '/Search/Contract/' + contracts[i].contractId;
+                                            anchor.setAttribute('target', '_blank');
+
+                                            // newElements.push(anchor);
+                                            li.appendChild(anchor);
+                                            ulContracts.appendChild(li);
+
+                                        }
+                                        newElements.push(ulContracts);
+
+                                    }
+                                    else {
+                                        // newElements.push(createAnchor("No Contracts", "sidebarData")); // work on
+                                    }
                                 }
-                                else {
-                                    newElements.push(createAnchor("No departments", "sidebarData")); 
-                                }
+                                
+
 
                                 sidebarNode.replaceChildren(...newElements);
                             },
@@ -278,10 +373,16 @@
                             success: function (data) {
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
+                                newElements.push(createAnchor("Number of Connections: " + countConnectionsDepartment(node.id), "sidebarEntry"));
 
                                 // ADD CONSTANT PARTNER INFO
 
-                                newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                if (data.length > 0) {
+                                    newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                }
+                                else {
+                                    newElements.push(createAnchor("No Contracts ", "sidebarData"));
+                                }
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
@@ -317,10 +418,16 @@
 
                                 var newElements = [];
                                 newElements.push(createAnchor(node.label, "sidebarTitle")); // push partner name
+                                newElements.push(createAnchor("Number of Connections: " + countConnectionsPartner(node.id), "sidebarEntry"));
 
                                 // ADD CONSTANT PARTNER INFO
 
-                                newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                if (data.length > 0) {
+                                    newElements.push(createAnchor("Associated Contracts: ", "sidebarData"));
+                                }
+                                else {
+                                    newElements.push(createAnchor("No Contracts ", "sidebarData"));
+                                }
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
@@ -369,11 +476,12 @@
                     url: '/Visualization/FillContractData',
                     type: 'GET',
                     dataType: 'json',
-                    data: { contractId: edge.id },
+                    data: { contractId: edge.ContractId },
                     success: function (params) {
                         var updatedEdge =
                         {
-                            id: params.contractID,
+                            id: edgeId,
+                            ContractId: params.contractID,
                             CreatedOn: params.createdOn,
                             ContractName: params.contractName,
                             Owner: params.owner,
@@ -389,25 +497,25 @@
                         };
 
                         data.edges.update(updatedEdge);
-                        edge = data.edges.get(edgeId);
+                        var edge = data.edges.get(edgeId);
 
-                        var anchor = createAnchor(edge.ContractName + " [" + edge.id + "]", "sidebarTitle");
-                        anchor.href = '/Search/Contract/' + edge.id;
+                        var anchor = createAnchor(edge.ContractName + " [" + edge.ContractId + "]", "sidebarTitle");
+                        anchor.href = '/Search/Contract/' + edge.ContractId;
                         anchor.setAttribute('target', '_blank');
 
                         sidebarEdge.replaceChildren(
                             anchor,
-                            createAnchor("Department: " + edge.Department, "sidebarData"),
-                            createAnchor("Partner Name: " + edge.AgencyName, "sidebarData"),
-                            createAnchor("Owner: " + edge.Owner, "sidebarData"),
-                            createAnchor("Faculty Initiator: " + edge.FacultyInitiator, "sidebarData"),
-                            createAnchor("Stage Name: " + edge.StageName, "sidebarData"),
-                            createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
-                            createAnchor("City: " + edge.City, "sidebarData"),
-                            createAnchor("State: " + edge.State, "sidebarData"),
-                            createAnchor("Year: " + edge.Year, "sidebarData"),
-                            createAnchor("Updated On: " + edge.UpdatedOn, "sidebarData"),
-                            createAnchor("Renewal: " + edge.Renewal, "sidebarData"),
+                            edge.Department && createAnchor("Department: " + edge.Department, "sidebarData"),
+                            edge.AgencyName && createAnchor("Partner Name: " + edge.AgencyName, "sidebarData"),
+                            edge.Owner && createAnchor("Owner: " + edge.Owner, "sidebarData"),
+                            edge.FacultyInitiator && createAnchor("Faculty Initiator: " + edge.FacultyInitiator, "sidebarData"),
+                            edge.StageName && createAnchor("Stage Name: " + edge.StageName, "sidebarData"),
+                            edge.City && createAnchor("City: " + edge.City, "sidebarData"),
+                            edge.State && createAnchor("State: " + edge.State, "sidebarData"),
+                            edge.Year && createAnchor("Year: " + edge.Year, "sidebarData"),
+                            edge.CreatedOn && createAnchor("Created On: " + edge.CreatedOn, "sidebarData"),
+                            edge.UpdatedOn && createAnchor("Updated On: " + edge.UpdatedOn, "sidebarData"),
+                            edge.Renewal && createAnchor("Renewal: " + edge.Renewal, "sidebarData")
                         );
 
                     },
@@ -418,7 +526,7 @@
 
             }
             else {
-                document.getElementById("sidebarName").innerHTML = edge.hiddenLabel;
+                document.getElementById("sidebarName").innerHTML = beforeEdge.hiddenLabel;
             }
             if (!isGuid(edgeId)) {
                 openSidebar();
@@ -431,6 +539,8 @@
         network.on("deselectEdge", function (params) {
             closeSidebar();
         });
+
+        
 
     });
 
@@ -454,10 +564,33 @@
     }
 
     function isGuid(value) {
-        var regex = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i;
+        var regex = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/;
         var match = regex.exec(value);
         return match != null;
     }
+
+    function checkExpiration(expirationDate) {
+        if (expirationDate == null) {
+            return '76BC43'; // UNF Leaf
+        }
+        expirationDate = Date.parse(expirationDate);
+        var today = new Date();
+        var sixMonths = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
+        // var twoMonth = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
+
+        if (expirationDate < today) { // already expired
+            return '#C41F4B'; // UNF Sunset
+        }
+        else if (expirationDate < sixMonths) { // will expire within the month
+            return 'FFC62F'; // UNF Sunshine
+        }
+        else {
+            return '76BC43'; // UNF Leaf
+        }
+        
+        
+    }
+    
 }
 else {
     console.log("mynetwork not in html");

@@ -16,5 +16,7 @@ namespace Services.Visualizations
         Task<List<Edge>> GetEdgesAsync(CancellationToken ct);
         Task AddNodeAsync(Node node, CancellationToken ct);
         Task DeleteAllNodes(CancellationToken ct);
+        string IsolateContractId(string input);
+        string IsolateNodeId(string input);
     }
 }

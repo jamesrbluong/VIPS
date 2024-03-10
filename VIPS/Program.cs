@@ -19,10 +19,9 @@ using Services.Edges;
 using Services.CSVs;
 using Repositories.Edges;
 using Repositories.Nodes;
-using Repositories.CSVs;
-
-
-
+using Repositories.CSV;
+using Services.CSV;
+using Repositories.Departments;
 
 // "Server=(localdb)\\MSSQLLocalDB;Database=VIPS;Trusted_Connection=True;MultipleActiveResultSets=true"
 // "Server=tcp:vipsserver.database.windows.net,1433;Initial Catalog=vips;Persist Security Info=False;User ID=vipsadmin;Password=VIPS!unf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
@@ -103,6 +102,7 @@ app.Run();
 void RegisterRepositories(IServiceCollection services)
 {
     services.AddScoped<IContractRepository, ContractRepository>();
+    services.AddScoped<ICSVRepository, CSVRepository>();
     services.AddScoped<IAccountRepository, AccountRepository>();
     services.AddScoped<ISchoolRepository, SchoolRepository>();
     services.AddScoped<IDepartmentRepository, DepartmentRepository>();
@@ -115,6 +115,7 @@ void RegisterRepositories(IServiceCollection services)
 void RegisterServices(IServiceCollection services)
 {
     services.AddScoped<IContractService, ContractService>();
+    services.AddScoped<ICSVService, CSVService>();
     services.AddScoped<IAccountService, AccountService>();
     services.AddScoped<ISchoolService, SchoolService>();
     services.AddScoped<IDepartmentService, DepartmentService>();

@@ -19,69 +19,38 @@ namespace Repositories.Nodes
 
         public Task<List<Common.Entities.Node>> GetListAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return _dbContext.Nodes.ToListAsync(cancellationToken);
-
-            }
-            return default;
+            return _dbContext.Nodes.ToListAsync(cancellationToken);
         }
 
         public async Task<Common.Entities.Node> GetByIdAsync(string id, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return await _dbContext.Nodes.FindAsync(id);
-
-            }
-            return default;
+            return await _dbContext.Nodes.FindAsync(id);
         }
 
         public async Task AddAsync(Common.Entities.Node visualization, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Nodes.Add(visualization);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Nodes.Add(visualization);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(Common.Entities.Node visualization, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Nodes.Update(visualization);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Nodes.Update(visualization);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var nodeToDelete = await _dbContext.Nodes.FindAsync(id);
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Nodes.Remove(nodeToDelete);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Nodes.Remove(nodeToDelete);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAllNodes(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var data = _dbContext.Nodes.ToList();
-                _dbContext.Nodes.RemoveRange(data);
-                await _dbContext.SaveChangesAsync();
-
-                return;
-            }
+            var data = await _dbContext.Nodes.ToListAsync(cancellationToken);
+            _dbContext.Nodes.RemoveRange(data);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

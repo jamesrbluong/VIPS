@@ -7,9 +7,17 @@
 #mynetwork {
     width: 100%;
     height: 650px;
-    border: 3px solid lightgray;
+    border: 3px solid lightgrey;
     position: relative;
-    
+}
+
+.overlay {
+    position: absolute;
+    visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    border: 3px solid lightgrey;
 }
 
 .sidebar {
@@ -20,16 +28,19 @@
     z-index: 1;
     top: 0;
     right: 0;
-    background-color: #999;
+    background-color: #A7A8A9;
     overflow-x: hidden;
     padding-top: 60px;
+    border-top: 3px solid lightgray;
+    border-right: 3px solid lightgray;
+    border-bottom: 3px solid lightgray;
 }
     .sidebar div:first-child {
         padding: 8px 8px 8px 32px;
     }
 
     .sidebar a {
-        color: black;
+        color: #0a233f;
         display: block;
         text-decoration: none;
     }

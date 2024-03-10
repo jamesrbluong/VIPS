@@ -15,56 +15,31 @@ namespace Repositories.Schools
 
         public Task<List<Common.Entities.School>> GetListAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return _dbContext.Schools.ToListAsync(cancellationToken);
-            }
-            return default;
+            return _dbContext.Schools.ToListAsync(cancellationToken);
         }
 
         public async Task<Common.Entities.School> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                return await _dbContext.Schools.FindAsync(id);
-            }
-            return default;
+            return await _dbContext.Schools.FindAsync(id);
         }
 
         public async Task AddAsync(Common.Entities.School school, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Schools.Add(school);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Schools.Add(school);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(Common.Entities.School school, CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Schools.Update(school);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Schools.Update(school);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var schoolToDelete = await _dbContext.Schools.FindAsync(id);
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                _dbContext.Schools.Remove(schoolToDelete);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return;
-            }
+            _dbContext.Schools.Remove(schoolToDelete);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
-
     }
 }
