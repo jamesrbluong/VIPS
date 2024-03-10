@@ -37,7 +37,7 @@
                     <img alt="University of North Florida" src="@Url.Content("~/Content/Images/UNFLogo.png")" />
                 </a>
             </div>
-            
+
             <div class="right">
                 <ul aria-label="Action Links" class="actionLinks">
 
@@ -62,20 +62,20 @@
 
 
 
-                <div class="searchBar">
-                    <input type="text" placeholder="Search..." />
-                </div>
-                @if (roleName.Equals("Admin"))
-                {
-                    <div class="adminOptions">
-                        <a asp-area="" asp-controller="Account" asp-action="Index">Account</a>
-                        <a asp-area="" asp-controller="CSV" asp-action="Upload">Upload</a>
+                    <div class="searchBar">
+                        <input type="text" placeholder="Search..." />
                     </div>
-                }
+                    @if (roleName.Equals("Admin"))
+                    {
+                        <div class="adminOptions">
+                            <a asp-area="" asp-controller="Account" asp-action="Index">Account</a>
+                            <a asp-area="" asp-controller="CSV" asp-action="Upload">Upload</a>
+                        </div>
+                    }
 
             </div>
 
-            
+
         </div>
     </header>
 
@@ -95,6 +95,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -134,7 +135,7 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
 
-    <base href="~/"/>
+    <base href="~/" />
     <script src="_framework/blazor.server.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

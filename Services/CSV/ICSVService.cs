@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Services.CSV
 {
@@ -8,6 +9,9 @@ namespace Services.CSV
         Task AddSchoolToDepartmentConnectionsAsync(CancellationToken cancellationToken);
         Task DeleteCSVDataFromTable(CancellationToken ct);
         Task DeleteDatabaseEntries(CancellationToken ct);
+        Task<byte[]> ErrorExportCSVAsync(CancellationToken cancellationToken);
+        Task<Common.Entities.CSV> GetById(int contractId, CancellationToken ct);
+        Task<List<Common.Entities.CSV>> GetCSVsAsync(CancellationToken ct);
         string GetSchoolName(string name, string program);
         int GetYearsUntilExpiration(Contract contract);
         Task PopulateDepartmentsAsync(CancellationToken ct);
@@ -15,5 +19,6 @@ namespace Services.CSV
         Task PopulatePartnersAsync(CancellationToken ct);
         Task PopulateSchoolsAsync(CancellationToken ct);
         Task TransferDataAsync(CancellationToken ct);
+        void UploadCSVFile(IFormFile file);
     }
 }

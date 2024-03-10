@@ -3,6 +3,7 @@
     public interface ICSVRepository
     {
         Task AddAsync(Common.Entities.CSV CSV, CancellationToken cancellationToken);
+        void AddRange(IEnumerable<Common.Entities.CSV> records);
         Task DeleteAsync(int id, CancellationToken cancellationToken);
         Task DeleteDataFromTableAsync(string tableName, CancellationToken ct);
         Task<Common.Entities.CSV> GetByIdAsync(int id, CancellationToken cancellationToken);

@@ -63,5 +63,9 @@ namespace Repositories.CSV
             await _db.SaveChangesAsync(cancellationToken);
         }
 
+        public void AddRange(IEnumerable<Common.Entities.CSV> records)
+        {
+            _db.CSVs.AddRange(records);
+        }
     }
 }

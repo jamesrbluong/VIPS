@@ -48,9 +48,9 @@ namespace VIPS.Controllers
         {
             var data = _db.CSVs.ToList();
             return View(data);
-    }
+        }
 
-    [HttpPost]
+        [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
             var records = new List<CSV>();

@@ -1,5 +1,7 @@
 ﻿using Common.Entities;
+using CsvHelper;
 using Humanizer;
+using Microsoft.AspNetCore.Http;
 using Repositories.Contracts;
 using Repositories.CSV;
 using Repositories.Departments;
@@ -7,7 +9,9 @@ using Repositories.Edges;
 using Repositories.Nodes;
 using Repositories.Partners;
 using Repositories.Schools;
+using System.Globalization;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Services.CSV
@@ -28,6 +32,62 @@ namespace Services.CSV
             _partnerRepository = partnerRepository;
             _edgeRepository = edgeRepository;
             _CSVRepository = cSVRepository;
+        }
+
+        public async Task<byte[]> ErrorExportCSVAsync(CancellationToken cancellationToken)
+        {
+            var csvData = await _CSVRepository.GetListAsync(cancellationToken);
+
+            // Create a StringBuilder to build the CSV content
+            var csvContent = new StringBuilder();
+
+            // Add header row
+            csvContent.AppendLine("ContractID,ErrorDescription");
+
+            // Add data rows
+            foreach (var csvItem in csvData)
+            {
+                if (csvItem.Error)
+                {
+                    csvContent.AppendLine($"{csvItem.ContractID},{csvItem.ErrorDescription}");
+                }
+            }
+
+            // Convert the string to bytes
+            byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent.ToString());
+
+            return fileBytes;
+        }
+
+        public async Task<Common.Entities.CSV> GetById(int contractId, CancellationToken ct)
+        {
+            return await _CSVRepository.GetByIdAsync(contractId, ct);
+        }
+
+        public async Task<List<Common.Entities.CSV>> GetCSVsAsync(CancellationToken ct)
+        {
+            return await _CSVRepository.GetListAsync(ct);
+        }
+
+        public void UploadCSVFile(IFormFile file)
+        {
+            var records = new List<Common.Entities.CSV>();
+
+            if (file != null)
+            {
+                using (var streamReader = new StreamReader(file.OpenReadStream()))
+                using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                {
+                    streamReader.ReadLine();
+                    streamReader.ReadLine();
+                    records = csvReader.GetRecords<Common.Entities.CSV>().ToList();
+                }
+
+
+                _CSVRepository.AddRange(records);
+
+
+            }
         }
 
         public async Task PopulateEdges(Contract contractItem, CancellationToken ct)
