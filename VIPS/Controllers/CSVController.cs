@@ -60,28 +60,6 @@ namespace VIPS.Controllers
             return RedirectToAction("Upload", "CSV");
         } 
 
-        public IActionResult ToNotepad()
-        {
-            var csvData = _db.CSVs.ToList();
-            string messageContent = "";
-
-            foreach (var csvItem in csvData)
-            {
-                if (csvItem.Error)
-                {
-                    messageContent += csvItem.ContractID + " ";
-                    messageContent += csvItem.ErrorDescription + " " + "\n";
-                }
-                
-            }
-            // Convert the string to bytes
-            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
-
-            // Set the file name
-            string fileName = "model_info.txt";
-
-            return File(fileBytes, "text/plain", fileName);
-        }
 
         public IActionResult ToCSV()
 {
