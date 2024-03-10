@@ -92,26 +92,6 @@
 <p id="response"></p>
 
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Attach click event handler to each row
-        $("#objectTable tbody tr").click(function () {
-            // Get the contractID from the clicked row
-            var contractID = $(this).find("td:first-child").text().trim();
-            // Make an AJAX request to call ContractDetailView with the contract ID
-            $.ajax({
-                url: '/CSV/DetailView/' + contractId,
-                type: 'GET',
-                success: function (response) {
-                    window.location.href = '/Contract/Detail?id=' + contractId;
-                },
-                error: function (error) {
-                    console.error('Error fetching data:', error);
-            });
-        });
-    });
-</script>
 
 
 @if (TempData["AlertMessage"] != null)
