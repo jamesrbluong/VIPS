@@ -44,7 +44,7 @@ namespace VIPS.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                contractList.Where(c => c.Department.ToLower() == searchString.ToLower() || c.ContractName.ToLower().Contains(searchString.ToLower()));
+                contractList = contractList.Where(c => c.Department.ToLower().Equals(searchString.ToLower()) || c.ContractName.ToLower().Contains(searchString.ToLower())).ToList();
             }
 
             if (sortOrder == "alphabetical")

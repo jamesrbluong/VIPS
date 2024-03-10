@@ -1,4 +1,5 @@
-﻿namespace Repositories.CSV
+﻿
+namespace Repositories.CSV
 {
     public interface ICSVRepository
     {

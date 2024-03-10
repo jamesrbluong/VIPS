@@ -9,13 +9,6 @@ using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
 using Common.Data;
 using Common.Entities;
-using Repositories.Contracts;
-using Services.Contracts;
-using Repositories.CSVs;
-using Services.CSVs;
-using static Azure.Core.HttpHeader;
-using System.Xml.Linq;
-using System.Data.Entity;
 using Repositories.CSV;
 using Services.CSV;
 
@@ -38,11 +31,9 @@ namespace VIPS.Controllers
             _CSVService = CSVService;
         }
 
-        public IActionResult Upload()
-
+        public async Task<IActionResult> UploadAsync(CancellationToken ct)
         {
-
-            var data = await _csvService.GetCSVsAsync(ct);
+            var data = await _CSVService.GetCSVsAsync(ct);
             ViewBag.Count = data.Count;
 
             int countOfDuplicates = data.Count(model => model.Duplicate);
@@ -54,7 +45,7 @@ namespace VIPS.Controllers
         [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
-            _csvService.UploadCSVFile(file);
+            _CSVService.UploadCSVFile(file);
             _db.SaveChanges();
 
             CheckForDuplicates();
@@ -66,10 +57,10 @@ namespace VIPS.Controllers
         }
 
 
-        public async Task<IActionResult> ErrorExportCSVAsync()
+        public async Task<IActionResult> ErrorExportCSVAsync(CancellationToken ct)
         {
 
-            byte[] fileBytes = await _csvService.ErrorExportCSVAsync(ct);
+            byte[] fileBytes = await _CSVService.ErrorExportCSVAsync(ct);
 
             // Set the file name
             string fileName = "CSV_Error_Export.csv";
