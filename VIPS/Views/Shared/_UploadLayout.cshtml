@@ -23,9 +23,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - VIPS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/csv.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/visualization.css" asp-append-version="true" />
 
 </head>
@@ -59,25 +59,26 @@
                             <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                         </li>
                     }
+                </ul>
 
 
-
-                    <div class="searchBar">
-                        <input type="text" placeholder="Search..." />
+                <div class="searchBar">
+                    <input type="text" placeholder="Search..." />
+                </div>
+                @if (roleName.Equals("Admin"))
+                {
+                    <div class="adminOptions">
+                        <a asp-area="" asp-controller="Account" asp-action="Index">Account</a>
+                        <a asp-area="" asp-controller="CSV" asp-action="Upload">Upload</a>
                     </div>
-                    @if (roleName.Equals("Admin"))
-                    {
-                        <div class="adminOptions">
-                            <a asp-area="" asp-controller="Account" asp-action="Index">Account</a>
-                            <a asp-area="" asp-controller="CSV" asp-action="Upload">Upload</a>
-                        </div>
-                    }
+                }
 
             </div>
 
 
         </div>
     </header>
+
 
     <nav aria-label="Main Menu" id="navBar" class="navbar navbar-expand-sm navbar-toggleable-sm">
         <div class="container-fluid">
@@ -104,9 +105,10 @@
             </button>
         </div>
     </nav>
+    <br />
 
 
-    <div>
+    <div class="container">
         <main role="main" class="pb-3">
             @if (TempData["success"] != null)
             {
@@ -123,7 +125,7 @@
 
     <footer class="border-top footer">
         <div class="container">
-            &copy; 2023 - VIPS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - VIPS - UNF
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -131,7 +133,6 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/CSV.js" asp-append-version="true"></script>
-
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
 

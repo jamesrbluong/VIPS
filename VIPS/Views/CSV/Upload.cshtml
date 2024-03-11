@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_UploadLayout.cshtml";
 }
 
 @model IEnumerable<Common.Entities.CSV>
@@ -88,10 +88,24 @@
     </table>
 
 }
+<button id="runButton">Load Visualization</button>
 <div id="mynetwork" style="display: none;"></div>
 <p id="response"></p>
+<div id="progressContainer" class="progress" style="display:none;">
+    <div id="progressBar" class="progress-bar" role="progressbar" style="width:100%;">
+        100%
+    </div>
+</div>
 
+<script>
+    document.getElementById("runButton").addEventListener("click", function () {
+        var scriptElement = document.createElement("script");
 
+        scriptElement.src = "/js/loadVisualization.js";
+
+        document.head.appendChild(scriptElement);
+    });
+</script>
 
 
 @if (TempData["AlertMessage"] != null)
