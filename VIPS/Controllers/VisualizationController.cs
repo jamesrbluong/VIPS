@@ -1,129 +1,169 @@
 ﻿using VIPS.Models;
 using Microsoft.AspNetCore.Mvc;
-using VIPS.Models.Data;
 using VIPS.Models.ViewModels.Search;
+using Common.Data;
+using Repositories.Contracts;
+using Services.Contracts;
+using Repositories.Partners;
+using Repositories.Schools;
+using Services.Partners;
+using Services.Schools;
+using Services.Visualizations;
+using Services.Departments;
+using System.Threading;
+using Common.Entities;
+using Services.Edges;
+using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace VIPS.Controllers
 {
     public class VisualizationController : Controller
     {
+        private readonly IVisualizationService _visualizationService;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationToken ct;
 
-        private readonly ApplicationDbContext _db;
-        public VisualizationController(ApplicationDbContext db)
+        public VisualizationController(ApplicationDbContext db, IVisualizationService visualizationService)
         {
-            _db = db;
+            ct = _cancellationTokenSource.Token;
+            _visualizationService = visualizationService;
+        }
+        
+        public IActionResult Index ()
+        {
+            return View();
         }
 
-        public IActionResult GetContractData()
+        [HttpGet]
+        public async Task<IActionResult> GetEdgeDataAsync() // ?
         {
-            var data = _db.Contracts.ToList();
+            var data = await _visualizationService.GetEdgesAsync(ct);
+            return Json(data);
+        }
+        public async Task<IActionResult> GetNodeDataAsync() // ?
+        {
+            var data = await _visualizationService.GetNodesAsync(ct);
             return Json(data);
         }
 
-        public IActionResult GetPartnerData()
+        public async Task<IActionResult> GetContractDataAsync()
         {
-            var data = _db.Partners.ToList();
-            // data.ForEach(Console.WriteLine);
+            var data = await _visualizationService.GetContractsAsync(ct);
             return Json(data);
         }
 
-        public IActionResult GetSchoolData()
+        public async Task<IActionResult> GetSchoolDataAsync()
         {
-            var data = _db.Schools.ToList(); // if school has no depts, don't add
+            var data = await _visualizationService.GetSchoolsAsync(ct); // if school has no depts, don't add
             // var data = _db.Schools.Where(x => x.Departments != null && x.Departments.Any());
             return Json(data);
         }
 
-        public IActionResult GetDepartmentData()
+        public async Task<IActionResult> GetDepartmentDataAsync()
         {
-            var data = _db.Departments.ToList();
+            var data = await _visualizationService.GetDepartmentsAsync(ct);
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetPartnerDataAsync()
+        {
+            var data = await _visualizationService.GetPartnersAsync(ct);
             return Json(data);
         }
 
         [HttpGet]
-        public IActionResult GetVisualizationData()
+        public async Task<IActionResult> FillContractData(int contractId)
         {
-            var data = _db.Visualizations.ToList();
-            return Json(data);
-        }
-
-        
-        [HttpGet]
-        public JsonResult FillSchoolData(string stringId)
-        {
-            // Console.WriteLine("test dept fill" + schoolId);
-
-            // This is wrong?
-            // Get a list of department names AND all contracts associated with those departments
-            stringId = stringId.Remove(0,1);
-            Console.WriteLine("noooo" + stringId);
-            int intId = Int32.Parse(stringId);
-            var deptNames = _db.Departments.Where(x => x.SchoolId == intId).Select(x => new { departmentName = x.Name }).ToList();
-            
-            var data = deptNames;
-
-            // use this list of dept ids to further get the contracts using that id from visualization table (also connections from s to p)
-            /*
-            foreach (var deptId in deptData)
+            contractId = Int32.Parse(_visualizationService.IsolateContractId(contractId.ToString()));
+            Console.WriteLine("FillContractData: " + contractId);
+            if (contractId != 0)
             {
-                var connectionData = _db.Visualizations.Where(x => x.ToId == deptId).Select(x => new { contractId = x.ContractId }).ToList();
-            }
-            */
-            
-
-            return Json(data);
-        }
-        
-
-        [HttpGet]
-        public JsonResult FillDepartmentData(string departmentId)
-        {
-            Console.WriteLine("test dept fill" + departmentId);
-            
-            var data = _db.Visualizations.Where(x => x.FromId == departmentId).Select(x => new { contractId = x.ContractId } ).ToList();
-            
-            return Json(data);
-        }
-
-        [HttpGet]
-        public IActionResult FillPartnerData(string partnerId)
-        {
-            var data = _db.Visualizations.Where(x => x.ToId == partnerId).Select(x => new { contractId = x.ContractId }).ToList();
-
-            return Json(data);
-        }
-
-        [HttpGet]
-        public IActionResult FillContractData(int contractId)
-        {
-            Console.WriteLine("test contract fill" + contractId);
-
-            var contract = _db.Contracts.Where(x => x.ContractID == contractId).FirstOrDefault();
-            if (contract != null)
-            {
-                var data = new CondensedContract
+                var contract = await _visualizationService.FillContractDataAsync(contractId, ct);
+                if (contract != null)
                 {
-                    ContractID = contractId,
-                    CreatedOn = contract.CreatedOn,
-                    ContractName = contract.ContractName,
-                    Owner = contract.Owner,
-                    StageName = contract.StageName,
-                    UpdatedOn = contract.UpdatedOn,
-                    AgencyName = contract.AgencyName,
-                    City = contract.City,
-                    Department = contract.Department,
-                    FacultyInitiator = contract.FacultyInitiator,
-                    Renewal = contract.Renewal,
-                    State = contract.State,
-                    Year = contract.Year
-                };
-                
+                    var data = CondensedContract.CreateFromContract(contract);
+                    return Json(data);
+                }
+            }
+            Console.WriteLine("uh oh: ");
+
+            return default;
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> FillSchoolDataAsync(string stringId)
+        {
+            if (!string.IsNullOrEmpty(stringId))
+            {
+                var data = await _visualizationService.FillSchoolDataAsync(stringId, ct);
                 return Json(data);
             }
-            return Json("");
-            
+
+            return default;
         }
+        
+
+        [HttpGet]
+        public async Task<JsonResult> FillDepartmentDataAsync(string departmentId)
+        {
+            if (!string.IsNullOrEmpty(departmentId))
+            {
+                var data = await _visualizationService.FillDepartmentData(departmentId, ct);
+                return Json(data);
+            }
+
+            return default;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FillPartnerDataAsync(string partnerId)
+        {
+            if (!string.IsNullOrEmpty(partnerId))
+            {
+                var data = await _visualizationService.FillPartnerData(partnerId, ct);
+                return Json(data);
+            }
+
+            return default;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> SetNodes (string nodes)
+        {
+            Console.WriteLine("pizza " + nodes);
+
+            if (!string.IsNullOrEmpty(nodes))
+            {
+                List<Node> nodeList = JsonConvert.DeserializeObject<List<Node>>(nodes);
+
+                await _visualizationService.DeleteAllNodes(ct);
+                
+                foreach (var item in nodeList)
+                {
+                    Console.WriteLine(item.NodeId + " " + item.Name + " " + item.x + " " + item.y + " " + item.SchoolId);
+
+                    Node node = new Node
+                    {
+                        NodeId = item.NodeId,
+                        Name = item.Name,
+                        x = item.x,
+                        y = item.y,
+                        SchoolId = item.SchoolId
+                    };
+
+                    await _visualizationService.AddNodeAsync(node, ct);
+
+                }
+            }
+
+            TempData["loadVisualization"] = null;
+            return Json("success");
+        }
+        
 
 
     }
 }
+

@@ -23,9 +23,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - VIPS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/csv.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/visualization.css" asp-append-version="true" />
 
 </head>
@@ -37,7 +37,7 @@
                     <img alt="University of North Florida" src="@Url.Content("~/Content/Images/UNFLogo.png")" />
                 </a>
             </div>
-            
+
             <div class="right">
                 <ul aria-label="Action Links" class="actionLinks">
 
@@ -59,7 +59,7 @@
                             <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                         </li>
                     }
-
+                </ul>
 
 
                 <div class="searchBar">
@@ -75,24 +75,28 @@
 
             </div>
 
-            
+
         </div>
     </header>
+
 
     <nav aria-label="Main Menu" id="navBar" class="navbar navbar-expand-sm navbar-toggleable-sm">
         <div class="container-fluid">
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="MenuHoriz">
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="" asp-action="">Visualization</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="" asp-action="">Detailed View</a>
-                    </li>
-                </ul>
+                <div class="container">
+                    <div class="MenuHoriz">
+                        <div class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </div>
+                        <div class="nav-item">
+                            <a asp-area="" asp-controller="Visualization" asp-action="Index">Visualization</a>
+                        </div>
+                        <div class="nav-item">
+                            <a asp-area="" asp-controller="Search" asp-action="SearchView">Detailed View</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -101,9 +105,10 @@
             </button>
         </div>
     </nav>
+    <br />
 
 
-    <div>
+    <div class="container">
         <main role="main" class="pb-3">
             @if (TempData["success"] != null)
             {
@@ -120,7 +125,7 @@
 
     <footer class="border-top footer">
         <div class="container">
-            &copy; 2023 - VIPS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - VIPS - UNF
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -128,11 +133,10 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/CSV.js" asp-append-version="true"></script>
-    <script src="~/js/visualization.js" asp-append-version="true"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
 
-    <base href="~/"/>
+    <base href="~/" />
     <script src="_framework/blazor.server.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

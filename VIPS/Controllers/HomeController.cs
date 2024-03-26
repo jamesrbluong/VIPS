@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VIPS.Models;
+using VIPS.Models.ViewModels;
 
 namespace VIPS.Controllers
 {

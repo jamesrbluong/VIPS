@@ -1,4 +1,4 @@
-﻿@model VIPS.Models.Data.CSV
+﻿@model Common.Entities.CSV
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ContractID" />
             <div class="form-group">
                 <label asp-for="ContractID" class="control-label"></label>
                 <input asp-for="ContractID" class="form-control" />

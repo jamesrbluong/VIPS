@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\js\\CSV.js"
     },
     {
+      "Id": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\loadVisualization.js",
+      "PackagePath": "staticwebassets\\js\\loadVisualization.js"
+    },
+    {
       "Id": "C:\\Users\\frost\\Documents\\GitHub\\VIPS\\VIPS\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

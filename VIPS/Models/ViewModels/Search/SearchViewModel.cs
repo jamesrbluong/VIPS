@@ -1,6 +1,4 @@
-﻿using VIPS.Models.Data;
-
-namespace VIPS.Models.ViewModels.Search
+﻿namespace VIPS.Models.ViewModels.Search
 {
     public class SearchViewModel
     {

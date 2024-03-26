@@ -1,30 +1,39 @@
 ﻿using CsvHelper;
-using VIPS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text;
-using VIPS.Models.Data;
+using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
+using Common.Data;
+using Common.Entities;
+using Repositories.CSV;
+using Services.CSV;
 
 namespace VIPS.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class CSVController : Controller
     {
 
+        // "the goal is for the controller to just communicate with service. no db or repository -joshua" - matthew
         private readonly ApplicationDbContext _db;
-        public CSVController(ApplicationDbContext db)
+
+        private readonly ICSVService _CSVService;
+        private readonly ICSVRepository _CSVRepository;
+
+        public CSVController(ApplicationDbContext db, ICSVRepository CSVRepository, ICSVService CSVService)
         {
             _db = db;
+            _CSVRepository = CSVRepository;
+            _CSVService = CSVService;
         }
-        
-        public IActionResult Upload()
+
+        public async Task<IActionResult> UploadAsync(CancellationToken ct)
         {
-            
-            var data = _db.CSVs.ToList();
+            var data = await _CSVService.GetCSVsAsync(ct);
             ViewBag.Count = data.Count;
 
             int countOfDuplicates = data.Count(model => model.Duplicate);
@@ -33,98 +42,32 @@ namespace VIPS.Controllers
             return View(data);
         }
 
-        public IActionResult CSV()
-        {
-            var data = _db.CSVs.ToList();
-            return View(data);
-    }
-
-    [HttpPost]
+        [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
-            var records = new List<CSV>();
+            _CSVService.UploadCSVFile(file);
+            _db.SaveChanges();
 
-            if (file != null)
-            {
-                using (var streamReader = new StreamReader(file.OpenReadStream()))
-                using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
-                {
-                    streamReader.ReadLine();
-                    streamReader.ReadLine();
-                    records = csvReader.GetRecords<CSV>().ToList();
-                }
+            CheckForDuplicates();
 
-
-                // Save the records to the database
-                _db.CSVs.AddRange(records);
-                _db.SaveChanges();
-
-                CheckForDuplicates();
-                _db.SaveChanges();
-
-                ErrorChecking();
-                _db.SaveChanges();
-            }
-            else
-            {
-                TempData["error"] = "No file uploaded";
-            }
-            
+            ErrorChecking();
+            _db.SaveChanges();
 
             return RedirectToAction("Upload", "CSV");
-        } 
+        }
 
-        public IActionResult ToNotepad()
+
+        public async Task<IActionResult> ErrorExportCSVAsync(CancellationToken ct)
         {
-            var csvData = _db.CSVs.ToList();
-            string messageContent = "";
 
-            foreach (var csvItem in csvData)
-            {
-                if (csvItem.Error)
-                {
-                    messageContent += csvItem.ContractID + " ";
-                    messageContent += csvItem.ErrorDescription + " " + "\n";
-                }
-                
-            }
-            // Convert the string to bytes
-            byte[] fileBytes = Encoding.UTF8.GetBytes(messageContent);
+            byte[] fileBytes = await _CSVService.ErrorExportCSVAsync(ct);
 
             // Set the file name
-            string fileName = "model_info.txt";
+            string fileName = "CSV_Error_Export.csv";
 
-            return File(fileBytes, "text/plain", fileName);
+            // Return the CSV file
+            return File(fileBytes, "text/csv", fileName);
         }
-
-        public IActionResult ToCSV()
-{
-    var csvData = _db.CSVs.ToList();
-
-    // Create a StringBuilder to build the CSV content
-    var csvContent = new StringBuilder();
-
-    // Add header row
-    csvContent.AppendLine("ContractID,ErrorDescription");
-
-    // Add data rows
-    foreach (var csvItem in csvData)
-    {
-        if (csvItem.Error)
-        {
-            csvContent.AppendLine($"{csvItem.ContractID},{csvItem.ErrorDescription}");
-        }
-    }
-
-    // Convert the string to bytes
-    byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent.ToString());
-
-    // Set the file name
-    string fileName = "CSV_Error_Export.csv";
-    
-    // Return the CSV file
-    return File(fileBytes, "text/csv", fileName);
-}
 
 
         public async Task<IActionResult> Edit(int? id)
@@ -142,14 +85,11 @@ namespace VIPS.Controllers
             return View(cSV);
         }
 
-        // POST: CSVs22/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ContractID,CreatedOn,CreatedBy,ContractName,ContractOrigin,ContractTypeName,CurrentStageAssignees,DaysInCurrStage,Description,ExternalContractReferenceID,FolderName,Locked,Owner,PrimaryDocument,RelatedToContract,RelatedToContractID,StageName,UpdatedBy,UpdatedOn,Workflow,ProgramsOrCourses,CCECMajors,AutoRenewal,ContractCategory,AgencyMailingAddress1,AgencyMailingAddress2,AgencyName,BCH_AgingServicesManagement,BCH_AthleticTraining,BCH_College,BCH_ExerciseScience,BCH_HealthAdministration,BCH_InterdisciplinaryHealthStudies,BCH_MentalHealthCounseling,BCH_NurseAnesthetist,BCH_Nursing,BCH_NutritionDietetics,BCH_PhysicalTherapy,BCH_PublicHealth,City,COEHSPrograms,Department,EmailAddress,FacultyInitiator,Graduate_Undergraduate,PhoneNumber,PrimaryContact,Renewal,State,TitleCert,Year,ZipCode,Error,ErrorDescription,Duplicate")] CSV cSV)
         {
-            if (id != cSV.Id)
+            if (id != cSV.ContractID)
             {
                 return NotFound();
             }
@@ -163,7 +103,7 @@ namespace VIPS.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CSVExists(cSV.Id))
+                    if (!CSVExists(cSV.ContractID))
                     {
                         return NotFound();
                     }
@@ -179,7 +119,7 @@ namespace VIPS.Controllers
 
         private bool CSVExists(int id)
         {
-            return (_db.CSVs?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_db.CSVs?.Any(e => e.ContractID == id)).GetValueOrDefault();
         }
 
         private void ErrorChecking()
@@ -229,7 +169,7 @@ namespace VIPS.Controllers
                     }
                 }
 
-        }
+            }
         }
 
         private void ErrorCheckingContractID()
@@ -270,11 +210,11 @@ namespace VIPS.Controllers
             var csvData = _db.CSVs.ToList();
 
             List<string> validContractOrigins = new List<string>
-    {
-        "Bulk Loader",
-        "User",
-        "Copy"
-    };
+                    {
+                "Bulk Loader",
+                "User",
+                "Copy"
+                };
 
             foreach (var csvItem in csvData)
             {
@@ -289,22 +229,16 @@ namespace VIPS.Controllers
             }
         }
 
-        public IActionResult OverWriteSubmit()
+        public async Task<IActionResult> OverWriteSubmitAsync(CancellationToken ct)
         {
-            DeleteVisualizationDataFromTable(); // here
-            DeleteContractDataFromTable();
-            DeleteSchoolDataFromTable(); // here
-            PopulateSchools();
-            DeletePartnerDataFromTable();
-            PopulatePartners();
-            DeleteDepartmentDataFromTable(); // here
-            PopulateDepartments();
-            TransferData();
-            DeleteCSVDataFromTable();
+            await _CSVService.DeleteDatabaseEntries(ct);
+            await PopulateDatabaseEntries(ct);
+            await _CSVService.TransferDataAsync(ct);
+
             return RedirectToAction("Upload");
         }
 
-        public IActionResult Submit()
+        public async Task<IActionResult> SubmitAsync(CancellationToken ct)
         {
             var csvData = _db.CSVs.ToList();
             foreach (var csvItem in csvData)
@@ -316,36 +250,17 @@ namespace VIPS.Controllers
                 }
             }
 
-            DeleteDatabaseEntries();
-            PopulateDatabaseEntries();
-
-            TransferData();
-            DeleteCSVDataFromTable();
+            await _CSVService.DeleteDatabaseEntries(ct);
+            await PopulateDatabaseEntries(ct);
+            await _CSVService.TransferDataAsync(ct);
             return RedirectToAction("Upload");
         }
 
-        public void DeleteContractDataFromTable()
+        public async Task<IActionResult> ClearUpload(CancellationToken ct)
         {
-            var data = _db.Contracts.ToList();
-            _db.Contracts.RemoveRange(data);
-            _db.SaveChanges();
-        }
-
-        public void DeleteCSVDataFromTable()
-        {
-            var data = _db.CSVs.ToList();
-            _db.CSVs.RemoveRange(data);
-            _db.SaveChanges();
-        }
-
-        public IActionResult ClearUpload()
-        {
-            var data = _db.CSVs.ToList();
-            _db.CSVs.RemoveRange(data);
-            _db.SaveChanges();
+            await _CSVService.DeleteCSVDataFromTable(ct);
             return RedirectToAction("Upload");
         }
-        
 
         public void CheckForDuplicates()
         {
@@ -367,338 +282,11 @@ namespace VIPS.Controllers
             }
         }
 
-
-        public void TransferData()
+        public async Task PopulateDatabaseEntries(CancellationToken ct)
         {
-            // Retrieve all records from the table
-            var csvData = _db.CSVs.ToList();
-            // var contractData = _db.Contracts.ToList();
-
-            foreach (var csvItem in csvData)
-            {
-                var contractItem = new Models.Data.Contract
-                {
-                    ContractID = csvItem.ContractID,
-                    RelatedToContractID = csvItem.RelatedToContractID,
-                    CreatedOn = csvItem.CreatedOn,
-                    CreatedBy = csvItem.CreatedBy,
-                    ContractName = csvItem.ContractName,
-                    ContractOrigin = csvItem.ContractOrigin,
-                    ContractTypeName = csvItem.ContractTypeName,
-                    CurrentStageAssignees = csvItem.CurrentStageAssignees,
-                    DaysInCurrStage = csvItem.DaysInCurrStage,
-                    Description = csvItem.Description,
-                    ExternalContractReferenceID = csvItem.ExternalContractReferenceID,
-                    FolderName = csvItem.FolderName,
-                    Locked = csvItem.Locked,
-                    Owner = csvItem.Owner,
-                    PrimaryDocument = csvItem.PrimaryDocument,
-                    RelatedToContract = csvItem.RelatedToContract,
-                    StageName = csvItem.StageName,
-                    UpdatedBy = csvItem.UpdatedBy,
-                    UpdatedOn = csvItem.UpdatedOn,
-                    Workflow = csvItem.Workflow,
-                    ProgramsOrCourses = csvItem.ProgramsOrCourses,
-                    CCECMajors = csvItem.CCECMajors,
-                    AutoRenewal = csvItem.AutoRenewal,
-                    ContractCategory = csvItem.ContractCategory,
-                    AgencyMailingAddress1 = csvItem.AgencyMailingAddress1,
-                    AgencyMailingAddress2 = csvItem.AgencyMailingAddress2,
-                    AgencyName = csvItem.AgencyName,
-                    BCH_AgingServicesManagement = csvItem.BCH_AgingServicesManagement,
-                    BCH_AthleticTraining = csvItem.BCH_AthleticTraining,
-                    BCH_College = csvItem.BCH_College,
-                    BCH_ExerciseScience = csvItem.BCH_ExerciseScience,
-                    BCH_HealthAdministration = csvItem.BCH_HealthAdministration,
-                    BCH_InterdisciplinaryHealthStudies = csvItem.BCH_InterdisciplinaryHealthStudies,
-                    BCH_MentalHealthCounseling = csvItem.BCH_MentalHealthCounseling,
-                    BCH_NurseAnesthetist = csvItem.BCH_NurseAnesthetist,
-                    BCH_Nursing = csvItem.BCH_Nursing,
-                    BCH_NutritionDietetics = csvItem.BCH_NutritionDietetics,
-                    BCH_PhysicalTherapy = csvItem.BCH_PhysicalTherapy,
-                    BCH_PublicHealth = csvItem.BCH_PublicHealth,
-                    City = csvItem.City,
-                    COEHSPrograms = csvItem.COEHSPrograms,
-                    Department = csvItem.Department,
-                    EmailAddress = csvItem.EmailAddress,
-                    FacultyInitiator = csvItem.FacultyInitiator,
-                    Graduate_Undergraduate = csvItem.Graduate_Undergraduate,
-                    PhoneNumber = csvItem.PhoneNumber,
-                    PrimaryContact = csvItem.PrimaryContact,
-                    Renewal = csvItem.Renewal,
-                    State = csvItem.State,
-                    TitleCert = csvItem.TitleCert,
-                    Year = csvItem.Year,
-                    ZipCode = csvItem.ZipCode
-                };
-
-                _db.Contracts.Add(contractItem);
-
-                // Console.WriteLine("pasta" + contractItem.COEHSPrograms);
-
-                string from = "N/A";
-                string to = "N/A";
-
-                if (!string.IsNullOrEmpty(contractItem.Department))
-                {
-                    from = contractItem.Department;
-                    to = contractItem.AgencyName;
-                    AddVisualizationConnection(contractItem.ContractID, from, to, false);
-                }
-                else if (!string.IsNullOrEmpty(contractItem.COEHSPrograms))
-                {
-                    from = contractItem.COEHSPrograms;
-                    to = contractItem.AgencyName;
-                    AddVisualizationConnection(contractItem.ContractID, from, to, false);
-                }
-                else if (!string.IsNullOrEmpty(FolderNameRegex(contractItem.FolderName))) // FIX dept/coehs may be blank thats not good
-                {
-                    Console.WriteLine("isSchool test" + contractItem.Department + " " + contractItem.COEHSPrograms);
-                    from = FolderNameRegex(contractItem.FolderName);
-                    to = contractItem.AgencyName;
-
-                    AddVisualizationConnection(contractItem.ContractID, from, to, true);
-                }
-            }
-            // Remove each record from the DbSet
-            _db.CSVs.RemoveRange(csvData);
-            _db.SaveChanges();
-
-            AddSchoolToDepartmentConnections();
-        }
-
-        public void DeleteDatabaseEntries()
-        {
-            DeleteVisualizationDataFromTable(); // here
-            DeleteContractDataFromTable();
-            DeleteDepartmentDataFromTable(); // here
-            DeletePartnerDataFromTable();
-        }
-
-        public void PopulateDatabaseEntries()
-        {
-            PopulateSchools();
-            PopulateDepartments();
-            PopulatePartners();
-        }
-
-        public string FolderNameRegex(string FolderName)
-        {
-            var split = FolderName.Split('\\');
-            if (split.Length >= 2)
-            {
-                var result = split[split.Length - 2];
-                result = Regex.Replace(result, @"\\.*$", "");
-                return result;
-            }
-
-            return "";
-        }
-
-        public void PopulateSchools()
-        {
-            List<string> schoolNames = new List<string>();
-            var folderName = _db.CSVs
-                .Where(csv => !string.IsNullOrEmpty(csv.FolderName))
-                .Select(csv => csv.FolderName.Trim())
-                .Distinct()
-                .ToList();
-
-            foreach (var folder in folderName)
-            {
-                var schoolName = FolderNameRegex(folder);
-
-                Console.WriteLine("FolderName test 2" + schoolName);
-
-                schoolNames.Add(schoolName);
-            }
-
-            foreach (var name in schoolNames)
-            {
-                var school = new School
-                {
-                    Name = name
-                };
-                _db.Schools.Add(school);
-            }
-            
-            _db.SaveChanges();
-        }
-        public void PopulateDepartments() // needs to also get school names from contract and then grab id from them
-        {
-            var deptData = _db.CSVs
-                .Where(csv => !string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName)) // !string.IsNullOrEmpty(csv.Department) && 
-                .Select(csv => new { dept = csv.Department, folderName = csv.FolderName })
-                .Distinct()
-                .ToList();
-
-            var COEHSData = _db.CSVs
-                .Where(csv => string.IsNullOrEmpty(csv.Department) && !string.IsNullOrEmpty(csv.FolderName) && !string.IsNullOrEmpty(csv.COEHSPrograms)) 
-                .Select(csv => new { dept = csv.COEHSPrograms, folderName = csv.FolderName })
-                .Distinct()
-                .ToList();
-
-            COEHSData.ForEach(Console.WriteLine);
-
-            deptData = deptData.Concat(COEHSData).ToList();
-
-            foreach (var item in deptData)
-            {
-                // Console.WriteLine("howdy "+ item.dept);
-                var schoolId = _db.Schools
-                    .Where(school => school.Name.Equals(FolderNameRegex(item.folderName)))
-                    .Select(school => school.SchoolId)
-                    .FirstOrDefault();
-
-                var dept = new Department
-                {
-                    Name = item.dept,
-                    SchoolId = schoolId
-                };
-                _db.Departments.Add(dept);
-
-            }
-            _db.SaveChanges();
-        }
-
-        public void PopulatePartners()
-        {
-            var partnerData = _db.CSVs
-                .Where(csv => !string.IsNullOrEmpty(csv.AgencyName))
-                .Select(csv => csv.AgencyName.Trim())
-                .Distinct()
-                .ToList();
-
-            foreach (var partnerItem in partnerData)
-            {
-                var partner = new Partner
-                {
-                    Name = partnerItem
-                };
-                _db.Partners.Add(partner);
-            }
-            _db.SaveChanges();
-
-        }
-
-        /*
-        public void CreateVisualizationTable(int ContractId, string DepartmentName, string PartnerName)
-        {
-            var DepartmentId = _db.Departments
-                .Where(dept => DepartmentName.Equals(dept.Name))
-                .Select(dept => dept.DepartmentId)
-                .FirstOrDefault();
-            Console.WriteLine(DepartmentId + DepartmentName);
-
-            var PartnerId = _db.Partners
-                .Where(partner => PartnerName.Equals(partner.Name))
-                .Select(partner => partner.PartnerId)
-                .FirstOrDefault();
-            Console.WriteLine(PartnerId + PartnerName);
-
-            var connection = new Visualization
-            {
-                ContractId = ContractId,
-                DeptId = DepartmentId,
-                PartnerId = PartnerId
-            };
-
-            _db.Visualizations.Add(connection);
-            _db.SaveChanges();
-        }
-        */
-
-        public void AddVisualizationConnection(int ContractId, string FromName, string ToName, bool isSchool)
-        {
-            string FromId = "";
-            string ToId = "";
-
-            if (isSchool)
-            {
-                FromId = "s" + _db.Schools
-                .Where(school => FromName.Equals(school.Name))
-                .Select(school => school.SchoolId)
-                .FirstOrDefault();
-                ToId = "p" + _db.Partners
-                .Where(partner => ToName.Equals(partner.Name))
-                .Select(partner => partner.PartnerId)
-                .FirstOrDefault();
-            }
-            else
-            {
-                FromId = "d" + _db.Departments
-                .Where(dept => FromName.Equals(dept.Name))
-                .Select(dept => dept.DepartmentId)
-                .FirstOrDefault();
-
-                ToId = "p" + _db.Partners
-                .Where(partner => ToName.Equals(partner.Name))
-                .Select(partner => partner.PartnerId)
-                .FirstOrDefault();
-            }
-
-            if (!string.IsNullOrEmpty(FromId) && !string.IsNullOrEmpty(ToId))
-            {
-                var connection = new Visualization
-                {
-                    ContractId = ContractId,
-                    FromId = FromId,
-                    ToId = ToId
-                };
-                _db.Visualizations.Add(connection);
-                _db.SaveChanges();
-            }
-        }
-
-        public void AddSchoolToDepartmentConnections()
-        {
-            string FromId = "N/A";
-            string ToId = "N/A";
-            
-            var departments = _db.Departments.ToList();
-            foreach (var department in departments)
-            {
-                FromId = "s" + department.SchoolId;
-                ToId = "d" + department.DepartmentId;
-
-                var connection = new Visualization
-                {
-                    ContractId = 0,
-                    FromId = FromId,
-                    ToId = ToId
-                };
-                _db.Visualizations.Add(connection);
-            }
-            _db.SaveChanges();
-        }
-
-        public void DeleteVisualizationDataFromTable()
-        {
-            var data = _db.Visualizations.ToList();
-            _db.Visualizations.RemoveRange(data);
-            _db.SaveChanges();
-        }
-
-        public void DeleteDepartmentDataFromTable()
-        {
-            var data = _db.Departments.ToList();
-            _db.Departments.RemoveRange(data);
-            _db.SaveChanges();
-        }
-
-
-        public void DeletePartnerDataFromTable()
-        {
-            var data = _db.Partners.ToList();
-            _db.Partners.RemoveRange(data);
-            _db.SaveChanges();
-        }
-
-        public void DeleteSchoolDataFromTable()
-        {
-            var data = _db.Schools.ToList();
-            _db.Schools.RemoveRange(data);
-            _db.SaveChanges();
+            await _CSVService.PopulateSchoolsAsync(ct);
+            await _CSVService.PopulateDepartmentsAsync(ct);
+            await _CSVService.PopulatePartnersAsync(ct);
         }
 
         private static string RemovePunct(string input)
@@ -706,6 +294,23 @@ namespace VIPS.Controllers
             return Regex.Replace(input, @"[.,'\-]", "");
         }
 
-    }
+        public async Task<IActionResult> DetailView(int id)
+        {
+            var contract = await _db.CSVs.FindAsync(id);
+
+            if (contract != null)
+            {
+                return View(contract);
+            }
+            else
+            {
+                Console.WriteLine("NotFound");
+                return NotFound();
+            }
+
+        }
 
     }
+
+}
+

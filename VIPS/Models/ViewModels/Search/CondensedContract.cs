@@ -1,4 +1,6 @@
-﻿namespace VIPS.Models.ViewModels.Search
+﻿using Common.Entities;
+
+namespace VIPS.Models.ViewModels.Search
 {
     public class CondensedContract
     {
@@ -9,11 +11,36 @@
         public string StageName { get; set; }
         public string UpdatedOn { get; set; }
         public string AgencyName { get; set; }
-        public string City { get; set;}
-        public string Department { get; set;}
-        public string FacultyInitiator { get; set;}
+        public string City { get; set; }
+        public string Department { get; set; }
+        public string FacultyInitiator { get; set; }
         public string Renewal { get; set; }
-        public string State { get; set;}
-        public string Year { get; set;}
+        public string State { get; set; }
+        public string Year { get; set; }
+
+        public static CondensedContract CreateFromContract(Contract contract)
+        {
+            return new CondensedContract()
+            {
+                AgencyName = contract.AgencyName,
+                City = contract.City,
+                ContractID = contract.ContractID,
+                ContractName = contract.ContractName,
+                CreatedOn = contract.CreatedOn,
+                Department = !string.IsNullOrEmpty(contract.Department) ? contract.Department :
+                             !string.IsNullOrEmpty(contract.COEHSPrograms) ? contract.COEHSPrograms :
+                             !string.IsNullOrEmpty(contract.CCECMajors) ? contract.CCECMajors : "condensed contract testing...",
+                FacultyInitiator = contract.FacultyInitiator,
+                Owner = contract.Owner,
+                Renewal = contract.Renewal,
+                StageName = contract.StageName,
+                State = contract.State,
+                UpdatedOn = contract.UpdatedOn,
+                Year = contract.Year
+            };
+        }
+
+
+
     }
 }
