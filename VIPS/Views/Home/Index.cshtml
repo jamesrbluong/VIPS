@@ -39,12 +39,43 @@
         <div id="deptList" class="dropdown-check-list" tabindex="100">
         </div>
     </div>
+
     <button id="legendbtn" type="button">Legend</button>
-    <div class="legendmenu menu-container menu-container-upwards">
-        <a href="#">lOption 1</a>
-        <a href="#">Option 2</a>
-        <a href="#">Option 3</a>
+    <div class="legendmenu menu-container menu-container-upwards" style="padding: 10px;">
+        <div class="legend-section">
+            <h4 style="margin-bottom: 5px;">Nodes</h4>
+            <div class="legend-item">
+                <span style="background-color: purple; width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></span>
+                Schools
+            </div>
+            <div class="legend-item">
+                <span style="background-color: rgba(10, 35, 63, 1); width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></span>
+                Departments
+            </div>
+            <div class="legend-item">
+                <span style="background-color: red; width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></span>
+                Partners
+            </div>
+        </div>
+        <div class="divider" style="margin: 10px 0;"></div>
+        <div class="legend-section">
+            <h4 style="margin-bottom: 5px;">Edges</h4>
+            <div class="caption" style="margin-bottom: 5px;">Time til Expiration:</div>
+            <div class="legend-item">
+                <span style="background-color: #C41F4B; width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></span>
+                Expired
+            </div>
+            <div class="legend-item">
+                <span style="background-color: #FFC62F; width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></span>
+                Less than a month
+            </div>
+            <div class="legend-item">
+                <span style="background-color: #76BC43; width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></span>
+                Over a month
+            </div>
+        </div>
     </div>
+
     <button id="settingsbtn" type="button">Settings</button>
     <div class="settingsmenu menu-container menu-container-upwards">
         <a href="#">sOption 1</a>
