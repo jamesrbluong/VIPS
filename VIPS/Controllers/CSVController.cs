@@ -112,7 +112,7 @@ namespace VIPS.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Upload));
+                return RedirectToAction("Upload");
             }
             return View(cSV);
         }
