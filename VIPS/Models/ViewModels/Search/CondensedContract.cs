@@ -29,7 +29,7 @@ namespace VIPS.Models.ViewModels.Search
                 CreatedOn = contract.CreatedOn,
                 Department = !string.IsNullOrEmpty(contract.Department) ? contract.Department :
                              !string.IsNullOrEmpty(contract.COEHSPrograms) ? contract.COEHSPrograms :
-                             !string.IsNullOrEmpty(contract.CCECMajors) ? contract.CCECMajors : "condensed contract testing...",
+                             !string.IsNullOrEmpty(contract.CCECMajors) ? contract.CCECMajors : "",
                 FacultyInitiator = contract.FacultyInitiator,
                 Owner = contract.Owner,
                 Renewal = contract.Renewal,

@@ -30,11 +30,6 @@ namespace VIPS.Controllers
             ct = _cancellationTokenSource.Token;
             _visualizationService = visualizationService;
         }
-        
-        public IActionResult Index ()
-        {
-            return View();
-        }
 
         [HttpGet]
         public async Task<IActionResult> GetEdgeDataAsync() // ?

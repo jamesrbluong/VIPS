@@ -590,8 +590,6 @@
             closeSidebar();
         });
 
-        
-
     });
 
     function openSidebar() {
