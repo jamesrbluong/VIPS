@@ -32,31 +32,31 @@
     <table class="custom-table" id="objectTable">
         <thead>
             <tr>
-                <th>
+                <th onclick="sortTable(0)" data-order="asc">
                     @Html.DisplayNameFor(model => model.ContractID)
                 </th>
-                <th>
+                <th  onclick="sortTable(1)" data-order="asc">
                     @Html.DisplayNameFor(model => model.CreatedOn)
                 </th>
-                <th>
+                <th  onclick="sortTable(2)" data-order="asc">
                     @Html.DisplayNameFor(model => model.ContractName)
                 </th>
-                <th>
+                <th onclick="sortTable(3)"  data-order="asc">
                     @Html.DisplayNameFor(model => model.Owner)
                 </th>
-                <th>
+                <th  onclick="sortTable(4)" data-order="asc">
                     @Html.DisplayNameFor(model => model.UpdatedOn)
                 </th>
-                <th>
+                <th onclick="sortTable(5)"  data-order="asc">
                     @Html.DisplayNameFor(model => model.Department)
                 </th>
-                <th>
+                <th  onclick="sortTable(6)" data-order="asc">
                     @Html.DisplayNameFor(model => model.Year)
                 </th>
-                <th>
+                <th onclick="sortTable(7)"  data-order="asc">
                     @Html.DisplayNameFor(model => model.Error)
                 </th>
-                <th>
+                <th  onclick="sortTable(8)" data-order="asc">
                     @Html.DisplayNameFor(model => model.Duplicate)
                 </th>
                 <th></th>
@@ -97,6 +97,8 @@
     </div>
 </div>
 
+
+
 <script>
     document.getElementById("runButton").addEventListener("click", function () {
         var scriptElement = document.createElement("script");
@@ -105,6 +107,57 @@
 
         document.head.appendChild(scriptElement);
     });
+
+
+    function sortTable(colIndex) {
+        var table = document.getElementById("objectTable");
+        var headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+        var headerCells = headerRow.getElementsByTagName("th");
+
+        var currentOrder = headerCells[colIndex].getAttribute("data-order");
+        var newOrder = currentOrder === "asc" ? "desc" : "asc";
+        headerCells[colIndex].setAttribute("data-order", newOrder);
+
+        var rows = Array.from(table.rows).slice(1); // Exclude header row
+
+        rows.sort((a, b) => {
+            var aValue = getValueFromCell(a.cells[colIndex]);
+            var bValue = getValueFromCell(b.cells[colIndex]);
+
+            // Compare the values based on sorting direction
+            if (newOrder === "asc") {
+                return compareValues(aValue, bValue);
+            } else {
+                return compareValues(bValue, aValue);
+            }
+        });
+
+        rows.forEach(row => table.appendChild(row));
+    }
+
+    function getValueFromCell(cell) {
+
+        var text = cell.textContent ? cell.textContent.trim() : "";
+        // Parse number
+        if (!isNaN(text)) {
+            return parseFloat(text);
+        }
+        // Parse date
+        var date = Date.parse(text);
+        if (!isNaN(date)) {
+            return new Date(date);
+        }
+        // Default to string
+        return text;
+    }
+
+    function compareValues(valueA, valueB) {
+        if (typeof valueA === "string" && typeof valueB === "string") {
+            return valueA.localeCompare(valueB);
+        } else {
+            return valueA - valueB;
+        }
+    }
 </script>
 
 
