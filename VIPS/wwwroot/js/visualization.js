@@ -12,7 +12,7 @@
             fixed: false,
             widthConstraint: 500, // 200
             heightConstraint: 250, // 100
-            shape: "circle",
+
             shapeProperties: {
                 interpolation: false    // 'true' for intensive zooming
             },
@@ -92,8 +92,22 @@
                             y: data[i].y,
                             type: "school",
                             color: "purple",
-                            title: data[i].name
+                            title: data[i].name,
+                            shape: "square",
+                            size: 250,
+                            font: {vadjust: -400}
                         });
+
+                        var li = document.createElement('li');
+                        li.style.listStyle = 'none';
+
+                        var anchor = createFilter(data[i].nodeId, data[i].name, "deptEntry");
+
+                        li.appendChild(anchor[0]);
+                        li.appendChild(anchor[1]);
+                        ul.appendChild(li);
+
+                        deptItems.push(ul);
                     }
                     else if (type === "d") {
                         nodesArray.push({
@@ -104,7 +118,10 @@
                             y: data[i].y,
                             type: "department",
                             color: "#0A233F",
-                            title: data[i].name
+                            title: data[i].name,
+                            shape: "hexagon",
+                            size: 250,
+                            font: { vadjust: -400 }
                         });
 
                         var li = document.createElement('li');
@@ -127,7 +144,8 @@
                             y: data[i].y,
                             type: "partner",
                             color: "red",
-                            title: data[i].name
+                            title: data[i].name,
+                            shape: "circle"
                         });
                     }
                     else {
@@ -477,10 +495,15 @@
                 network.redraw();
             }
         });
+
         function refreshNetwork() {
             var selectedNodes = [];
+            var selectedColors = [];
             document.querySelectorAll('.deptEntry:checked').forEach(function (checkbox) {
                 selectedNodes.push(checkbox.id);
+            });
+            document.querySelectorAll('.edge-filter:checked').forEach(function (checkbox) {
+                selectedColors.push(checkbox.value);
             });
 
             var allNodes = network.body.data.nodes.get();
@@ -492,7 +515,6 @@
                 }
             });
 
-
             selectedNodes.forEach(function (selectedNodeId) {
                 var connectedEdges = network.getConnectedEdges(selectedNodeId);
                 connectedEdges.forEach(function (edgeId) {
@@ -501,13 +523,47 @@
                     network.body.data.nodes.update({ id: edge.to, hidden: false });
                 });
             });
+
+            var allEdges = network.body.data.edges.get();
+            allEdges.forEach(function (edge) {
+                var edgeColor = edge.color; 
+                if (selectedColors.length === 0 || selectedColors.includes(edgeColor)) {
+                    network.body.data.edges.update({ id: edge.id, hidden: false });
+                } else {
+                    network.body.data.edges.update({ id: edge.id, hidden: true });
+                }
+            });
+
+
+
         }
 
+        //function colorblindMode() {
+        //    var allNodes = network.body.data.nodes.get();
+        //    var colorblindChecked = document.querySelector('.colorblind').checked;
 
-        var checkboxes = document.querySelectorAll('.deptEntry');
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', refreshNetwork);
+        //    allNodes.forEach(function (node) {
+        //        if (node.type === 'school') {
+        //            network.body.data.nodes.update({ id: node.id, font: colorblindChecked ? { vadjust: -400 } : { vadjust: 0 }, shape: colorblindChecked ? 'square' : 'circle' });
+        //        } else if (node.type === 'department') {
+        //            network.body.data.nodes.update({ id: node.id, font: colorblindChecked ? { vadjust: -400 } : {vadjust: 0}, shape: colorblindChecked ? 'hexagon' : 'circle' });
+        //        }
+        //    });
+        //}
+
+        //var checkboxes = document.querySelectorAll('.deptEntry');
+        //checkboxes.forEach(function (checkbox) {
+        //    checkbox.addEventListener('change', refreshNetwork);
+        //});
+
+        var submitButton = document.getElementById('submitFilters');
+        submitButton.addEventListener('click', function () {
+            refreshNetwork();
         });
+
+        //var colorblind = document.querySelector('.colorblind'); 
+        //colorblind.addEventListener('change', colorblindMode);
+
 
         network.on("deselectNode", function (params) {
             closeSidebar();

@@ -4,6 +4,8 @@
     ViewData["Title"] = "Home Page";
 }
 
+
+
 <div class="text-center">
     <h1 class="display-4">Visualization of Institutional Partnerships System</h1>
     <h4>UNF Office of Experiential Learning</h4>
@@ -33,24 +35,63 @@
 
 <div id="visnavbar" class="visnavbar">
     <button id="filterbtn" type="button">Filters</button>
-    <div class="filtermenu menu-container menu-container-upwards">
-        <a href="#">fOption 1</a>
-        <a href="#">Option 2</a>
+    <div class="filtermenu menu-container menu-container-upwards" style="height: 500px; overflow-y: scroll;">
+        <div id="edgeList" class="dropdown-check-list" tabindex="100">
+            <input type="checkbox" class="edge-filter" id="color-red" value="#C41F4B">
+            <label for="color-red">Expired</label><br>
+
+            <input type="checkbox" class="edge-filter" id="color-yellow" value="FFC62F">
+            <label for="color-yellow">6 Months to Expired</label><br>
+
+            <input type="checkbox" class="edge-filter" id="color-green" value="76BC43">
+            <label for="color-green">Active</label><br>
+         </div>
+        <div class="divider" style="margin: 10px 0;"></div>
         <div id="deptList" class="dropdown-check-list" tabindex="100">
         </div>
+        <button id="submitFilters" style="height:50px;">Submit Filters</button>
     </div>
     <button id="legendbtn" type="button">Legend</button>
-    <div class="legendmenu menu-container menu-container-upwards">
-        <a href="#">lOption 1</a>
-        <a href="#">Option 2</a>
-        <a href="#">Option 3</a>
+    <div class="legendmenu menu-container menu-container-upwards" style="padding: 10px;">
+        <div class="legend-section">
+            <h4 style="margin-bottom: 5px;">Nodes</h4>
+            <div class="legend-item">
+                <i class="bi bi-square-fill" tag="schools" style="color: purple; font-size: 20px; margin-right: 5px;"></i>
+                Schools
+            </div>
+            <div class="legend-item">
+                <i class="bi bi-hexagon-fill" tag="departments" style="color: rgba(10, 35, 63, 1); font-size: 20px; margin-right: 5px;"></i>
+                Departments
+            </div>
+            <div class="legend-item">
+                <i class="bi bi-circle-fill" tag="partners" style="color: red; font-size: 20px; margin-right: 5px;"></i>
+                Partners
+            </div>
+        </div>
+
+        <div class="divider" style="margin: 10px 0;"></div>
+        <div class="legend-section">
+            <h4 style="margin-bottom: 5px;">Edges</h4>
+            <div class="caption" style="margin-bottom: 5px;">Time til Expiration:</div>
+            <div class="legend-item">
+                <i class="bi bi-square-fill" style="color: #C41F4B; font-size: 20px; margin-right: 5px;"></i>
+                Expired
+            </div>
+            <div class="legend-item">
+                <i class="bi bi-square-fill" style="color: #FFC62F; font-size: 20px; margin-right: 5px;"></i>
+                Less than a month
+            </div>
+            <div class="legend-item">
+                <i class="bi bi-square-fill" style="color: #76BC43; font-size: 20px; margin-right: 5px;"></i>
+                Over a month
+            </div>
+        </div>
     </div>
-    <button id="settingsbtn" type="button">Settings</button>
+@*    <button id="settingsbtn" type="button">Settings</button>
     <div class="settingsmenu menu-container menu-container-upwards">
-        <a href="#">sOption 1</a>
-        <a href="#">Option 2</a>
-        <a href="#">Option 3</a>
-    </div>
+        <input id="colorblindCheckbox" class="colorblind" type="checkbox" />
+        <label>Colorblind Mode</label>
+    </div>*@
 </div>
 
 <script>
@@ -73,10 +114,10 @@
         closeOtherMenus('legendmenu');
     });
 
-    document.getElementById('settingsbtn').addEventListener('click', function () {
-        toggleMenu('settingsmenu');
-        closeOtherMenus('settingsmenu');
-    });
+    //document.getElementById('settingsbtn').addEventListener('click', function () {
+    //    toggleMenu('settingsmenu');
+    //    closeOtherMenus('settingsmenu');
+    //});
 
     function toggleMenu(menuClass) {
         var menu = document.querySelector('.' + menuClass);
@@ -84,7 +125,7 @@
     }
 
     function closeOtherMenus(activeMenu) {
-        var menus = ['filtermenu', 'legendmenu', 'settingsmenu'];
+        var menus = ['filtermenu', 'legendmenu'/*, 'settingsmenu'*/];
         menus.forEach(function (menu) {
             if (menu !== activeMenu) {
                 var otherMenu = document.querySelector('.' + menu);
