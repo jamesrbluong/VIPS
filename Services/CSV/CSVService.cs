@@ -533,72 +533,14 @@ namespace Services.CSV
 
         public async Task TransferDataAsync(CancellationToken ct)
         {
-            // Retrieve all records from the table
-            var csvData = await _CSVRepository.GetListAsync(ct);
-            // var contractData = _db.Contracts.ToList();
+            await _CSVRepository.TransferCSVToContractData(ct);  
+            
+            // Retrieve contract data from the table
+            var contractData = await _contractRepository.GetListAsync(ct);
 
-            foreach (var csvItem in csvData)
+
+            foreach (var contractItem in contractData)
             {
-                var contractItem = new Common.Entities.Contract
-                {
-                    ContractID = csvItem.ContractID,
-                    RelatedToContractID = csvItem.RelatedToContractID,
-                    CreatedOn = csvItem.CreatedOn,
-                    CreatedBy = csvItem.CreatedBy,
-                    ContractName = csvItem.ContractName,
-                    ContractOrigin = csvItem.ContractOrigin,
-                    ContractTypeName = csvItem.ContractTypeName,
-                    CurrentStageAssignees = csvItem.CurrentStageAssignees,
-                    DaysInCurrStage = csvItem.DaysInCurrStage,
-                    Description = csvItem.Description,
-                    ExternalContractReferenceID = csvItem.ExternalContractReferenceID,
-                    FolderName = csvItem.FolderName,
-                    Locked = csvItem.Locked,
-                    Owner = csvItem.Owner,
-                    PrimaryDocument = csvItem.PrimaryDocument,
-                    RelatedToContract = csvItem.RelatedToContract,
-                    StageName = csvItem.StageName,
-                    UpdatedBy = csvItem.UpdatedBy,
-                    UpdatedOn = csvItem.UpdatedOn,
-                    Workflow = csvItem.Workflow,
-                    ProgramsOrCourses = csvItem.ProgramsOrCourses,
-                    CCECMajors = csvItem.CCECMajors,
-                    AutoRenewal = csvItem.AutoRenewal,
-                    ContractCategory = csvItem.ContractCategory,
-                    AgencyMailingAddress1 = csvItem.AgencyMailingAddress1,
-                    AgencyMailingAddress2 = csvItem.AgencyMailingAddress2,
-                    AgencyName = csvItem.AgencyName,
-                    BCH_AgingServicesManagement = !string.IsNullOrEmpty(csvItem.BCH_AgingServicesManagement) ? csvItem.BCH_AgingServicesManagement : "FALSE",
-                    BCH_AthleticTraining = !string.IsNullOrEmpty(csvItem.BCH_AthleticTraining) ? csvItem.BCH_AthleticTraining : "FALSE",
-                    BCH_College = !string.IsNullOrEmpty(csvItem.BCH_College) ? csvItem.BCH_College : "FALSE",
-                    BCH_ExerciseScience = !string.IsNullOrEmpty(csvItem.BCH_ExerciseScience) ? csvItem.BCH_ExerciseScience : "FALSE",
-                    BCH_HealthAdministration = !string.IsNullOrEmpty(csvItem.BCH_HealthAdministration) ? csvItem.BCH_HealthAdministration : "FALSE",
-                    BCH_InterdisciplinaryHealthStudies = !string.IsNullOrEmpty(csvItem.BCH_InterdisciplinaryHealthStudies) ? csvItem.BCH_InterdisciplinaryHealthStudies : "FALSE",
-                    BCH_MentalHealthCounseling = !string.IsNullOrEmpty(csvItem.BCH_MentalHealthCounseling) ? csvItem.BCH_MentalHealthCounseling : "FALSE",
-                    BCH_NurseAnesthetist = !string.IsNullOrEmpty(csvItem.BCH_NurseAnesthetist) ? csvItem.BCH_NurseAnesthetist : "FALSE",
-                    BCH_Nursing = !string.IsNullOrEmpty(csvItem.BCH_Nursing) ? csvItem.BCH_Nursing : "FALSE",
-                    BCH_NutritionDietetics = !string.IsNullOrEmpty(csvItem.BCH_NutritionDietetics) ? csvItem.BCH_NutritionDietetics : "FALSE",
-                    BCH_PhysicalTherapy = !string.IsNullOrEmpty(csvItem.BCH_PhysicalTherapy) ? csvItem.BCH_PhysicalTherapy : "FALSE",
-                    BCH_PublicHealth = !string.IsNullOrEmpty(csvItem.BCH_PublicHealth) ? csvItem.BCH_PublicHealth : "FALSE",
-                    City = csvItem.City,
-                    COEHSPrograms = csvItem.COEHSPrograms,
-                    Department = csvItem.Department,
-                    EmailAddress = csvItem.EmailAddress,
-                    FacultyInitiator = csvItem.FacultyInitiator,
-                    Graduate_Undergraduate = csvItem.Graduate_Undergraduate,
-                    PhoneNumber = csvItem.PhoneNumber,
-                    PrimaryContact = csvItem.PrimaryContact,
-                    Renewal = csvItem.Renewal,
-                    State = csvItem.State,
-                    TitleCert = csvItem.TitleCert,
-                    Year = csvItem.Year,
-                    ZipCode = csvItem.ZipCode
-                };
-
-                await _contractRepository.AddAsync(contractItem, ct);
-
-                // Josh's code was here! moved to service
-
                 await PopulateEdges(contractItem, ct);
 
             }
@@ -618,7 +560,7 @@ namespace Services.CSV
 
         public async Task DeleteCSVDataFromTable(CancellationToken ct)
         {
-            await _CSVRepository.DeleteDataFromTableAsync("CSVs", ct);
+            await _CSVRepository.DeleteDataFromTableAsyncCSV(ct);
         }
 
 
