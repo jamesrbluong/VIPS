@@ -1,80 +1,73 @@
-﻿using Common.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using VIPS.Models.ViewModels.Search;
-using Repositories.Contracts;
 using Services.Contracts;
-using VIPS.Models.ViewModels.Account;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions; // Add this using directive for Regex
 
 namespace VIPS.Controllers
 {
     public class SearchController : Controller
     {
-        // the goal is for the controller to just communicate with service. no db or repository -joshua
-        private readonly ApplicationDbContext _db;
-        private readonly IContractRepository _contractRepository;
         private readonly IContractService _contractService;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private CancellationToken ct;
 
-        public SearchController(ApplicationDbContext db, IContractRepository contractRepository, IContractService contractService)
+        public SearchController(IContractService contractService)
         {
-            _db = db;
-            _contractRepository = contractRepository;
             _contractService = contractService;
-            ct = _cancellationTokenSource.Token;
-
         }
-
-        /**
-        public List<Contract> SearchContractsByDepartment(string departmentName)
-        {
-            var filteredContracts = _db.Contracts
-                .Where(contract => contract.FolderName.Contains(departmentName, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            return filteredContracts;
-        }
-        **/
 
         public async Task<IActionResult> SearchView(string searchString, string sortOrder, CancellationToken cancellationToken)
         {
-            var tempContracts = await _contractService.GetContractsAsync(cancellationToken);
-            var contractList = tempContracts.Select(x => CondensedContract.CreateFromContract(x)).ToList();
+            var contractList = await _contractService.GetContractsAsync(cancellationToken);
 
+            // Apply search filter if searchString is not null or empty
             if (!string.IsNullOrEmpty(searchString))
             {
                 contractList = contractList.Where(c => c.Department.ToLower().Equals(searchString.ToLower()) || c.ContractName.ToLower().Contains(searchString.ToLower())).ToList();
             }
 
-            if (sortOrder == "alphabetical")
+            // Calculate the total number of contracts
+            var totalContracts = contractList.Count;
+
+            // Define a mapping of renewal periods to numerical values
+            var renewalPeriods = new Dictionary<string, int>
             {
-                contractList = contractList.OrderBy(contract => {
-                    var contractName = contract.ContractName;
-                    var index = contractName.IndexOf("AA - ");
-                    if (index >= 0 && contractName.Length > index + 5)
-                    {
-                        var substring = contractName.Substring(index + 5);
-                        var words = substring.Split(' ');
-                        if (words.Length > 0)
-                        {
-                            return words[0];
-                        }
-                    }
-                    return contractName;
-                }).ToList();
-            }
+                { "Auto", 0 },
+                { "One Year", 1 },
+                { "Two Year", 2 },
+                { "Three Year", 3 },
+                { "Four Year", 4 },
+                { "Five Year", 5 },
+                { "Six Year", 6 },
+                { "Seven Year", 7 },
+                { "Eight Year", 8 },
+                { "Nine Year", 9 },
+                { "Ten Year", 10 },
+                { "Unknown", int.MaxValue } // Default value for empty or null Renewal
+                // Add more as needed
+            };
+
+            // Sort by renewal period
+            contractList = sortOrder == "close_exp" ?
+                contractList.OrderBy(c => renewalPeriods.ContainsKey(c.Renewal) ? renewalPeriods[c.Renewal] : renewalPeriods["Unknown"]).ToList() : // Sort closest to expiration
+                contractList.OrderByDescending(c => renewalPeriods.ContainsKey(c.Renewal) ? renewalPeriods[c.Renewal] : renewalPeriods["Unknown"]).ToList(); // Sort furthest from expiration
+
+            // Create the view model
             var model = new SearchViewModel
             {
-                ContractList = contractList,
-                SearchQuery = searchString
+                ContractList = contractList.Select(x => CondensedContract.CreateFromContract(x)).ToList(),
+                SearchQuery = searchString,
+                TotalContracts = totalContracts // Assign the total number of contracts to the view model property
             };
 
             return View(model);
         }
+
         public async Task<IActionResult> Contract(int id)
         {
-            var contract = await _contractService.GetById(id, ct);
+            var contract = await _contractService.GetById(id, CancellationToken.None);
 
             if (contract != null)
             {
@@ -85,7 +78,6 @@ namespace VIPS.Controllers
                 Console.WriteLine("NotFound");
                 return NotFound();
             }
-
         }
     }
 }

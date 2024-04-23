@@ -130,7 +130,7 @@ namespace Services.CSV
                 {
                     return;
                 }
-                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct);
+                await AddEdgeAsync(contractItem, from, to, exp, isSchool, ct);
             }
             else
             {
@@ -232,7 +232,7 @@ namespace Services.CSV
                     from = "Brooks College of Health";
                 }
 
-                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct); // is school
+                await AddEdgeAsync(contractItem, from, to, exp, isSchool, ct); // is school
                 
             }
             else
@@ -241,7 +241,7 @@ namespace Services.CSV
                 foreach (var item in BCHTrue)
                 {
                     Console.WriteLine(item + " -> " + to);
-                    await AddEdgeAsync(contractItem.ContractID, item, to, exp, false, ct); // is not school
+                    await AddEdgeAsync(contractItem, item, to, exp, false, ct); // is not school
                 }
             }
 
@@ -271,7 +271,7 @@ namespace Services.CSV
 
         }
 
-        public async Task AddEdgeAsync(int ContractId, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct)
+        public async Task AddEdgeAsync(Contract Contract, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct)
         {
             string FromId = "";
             string ToId = "";
@@ -309,7 +309,8 @@ namespace Services.CSV
             {
                 var connection = new Edge
                 {
-                    ContractId = ContractId,
+                    ContractId = Contract.ContractID,
+                    ContractName = Contract.ContractName,
                     FromId = FromId,
                     ToId = ToId,
                     ExpirationDate = exp
@@ -466,9 +467,9 @@ namespace Services.CSV
         }
 
 
-        public string GetSchoolName(string name, string program)
+        public string GetSchoolName(string fullName, string program)
         {
-            name = Regex.Match(name, @"^[^-]*").Value.Trim();
+            string name = Regex.Match(fullName, @"^[^-]*").Value.Trim();
 
             if (!string.IsNullOrEmpty(program) && (name.Equals("AA ADMIN")))
             {
@@ -497,7 +498,7 @@ namespace Services.CSV
             {
                 return SchoolNames[name];
             }
-            return "GetSchoolName - invalid"; // this is not good
+            return name; // this is not good
             
         }
 
