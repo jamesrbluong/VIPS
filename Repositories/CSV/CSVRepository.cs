@@ -1,9 +1,9 @@
 ﻿using Common.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Repositories.CSV
@@ -31,6 +31,11 @@ namespace Repositories.CSV
 
             }
 
+        }
+
+        public Task<int> DeleteDataFromTableAsyncCSV(CancellationToken ct)
+        {
+            return _db.Database.ExecuteSqlRawAsync("EXEC DeleteAllCSVData", ct);
         }
 
         public Task<List<Common.Entities.CSV>> GetListAsync(CancellationToken cancellationToken)
@@ -67,5 +72,12 @@ namespace Repositories.CSV
         {
             _db.CSVs.AddRange(records);
         }
+
+        public Task<int> TransferCSVToContractData(CancellationToken cancellationToken)
+        {
+            return _db.Database.ExecuteSqlRawAsync("EXEC CopyCSVDataToContracts", cancellationToken);
+        }
+
+
     }
 }

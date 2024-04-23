@@ -9,5 +9,6 @@ namespace Repositories.Contracts
         Task<Contract> GetByIdAsync(int id, CancellationToken cancellationToken);
         Task<List<Contract>> GetListAsync(CancellationToken cancellationToken);
         Task UpdateAsync(Contract contract, CancellationToken cancellationToken);
+        void AddRange(IEnumerable<Common.Entities.Contract> records);
     }
 }

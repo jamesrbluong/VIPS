@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj": {}
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj",
+        "projectUniqueName": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj",
         "projectName": "Common",
-        "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj",
+        "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj",
         "packagesPath": "C:\\Users\\Matthew\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\obj\\",
         "projectStyle": "PackageReference",
@@ -97,12 +97,12 @@
         }
       }
     },
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj": {
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj",
+        "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj",
         "packagesPath": "C:\\Users\\Matthew\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
@@ -125,8 +125,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
-                "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj"
+              "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
+                "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj"
               }
             }
           }
@@ -198,12 +198,12 @@
         }
       }
     },
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Services\\Services.csproj": {
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Services\\Services.csproj",
+        "projectUniqueName": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Services\\Services.csproj",
+        "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Services\\Services.csproj",
         "packagesPath": "C:\\Users\\Matthew\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Services\\obj\\",
         "projectStyle": "PackageReference",
@@ -226,11 +226,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
-                "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj"
+              "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
+                "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj"
               },
-              "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj": {
-                "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj"
+              "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj": {
+                "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj"
               }
             }
           }
@@ -270,14 +270,14 @@
         }
       }
     },
-    "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj": {
+    "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj",
+        "projectUniqueName": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj",
         "projectName": "VIPS",
-        "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj",
+        "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\VIPS.csproj",
         "packagesPath": "C:\\Users\\Matthew\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\VIPS\\obj\\",
+        "outputPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\VIPS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -298,14 +298,14 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
-                "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Common\\Common.csproj"
+              "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj": {
+                "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Common\\Common.csproj"
               },
-              "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj": {
-                "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj"
+              "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj": {
+                "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Repositories\\Repositories.csproj"
               },
-              "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Services\\Services.csproj": {
-                "projectPath": "C:\\Users\\Matthew\\source\\repos\\jamesrbluong\\VIPS\\Services\\Services.csproj"
+              "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\Matthew\\Source\\Repos\\jamesrbluong\\VIPS\\Services\\Services.csproj"
               }
             }
           }

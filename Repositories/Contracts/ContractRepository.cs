@@ -43,5 +43,9 @@ namespace Repositories.Contracts
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
+        public void AddRange(IEnumerable<Common.Entities.Contract> records)
+        {
+            _dbContext.Contracts.AddRange(records);
+        }
     }
 }
