@@ -23,6 +23,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - VIPS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="~/VIPS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/csv.css" asp-append-version="true" />
@@ -61,10 +62,6 @@
                     }
                     </ul>
 
-
-                <div class="searchBar">
-                    <input type="text" placeholder="Search..." />
-                </div>
                 @if (roleName.Equals("Admin"))
                 {
                     <div class="adminOptions">
@@ -87,9 +84,6 @@
                     <div class="MenuHoriz">
                         <div class="nav-item">
                             <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </div>
-                        <div class="nav-item">
-                            <a asp-area="" asp-controller="Visualization" asp-action="Index">Visualization</a>
                         </div>
                         <div class="nav-item">
                             <a asp-area="" asp-controller="Search" asp-action="SearchView">Detailed View</a>

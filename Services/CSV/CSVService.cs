@@ -130,7 +130,7 @@ namespace Services.CSV
                 {
                     return;
                 }
-                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct);
+                await AddEdgeAsync(contractItem, from, to, exp, isSchool, ct);
             }
             else
             {
@@ -141,7 +141,7 @@ namespace Services.CSV
 
         public async Task BCHBruteForceAsync(Contract contractItem, string to, bool isSchool, DateTime? exp, CancellationToken ct)
         {
-            Console.WriteLine("BCHBruteForce: " + contractItem.ContractName + ", " + to);
+            Console.WriteLine("BCHBruteForce: " + to);
 
             List<string> BCHDepts = new List<string>
             {
@@ -217,28 +217,31 @@ namespace Services.CSV
 
             if (BCHTrue.Count == 0 /* && contractItem.BCH_College.Equals("TRUE") */ || BCHTrue.Count == BCHDepts.Count )
             {
-                Console.WriteLine(BCHTrue.Count + "BCH is TRUE" + contractItem.ContractID);
+                Console.WriteLine("goes to college or dept");
                 string from;
                 if (!string.IsNullOrEmpty(contractItem.Department) && !contractItem.Department.Equals("College"))
                 {
+                    Console.WriteLine("goes to dept");
                     isSchool = false;
                     from = contractItem.Department; // only have to check department because COEHSProgram and CCECMajor are for different colleges and were handled earlier
                 }
                 else // id not filled, default to the school
                 {
+                    Console.WriteLine("goes to college");
                     isSchool = true;
                     from = "Brooks College of Health";
                 }
 
-                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct); // is school
+                await AddEdgeAsync(contractItem, from, to, exp, isSchool, ct); // is school
                 
             }
             else
             {
-                isSchool = false;
+                Console.WriteLine("goes to true list");
                 foreach (var item in BCHTrue)
                 {
-                    await AddEdgeAsync(contractItem.ContractID, item, to, exp, isSchool, ct); // is not school
+                    Console.WriteLine(item + " -> " + to);
+                    await AddEdgeAsync(contractItem, item, to, exp, false, ct); // is not school
                 }
             }
 
@@ -268,28 +271,32 @@ namespace Services.CSV
 
         }
 
-        public async Task AddEdgeAsync(int ContractId, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct)
+        public async Task AddEdgeAsync(Contract Contract, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct)
         {
             string FromId = "";
             string ToId = "";
 
+            Console.WriteLine("Name: " + FromName + ", " + ToName);
+
             if (isSchool)
             {
+                Console.WriteLine("is school");
                 FromId = "s" + (await _schoolRepository.GetListAsync(ct))
-                .Where(school => FromName.Equals(school.Name))
+                .Where(school => FromName.Trim().Equals(school.Name.Trim()))
                 .Select(school => school.SchoolId)
                 .FirstOrDefault();
             }
             else
             {
+                Console.WriteLine("not school");
                 FromId = "d" + (await _departmentRepository.GetListAsync(ct))
-                .Where(dept => FromName.Equals(dept.Name))
+                .Where(dept => FromName.Trim().Equals(dept.Name.Trim()))
                 .Select(dept => dept.DepartmentId)
                 .FirstOrDefault();
             }
 
             ToId = "p" + (await _partnerRepository.GetListAsync(ct))
-            .Where(partner => ToName.Equals(partner.Name))
+            .Where(partner => ToName.Trim().Equals(partner.Name.Trim()))
             .Select(partner => partner.PartnerId)
             .FirstOrDefault();
 
@@ -302,7 +309,8 @@ namespace Services.CSV
             {
                 var connection = new Edge
                 {
-                    ContractId = ContractId,
+                    ContractId = Contract.ContractID,
+                    ContractName = Contract.ContractName,
                     FromId = FromId,
                     ToId = ToId,
                     ExpirationDate = exp
@@ -459,9 +467,9 @@ namespace Services.CSV
         }
 
 
-        public string GetSchoolName(string name, string program)
+        public string GetSchoolName(string fullName, string program)
         {
-            name = Regex.Match(name, @"^[^-]*").Value.Trim();
+            string name = Regex.Match(fullName, @"^[^-]*").Value.Trim();
 
             if (!string.IsNullOrEmpty(program) && (name.Equals("AA ADMIN")))
             {
@@ -490,7 +498,7 @@ namespace Services.CSV
             {
                 return SchoolNames[name];
             }
-            return "GetSchoolName - invalid"; // this is not good
+            return name; // this is not good
             
         }
 
@@ -526,9 +534,10 @@ namespace Services.CSV
         public async Task TransferDataAsync(CancellationToken ct)
         {
             await _CSVRepository.TransferCSVToContractData(ct);  
-
+            
             // Retrieve contract data from the table
             var contractData = await _contractRepository.GetListAsync(ct);
+
 
             foreach (var contractItem in contractData)
             {

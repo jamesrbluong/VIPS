@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VIPS.Migrations
 {
     /// <inheritdoc />
-    public partial class Second : Migration
+    public partial class Special3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,17 +178,32 @@ namespace VIPS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SchoolId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Edges",
                 columns: table => new
                 {
                     ContractId = table.Column<int>(type: "int", nullable: false),
+                    ContractName = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     FromId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ToId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Edges", x => new { x.ContractId, x.FromId, x.ToId } );
+                    table.PrimaryKey("PK_Edges", x => new { x.ContractId, x.FromId, x.ToId });
                 });
 
             migrationBuilder.CreateTable(
@@ -196,10 +211,10 @@ namespace VIPS.Migrations
                 columns: table => new
                 {
                     NodeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    x = table.Column<int>(type: "int", nullable: false),
-                    y = table.Column<int>(type: "int", nullable: false),
-                    SchoolId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    x = table.Column<int>(type: "int", nullable: true),
+                    y = table.Column<int>(type: "int", nullable: true),
+                    SchoolId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -225,7 +240,7 @@ namespace VIPS.Migrations
                 {
                     SchoolId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -338,26 +353,6 @@ namespace VIPS.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    DepartmentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SchoolId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
-                    table.ForeignKey(
-                        name: "FK_Departments_Schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalTable: "Schools",
-                        principalColumn: "SchoolId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -396,11 +391,6 @@ namespace VIPS.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_SchoolId",
-                table: "Departments",
-                column: "SchoolId");
         }
 
         /// <inheritdoc />
@@ -440,13 +430,13 @@ namespace VIPS.Migrations
                 name: "Partners");
 
             migrationBuilder.DropTable(
+                name: "Schools");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Schools");
         }
     }
 }

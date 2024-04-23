@@ -19,15 +19,17 @@
 
         <label for="sortOrder">Filter:</label>
         <select id="sortOrder" name="sortOrder" onchange="this.form.submit()">
-            <option value="select">Select</option>
-            <option value="alphabetical">Alphabetical (AA-)</option>
-            <option value="id">Sort by ID</option>
-            <option value="close_exp">Closest to Expiration</option>
-            <option value="far_exp">Furthest from Expiration</option>
+            <option value="select" selected="@(Model.SortOrder == "select" ? "selected" : null)">Select</option>
+            <option value="alphabetical" selected="@(Model.SortOrder == "alphabetical" ? "selected" : null)">Alphabetical (AA-)</option>
+            <option value="id" selected="@(Model.SortOrder == "id" ? "selected" : null)">Sort by ID</option>
+            <option value="close_exp" selected="@(Model.SortOrder == "close_exp" ? "selected" : null)">Closest to Expiration</option>
+            <option value="far_exp" selected="@(Model.SortOrder == "far_exp" ? "selected" : null)">Furthest from Expiration</option>
         </select>
-    </form>
 
-    <p></p>
+        <p style="display:inline-block; margin-left:10px;">Contracts on Page: @Model.TotalContracts</p> <!-- Total number of contracts within the search -->
+        
+    </form>
+    
     <table class="table">
         <thead>
             <tr>
@@ -47,22 +49,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ContractList)
+            @foreach (var contract in Model.ContractList)
             {
                 <tr>
-                    <td><a asp-controller="Search" asp-action="Contract" asp-route-id="@item.ContractID">@item.ContractID</a></td>
-                    <td>@item.CreatedOn</td>
-                    <td>@item.ContractName</td>
-                    <td>@item.Owner</td>
-                    <td>@item.StageName</td>
-                    <td>@item.UpdatedOn</td>
-                    <td>@item.AgencyName</td>
-                    <td>@item.City</td>
-                    <td>@item.Department</td>
-                    <td>@item.FacultyInitiator</td>
-                    <td>@item.Renewal</td>
-                    <td>@item.State</td>
-                    <td>@item.Year</td>
+                    <td><a asp-controller="Search" asp-action="Contract" asp-route-id="@contract.ContractID">@contract.ContractID</a></td>
+                    <td>@contract.CreatedOn</td>
+                    <td>@contract.ContractName</td>
+                    <td>@contract.Owner</td>
+                    <td>@contract.StageName</td>
+                    <td>@contract.UpdatedOn</td>
+                    <td>@contract.AgencyName</td>
+                    <td>@contract.City</td>
+                    <td>@contract.Department</td>
+                    <td>@contract.FacultyInitiator</td>
+                    <td>@contract.Renewal</td>
+                    <td>@contract.State</td>
+                    <td>@contract.Year</td>
                 </tr>
             }
         </tbody>

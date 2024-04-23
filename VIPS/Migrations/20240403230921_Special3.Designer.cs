@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace VIPS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240211225649_Second")]
-    partial class Second
+    [Migration("20240403230921_Special3")]
+    partial class Special3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -551,8 +551,6 @@ namespace VIPS.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.HasIndex("SchoolId");
-
                     b.ToTable("Departments");
                 });
 
@@ -579,6 +577,13 @@ namespace VIPS.Migrations
                 {
                     b.Property<string>("NodeId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("x")
                         .HasColumnType("int");
@@ -616,19 +621,7 @@ namespace VIPS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchoolId"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -768,15 +761,6 @@ namespace VIPS.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Common.Entities.Department", b =>
-                {
-                    b.HasOne("Common.Entities.School", null)
-                        .WithMany("Departments")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -826,11 +810,6 @@ namespace VIPS.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Common.Entities.School", b =>
-                {
-                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

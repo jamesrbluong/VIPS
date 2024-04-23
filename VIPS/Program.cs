@@ -42,7 +42,8 @@ RegisterServices(services);
 services.AddSession();
 services.AddHttpContextAccessor();
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("VIPS")));
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("VIPS")));
 services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
     // Lockout settings
@@ -50,6 +51,18 @@ services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
 }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+services.Configure<IdentityOptions>(options =>
+{
+    Console.WriteLine("IdentityOptions");
+    // Default Password settings.
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
+});
 
 services.ConfigureApplicationCookie(options =>
 {
@@ -135,7 +148,7 @@ async Task CreateRoles(IServiceProvider serviceProvider)
     
     IdentityResult roleResult; // Result of identity operation
 
-    string[] roleNames = { "Admin", "CCBL_Employee", "UNF_Employee" }; // string array of all the roles in this program
+    string[] roleNames = { "Admin", "UNF_Employee" }; // string array of all the roles in this program
     
     // For each role in array, create the role if it does not yet exist in the program
     foreach (var name in roleNames)
