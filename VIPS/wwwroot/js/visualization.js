@@ -95,8 +95,8 @@
                             title: data[i].name.substring(0, 30) + '...',
                             shape: "square",
                             size: 250,
-                            font: {vadjust: -400}
-                            
+                            font: { vadjust: -400 }
+
                         });
 
                         var li = document.createElement('li');
@@ -383,7 +383,7 @@
                                         // newElements.push(createAnchor("No Contracts", "sidebarData")); // work on
                                     }
                                 }
-                                
+
 
 
                                 sidebarNode.replaceChildren(...newElements);
@@ -515,20 +515,17 @@
                     network.body.data.nodes.update({ id: edge.to, hidden: false });
                 });
             });
-        }
+        
 
             var allEdges = network.body.data.edges.get();
             allEdges.forEach(function (edge) {
-                var edgeColor = edge.color; 
+                var edgeColor = edge.color;
                 if (selectedColors.length === 0 || selectedColors.includes(edgeColor)) {
                     network.body.data.edges.update({ id: edge.id, hidden: false });
                 } else {
                     network.body.data.edges.update({ id: edge.id, hidden: true });
                 }
             });
-
-
-
         }
 
         var submitButton = document.getElementById('submitFilters');
