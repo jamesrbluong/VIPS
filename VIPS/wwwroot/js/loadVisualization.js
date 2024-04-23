@@ -24,9 +24,9 @@ var options = {
     physics: {
         enabled: true,
         barnesHut: {
-            gravitationalConstant: -2000,
+            gravitationalConstant: -20000,
             centralGravity: 0.1,
-            springLength: 5000,
+            springLength: 20000,
             springConstant: 0.01,
             damping: 0.15,
             avoidOverlap: 1

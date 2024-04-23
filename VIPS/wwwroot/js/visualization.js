@@ -82,7 +82,7 @@
                 var ul = document.createElement('ul');
 
                 for (var i = 0; i < data.length; i++) {
-                    var type = data[i].nodeId.slice(0,1);
+                    var type = data[i].nodeId.slice(0, 1);
 
                     if (type === "s") {
                         nodesArray.push({
@@ -92,10 +92,11 @@
                             y: data[i].y,
                             type: "school",
                             color: "purple",
-                            title: data[i].name,
+                            title: data[i].name.substring(0, 30) + '...',
                             shape: "square",
                             size: 250,
                             font: {vadjust: -400}
+                            
                         });
 
                         var li = document.createElement('li');
@@ -118,7 +119,7 @@
                             y: data[i].y,
                             type: "department",
                             color: "#0A233F",
-                            title: data[i].name,
+                            title: data[i].name.substring(0, 30) + '...',
                             shape: "hexagon",
                             size: 250,
                             font: { vadjust: -400 }
@@ -144,7 +145,7 @@
                             y: data[i].y,
                             type: "partner",
                             color: "red",
-                            title: data[i].name,
+                            title: data[i].name.substring(0, 30) + '...',
                             shape: "circle"
                         });
                     }
@@ -187,7 +188,8 @@
                             Renewal: "",
                             State: "",
                             Year: "",
-                            type: "contract"
+                            type: "contract",
+                            color: checkExpiration(params[i].expirationDate)
                         }
                     }
                     else {
@@ -208,7 +210,8 @@
                             Renewal: "",
                             State: "",
                             Year: "",
-                            type: "contract"
+                            type: "contract",
+                            color: checkExpiration(params[i].expirationDate)
                         }
                     }
                     edgesArray.push(tempEdge);
@@ -227,17 +230,7 @@
             edges: new vis.DataSet(edgesArray)
         };
 
-        data.nodes.forEach(function (node) {
-            var maxLength = 30; 
-            if (node.title.length > maxLength) {
-                node.title = node.title.substring(0, maxLength) + '...'; 
-            }
-        });
-
-        data.edges.forEach(function (edge) {
-            var color = checkExpiration(edge.ExpirationDate);
-            edge.color = color;
-        });
+        // var nodesView = new vis.DataView(nodes, { filter: } );
 
         network = new vis.Network(container, data, options);
 
@@ -305,7 +298,6 @@
 
         // network.on('click', neighbourhoodHighlight);
         network.on('selectNode', function (params) {
-            console.log("selectNode");
             var nodeId = params.nodes[0];
             var node = data.nodes.get(nodeId);
             var sidebarNode = document.getElementById("sidebarNode");
@@ -375,7 +367,7 @@
 
                                         for (i = 0; i < contracts.length; i++) {
                                             var li = document.createElement('li')
-                                            var anchor = createAnchor(contracts[i].contractId, "sidebarEntry");
+                                            var anchor = createAnchor(contracts[i].contractName, "sidebarEntry");
                                             anchor.href = '/Search/Contract/' + contracts[i].contractId;
                                             anchor.setAttribute('target', '_blank');
 
@@ -423,7 +415,7 @@
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
-                                    var anchor = createAnchor(data[i].contractId, "sidebarEntry");
+                                    var anchor = createAnchor(data[i].contractName, "sidebarEntry");
                                     anchor.href = '/Search/Contract/' + data[i].contractId;
                                     anchor.setAttribute('target', '_blank');
 
@@ -468,7 +460,7 @@
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
-                                    var anchor = createAnchor(data[i].contractId, "sidebarEntry");
+                                    var anchor = createAnchor(data[i].contractName, "sidebarEntry");
                                     anchor.href = '/Search/Contract/' + data[i].contractId;
                                     anchor.setAttribute('target', '_blank');
 
@@ -523,6 +515,7 @@
                     network.body.data.nodes.update({ id: edge.to, hidden: false });
                 });
             });
+        }
 
             var allEdges = network.body.data.edges.get();
             allEdges.forEach(function (edge) {
@@ -537,24 +530,6 @@
 
 
         }
-
-        //function colorblindMode() {
-        //    var allNodes = network.body.data.nodes.get();
-        //    var colorblindChecked = document.querySelector('.colorblind').checked;
-
-        //    allNodes.forEach(function (node) {
-        //        if (node.type === 'school') {
-        //            network.body.data.nodes.update({ id: node.id, font: colorblindChecked ? { vadjust: -400 } : { vadjust: 0 }, shape: colorblindChecked ? 'square' : 'circle' });
-        //        } else if (node.type === 'department') {
-        //            network.body.data.nodes.update({ id: node.id, font: colorblindChecked ? { vadjust: -400 } : {vadjust: 0}, shape: colorblindChecked ? 'hexagon' : 'circle' });
-        //        }
-        //    });
-        //}
-
-        //var checkboxes = document.querySelectorAll('.deptEntry');
-        //checkboxes.forEach(function (checkbox) {
-        //    checkbox.addEventListener('change', refreshNetwork);
-        //});
 
         var submitButton = document.getElementById('submitFilters');
         submitButton.addEventListener('click', function () {
@@ -645,8 +620,6 @@
         network.on("deselectEdge", function (params) {
             closeSidebar();
         });
-
-        
 
     });
 

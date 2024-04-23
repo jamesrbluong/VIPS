@@ -20,6 +20,25 @@ namespace VIPS.Models.ViewModels.Search
 
         public static CondensedContract CreateFromContract(Contract contract)
         {
+            // Find the index of "AA -"
+            var index = contract.ContractName.IndexOf("AA -", StringComparison.OrdinalIgnoreCase);
+
+            // If "AA -" is found and there are characters after it
+            if (index >= 0 && contract.ContractName.Length > index + 5)
+            {
+                // Extract the substring after "AA -"
+                var substring = contract.ContractName.Substring(index + 5).Trim();
+
+                // Extract the first word after "AA -"
+                var firstWord = substring.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+
+                // If a word is found, assign it to the ContractName
+                if (!string.IsNullOrEmpty(firstWord))
+                {
+                    contract.ContractName = firstWord;
+                }
+            }
+
             return new CondensedContract()
             {
                 AgencyName = contract.AgencyName,
@@ -27,9 +46,7 @@ namespace VIPS.Models.ViewModels.Search
                 ContractID = contract.ContractID,
                 ContractName = contract.ContractName,
                 CreatedOn = contract.CreatedOn,
-                Department = !string.IsNullOrEmpty(contract.Department) ? contract.Department :
-                             !string.IsNullOrEmpty(contract.COEHSPrograms) ? contract.COEHSPrograms :
-                             !string.IsNullOrEmpty(contract.CCECMajors) ? contract.CCECMajors : "condensed contract testing...",
+                Department = contract.Department,
                 FacultyInitiator = contract.FacultyInitiator,
                 Owner = contract.Owner,
                 Renewal = contract.Renewal,
@@ -39,8 +56,6 @@ namespace VIPS.Models.ViewModels.Search
                 Year = contract.Year
             };
         }
-
-
 
     }
 }

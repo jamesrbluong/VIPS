@@ -62,10 +62,6 @@
                     }
                     </ul>
 
-
-                <div class="searchBar">
-                    <input type="text" placeholder="Search..." />
-                </div>
                 @if (roleName.Equals("Admin"))
                 {
                     <div class="adminOptions">
@@ -88,9 +84,6 @@
                     <div class="MenuHoriz">
                         <div class="nav-item">
                             <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </div>
-                        <div class="nav-item">
-                            <a asp-area="" asp-controller="Visualization" asp-action="Index">Visualization</a>
                         </div>
                         <div class="nav-item">
                             <a asp-area="" asp-controller="Search" asp-action="SearchView">Detailed View</a>
