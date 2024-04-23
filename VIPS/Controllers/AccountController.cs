@@ -328,35 +328,39 @@ namespace VIPS.Controllers
                     email = model.Email
                 });
             }
-
-            var user = await _accountRepository.GetByEmailAsync(model.Email, ct); // add email form input to view and get from view, search user for email
-            if (user != null)
+            if (!string.IsNullOrEmpty(model.Email)) 
             {
-                if (await _accountRepository.HasPasswordAsync(user, ct))
+                var user = await _accountRepository.GetByEmailAsync(model.Email, ct); // add email form input to view and get from view, search user for email
+                if (user != null)
                 {
-                    // Console.WriteLine("test" + model.Email + model.NewPassword + model.ResetCode);
-
-                    Microsoft.AspNetCore.Identity.IdentityResult result = await _accountRepository.ResetPasswordAsync(user, model.ResetCode, model.NewPassword, ct);
-                    if (result.Succeeded)
+                    if (await _accountRepository.HasPasswordAsync(user, ct))
                     {
-                        TempData["success"] = "Password updated successfully";
-                        return RedirectToAction("Login", "Account");
+                        // Console.WriteLine("test" + model.Email + model.NewPassword + model.ResetCode);
+
+                        Microsoft.AspNetCore.Identity.IdentityResult result = await _accountRepository.ResetPasswordAsync(user, model.ResetCode, model.NewPassword, ct);
+                        if (result.Succeeded)
+                        {
+                            TempData["success"] = "Password updated successfully";
+                            return RedirectToAction("Login", "Account");
+                        }
+                        else
+                        {
+                            TempData["error"] = "Reset Password Token could not be verified";
+                        }
                     }
                     else
                     {
-                        TempData["error"] = "Reset Password Token could not be verified";
+                        TempData["error"] = "User account has no password";
                     }
+                    // await _userManager.UpdateSecurityStampAsync(user);
                 }
                 else
                 {
-                    TempData["error"] = "User account has no password";
+                    TempData["error"] = "User not found";
                 }
-                // await _userManager.UpdateSecurityStampAsync(user);
             }
-            else
-            {
-                TempData["error"] = "User not found";
-            }
+
+            
 
             return RedirectToAction("ForgotPassword", "Account");
         }

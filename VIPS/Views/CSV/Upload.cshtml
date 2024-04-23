@@ -1,8 +1,4 @@
-﻿@{
-    Layout = "~/Views/Shared/_UploadLayout.cshtml";
-}
-
-@model IEnumerable<Common.Entities.CSV>
+﻿@model IEnumerable<Common.Entities.CSV>
 
 <form asp-controller="CSV" asp-action="UploadFile" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
