@@ -14,7 +14,7 @@ using Services.CSV;
 
 namespace VIPS.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class CSVController : Controller
     {
 

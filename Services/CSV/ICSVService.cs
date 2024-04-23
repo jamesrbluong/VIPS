@@ -5,7 +5,7 @@ namespace Services.CSV
 {
     public interface ICSVService
     {
-        Task AddEdgeAsync(int ContractId, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct);
+        Task AddEdgeAsync(Contract Contract, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct);
         Task AddSchoolToDepartmentConnectionsAsync(CancellationToken cancellationToken);
         Task DeleteCSVDataFromTable(CancellationToken ct);
         Task DeleteDatabaseEntries(CancellationToken ct);

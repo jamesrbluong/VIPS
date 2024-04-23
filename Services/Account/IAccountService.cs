@@ -9,8 +9,8 @@ namespace Services.Account
         Task ChangeRole(string roleName, AppUser user, CancellationToken ct);
         Task<List<AppUser>> SearchAccounts(string query, CancellationToken ct);
         void SendEmail(string Email, string Code, string Purpose, string scheme, HostString host);
-        bool ValidateEmail(string email);
-        bool ValidatePassword(string password);
-        bool ValidatePassword(string password, string confirmPassword);
+        string ValidateEmail(string email);
+        string ValidatePassword(string password);
+        string ValidatePassword(string password, string confirmPassword);
     }
 }

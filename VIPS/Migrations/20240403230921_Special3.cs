@@ -196,6 +196,7 @@ namespace VIPS.Migrations
                 columns: table => new
                 {
                     ContractId = table.Column<int>(type: "int", nullable: false),
+                    ContractName = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     FromId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ToId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true)

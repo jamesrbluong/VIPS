@@ -82,7 +82,7 @@
                 var ul = document.createElement('ul');
 
                 for (var i = 0; i < data.length; i++) {
-                    var type = data[i].nodeId.slice(0,1);
+                    var type = data[i].nodeId.slice(0, 1);
 
                     if (type === "s") {
                         nodesArray.push({
@@ -92,7 +92,7 @@
                             y: data[i].y,
                             type: "school",
                             color: "purple",
-                            title: data[i].name
+                            title: data[i].name.substring(0, 30) + '...'
                         });
                     }
                     else if (type === "d") {
@@ -104,7 +104,7 @@
                             y: data[i].y,
                             type: "department",
                             color: "#0A233F",
-                            title: data[i].name
+                            title: data[i].name.substring(0, 30) + '...'
                         });
 
                         var li = document.createElement('li');
@@ -127,7 +127,7 @@
                             y: data[i].y,
                             type: "partner",
                             color: "red",
-                            title: data[i].name
+                            title: data[i].name.substring(0, 30) + '...'
                         });
                     }
                     else {
@@ -169,7 +169,8 @@
                             Renewal: "",
                             State: "",
                             Year: "",
-                            type: "contract"
+                            type: "contract",
+                            color: checkExpiration(params[i].expirationDate)
                         }
                     }
                     else {
@@ -190,7 +191,8 @@
                             Renewal: "",
                             State: "",
                             Year: "",
-                            type: "contract"
+                            type: "contract",
+                            color: checkExpiration(params[i].expirationDate)
                         }
                     }
                     edgesArray.push(tempEdge);
@@ -209,17 +211,7 @@
             edges: new vis.DataSet(edgesArray)
         };
 
-        data.nodes.forEach(function (node) {
-            var maxLength = 30; 
-            if (node.title.length > maxLength) {
-                node.title = node.title.substring(0, maxLength) + '...'; 
-            }
-        });
-
-        data.edges.forEach(function (edge) {
-            var color = checkExpiration(edge.ExpirationDate);
-            edge.color = color;
-        });
+        // var nodesView = new vis.DataView(nodes, { filter: } );
 
         network = new vis.Network(container, data, options);
 
@@ -287,7 +279,6 @@
 
         // network.on('click', neighbourhoodHighlight);
         network.on('selectNode', function (params) {
-            console.log("selectNode");
             var nodeId = params.nodes[0];
             var node = data.nodes.get(nodeId);
             var sidebarNode = document.getElementById("sidebarNode");
@@ -357,7 +348,7 @@
 
                                         for (i = 0; i < contracts.length; i++) {
                                             var li = document.createElement('li')
-                                            var anchor = createAnchor(contracts[i].contractId, "sidebarEntry");
+                                            var anchor = createAnchor(contracts[i].contractName, "sidebarEntry");
                                             anchor.href = '/Search/Contract/' + contracts[i].contractId;
                                             anchor.setAttribute('target', '_blank');
 
@@ -405,7 +396,7 @@
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
-                                    var anchor = createAnchor(data[i].contractId, "sidebarEntry");
+                                    var anchor = createAnchor(data[i].contractName, "sidebarEntry");
                                     anchor.href = '/Search/Contract/' + data[i].contractId;
                                     anchor.setAttribute('target', '_blank');
 
@@ -450,7 +441,7 @@
 
                                 for (i = 0; i < data.length; i++) {
                                     var li = document.createElement('li')
-                                    var anchor = createAnchor(data[i].contractId, "sidebarEntry");
+                                    var anchor = createAnchor(data[i].contractName, "sidebarEntry");
                                     anchor.href = '/Search/Contract/' + data[i].contractId;
                                     anchor.setAttribute('target', '_blank');
 
@@ -491,8 +482,6 @@
                     network.body.data.nodes.update({ id: node.id, hidden: true });
                 }
             });
-
-
             selectedNodes.forEach(function (selectedNodeId) {
                 var connectedEdges = network.getConnectedEdges(selectedNodeId);
                 connectedEdges.forEach(function (edgeId) {
@@ -501,10 +490,12 @@
                     network.body.data.nodes.update({ id: edge.to, hidden: false });
                 });
             });
+            
         }
 
 
         var checkboxes = document.querySelectorAll('.deptEntry');
+        
         checkboxes.forEach(function (checkbox) {
             checkbox.addEventListener('change', refreshNetwork);
         });
@@ -589,8 +580,6 @@
         network.on("deselectEdge", function (params) {
             closeSidebar();
         });
-
-        
 
     });
 

@@ -47,7 +47,10 @@ namespace Services.Visualizations
 
             var connections = await GetEdgesAsync(ct);
             var contracts = connections.Where(x => x.FromId == "s" + schoolId && x.ContractId != 0)
-                .Select(x => new { contractId = x.ContractId }).Distinct().ToList();
+                .Select(x => new { 
+                    contractId = x.ContractId,
+                    contractName = x.ContractName.ToString().Replace("AA - ", "").Replace("COEHS - ", "")
+            }).Distinct().ToList();
 
             var result = new
             {
@@ -62,7 +65,10 @@ namespace Services.Visualizations
         {
             var connections = await GetEdgesAsync(ct);
             var contracts = connections.Where(x => x.FromId == departmentId)
-                .Select(x => new { contractId = x.ContractId }).Distinct().ToList();
+                .Select(x => new { 
+                    contractId = x.ContractId, 
+                    contractName = x.ContractName
+                }).Distinct().ToList();
 
             return contracts;
         }
@@ -71,7 +77,10 @@ namespace Services.Visualizations
         {
             var connections = await GetEdgesAsync(ct);
             var contracts = connections.Where(x => x.ToId == partnerId)
-                .Select(x => new { contractId = x.ContractId }).Distinct().ToList();
+                .Select(x => new { 
+                    contractId = x.ContractId,
+                    contractName = x.ContractName
+                }).Distinct().ToList();
 
             return contracts;
         }

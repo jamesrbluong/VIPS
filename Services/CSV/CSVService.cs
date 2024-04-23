@@ -130,7 +130,7 @@ namespace Services.CSV
                 {
                     return;
                 }
-                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct);
+                await AddEdgeAsync(contractItem, from, to, exp, isSchool, ct);
             }
             else
             {
@@ -141,7 +141,7 @@ namespace Services.CSV
 
         public async Task BCHBruteForceAsync(Contract contractItem, string to, bool isSchool, DateTime? exp, CancellationToken ct)
         {
-            Console.WriteLine("BCHBruteForce: " + contractItem.ContractName + ", " + to);
+            Console.WriteLine("BCHBruteForce: " + to);
 
             List<string> BCHDepts = new List<string>
             {
@@ -217,28 +217,31 @@ namespace Services.CSV
 
             if (BCHTrue.Count == 0 /* && contractItem.BCH_College.Equals("TRUE") */ || BCHTrue.Count == BCHDepts.Count )
             {
-                Console.WriteLine(BCHTrue.Count + "BCH is TRUE" + contractItem.ContractID);
+                Console.WriteLine("goes to college or dept");
                 string from;
                 if (!string.IsNullOrEmpty(contractItem.Department) && !contractItem.Department.Equals("College"))
                 {
+                    Console.WriteLine("goes to dept");
                     isSchool = false;
                     from = contractItem.Department; // only have to check department because COEHSProgram and CCECMajor are for different colleges and were handled earlier
                 }
                 else // id not filled, default to the school
                 {
+                    Console.WriteLine("goes to college");
                     isSchool = true;
                     from = "Brooks College of Health";
                 }
 
-                await AddEdgeAsync(contractItem.ContractID, from, to, exp, isSchool, ct); // is school
+                await AddEdgeAsync(contractItem, from, to, exp, isSchool, ct); // is school
                 
             }
             else
             {
-                isSchool = false;
+                Console.WriteLine("goes to true list");
                 foreach (var item in BCHTrue)
                 {
-                    await AddEdgeAsync(contractItem.ContractID, item, to, exp, isSchool, ct); // is not school
+                    Console.WriteLine(item + " -> " + to);
+                    await AddEdgeAsync(contractItem, item, to, exp, false, ct); // is not school
                 }
             }
 
@@ -268,28 +271,32 @@ namespace Services.CSV
 
         }
 
-        public async Task AddEdgeAsync(int ContractId, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct)
+        public async Task AddEdgeAsync(Contract Contract, string FromName, string ToName, DateTime? exp, bool isSchool, CancellationToken ct)
         {
             string FromId = "";
             string ToId = "";
 
+            Console.WriteLine("Name: " + FromName + ", " + ToName);
+
             if (isSchool)
             {
+                Console.WriteLine("is school");
                 FromId = "s" + (await _schoolRepository.GetListAsync(ct))
-                .Where(school => FromName.Equals(school.Name))
+                .Where(school => FromName.Trim().Equals(school.Name.Trim()))
                 .Select(school => school.SchoolId)
                 .FirstOrDefault();
             }
             else
             {
+                Console.WriteLine("not school");
                 FromId = "d" + (await _departmentRepository.GetListAsync(ct))
-                .Where(dept => FromName.Equals(dept.Name))
+                .Where(dept => FromName.Trim().Equals(dept.Name.Trim()))
                 .Select(dept => dept.DepartmentId)
                 .FirstOrDefault();
             }
 
             ToId = "p" + (await _partnerRepository.GetListAsync(ct))
-            .Where(partner => ToName.Equals(partner.Name))
+            .Where(partner => ToName.Trim().Equals(partner.Name.Trim()))
             .Select(partner => partner.PartnerId)
             .FirstOrDefault();
 
@@ -302,7 +309,8 @@ namespace Services.CSV
             {
                 var connection = new Edge
                 {
-                    ContractId = ContractId,
+                    ContractId = Contract.ContractID,
+                    ContractName = Contract.ContractName,
                     FromId = FromId,
                     ToId = ToId,
                     ExpirationDate = exp
@@ -459,9 +467,9 @@ namespace Services.CSV
         }
 
 
-        public string GetSchoolName(string name, string program)
+        public string GetSchoolName(string fullName, string program)
         {
-            name = Regex.Match(name, @"^[^-]*").Value.Trim();
+            string name = Regex.Match(fullName, @"^[^-]*").Value.Trim();
 
             if (!string.IsNullOrEmpty(program) && (name.Equals("AA ADMIN")))
             {
@@ -490,7 +498,7 @@ namespace Services.CSV
             {
                 return SchoolNames[name];
             }
-            return "GetSchoolName - invalid"; // this is not good
+            return name; // this is not good
             
         }
 
@@ -560,18 +568,18 @@ namespace Services.CSV
                     AgencyMailingAddress1 = csvItem.AgencyMailingAddress1,
                     AgencyMailingAddress2 = csvItem.AgencyMailingAddress2,
                     AgencyName = csvItem.AgencyName,
-                    BCH_AgingServicesManagement = csvItem.BCH_AgingServicesManagement,
-                    BCH_AthleticTraining = csvItem.BCH_AthleticTraining,
-                    BCH_College = csvItem.BCH_College,
-                    BCH_ExerciseScience = csvItem.BCH_ExerciseScience,
-                    BCH_HealthAdministration = csvItem.BCH_HealthAdministration,
-                    BCH_InterdisciplinaryHealthStudies = csvItem.BCH_InterdisciplinaryHealthStudies,
-                    BCH_MentalHealthCounseling = csvItem.BCH_MentalHealthCounseling,
-                    BCH_NurseAnesthetist = csvItem.BCH_NurseAnesthetist,
-                    BCH_Nursing = csvItem.BCH_Nursing,
-                    BCH_NutritionDietetics = csvItem.BCH_NutritionDietetics,
-                    BCH_PhysicalTherapy = csvItem.BCH_PhysicalTherapy,
-                    BCH_PublicHealth = csvItem.BCH_PublicHealth,
+                    BCH_AgingServicesManagement = !string.IsNullOrEmpty(csvItem.BCH_AgingServicesManagement) ? csvItem.BCH_AgingServicesManagement : "FALSE",
+                    BCH_AthleticTraining = !string.IsNullOrEmpty(csvItem.BCH_AthleticTraining) ? csvItem.BCH_AthleticTraining : "FALSE",
+                    BCH_College = !string.IsNullOrEmpty(csvItem.BCH_College) ? csvItem.BCH_College : "FALSE",
+                    BCH_ExerciseScience = !string.IsNullOrEmpty(csvItem.BCH_ExerciseScience) ? csvItem.BCH_ExerciseScience : "FALSE",
+                    BCH_HealthAdministration = !string.IsNullOrEmpty(csvItem.BCH_HealthAdministration) ? csvItem.BCH_HealthAdministration : "FALSE",
+                    BCH_InterdisciplinaryHealthStudies = !string.IsNullOrEmpty(csvItem.BCH_InterdisciplinaryHealthStudies) ? csvItem.BCH_InterdisciplinaryHealthStudies : "FALSE",
+                    BCH_MentalHealthCounseling = !string.IsNullOrEmpty(csvItem.BCH_MentalHealthCounseling) ? csvItem.BCH_MentalHealthCounseling : "FALSE",
+                    BCH_NurseAnesthetist = !string.IsNullOrEmpty(csvItem.BCH_NurseAnesthetist) ? csvItem.BCH_NurseAnesthetist : "FALSE",
+                    BCH_Nursing = !string.IsNullOrEmpty(csvItem.BCH_Nursing) ? csvItem.BCH_Nursing : "FALSE",
+                    BCH_NutritionDietetics = !string.IsNullOrEmpty(csvItem.BCH_NutritionDietetics) ? csvItem.BCH_NutritionDietetics : "FALSE",
+                    BCH_PhysicalTherapy = !string.IsNullOrEmpty(csvItem.BCH_PhysicalTherapy) ? csvItem.BCH_PhysicalTherapy : "FALSE",
+                    BCH_PublicHealth = !string.IsNullOrEmpty(csvItem.BCH_PublicHealth) ? csvItem.BCH_PublicHealth : "FALSE",
                     City = csvItem.City,
                     COEHSPrograms = csvItem.COEHSPrograms,
                     Department = csvItem.Department,

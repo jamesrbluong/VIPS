@@ -22,9 +22,6 @@ namespace VIPS.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IAccountRepository _accountRepository;
-
-
-
         public AccountController(IAccountService accountService, IAccountRepository accountRepository)
         {
             _accountService = accountService;
@@ -76,9 +73,17 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LoginAccount(LoginViewModel model, CancellationToken ct)
         {
-            if (_accountService.ValidateEmail(model.Email) == false || _accountService.ValidatePassword(model.Password) == false)
+            string validateEmailString = _accountService.ValidateEmail(model.Email);
+            string validatePasswordString = _accountService.ValidatePassword(model.Password);
+            if (!string.IsNullOrEmpty(validateEmailString))
             {
-                return View("Login", model);
+                TempData["error"] = validateEmailString;
+                return RedirectToAction("Create", "Account");
+            }
+            else if (!string.IsNullOrEmpty(validatePasswordString))
+            {
+                TempData["error"] = validatePasswordString;
+                return RedirectToAction("Create", "Account");
             }
 
             AppUser user = await _accountRepository.GetByEmailAsync(model.Email, ct);
@@ -137,8 +142,16 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreateAccount(CreateViewModel model, CancellationToken ct)
         {
-            if (_accountService.ValidateEmail(model.Email) == false || _accountService.ValidatePassword(model.Password, model.ConfirmPassword) == false)
+            string validateEmailString = _accountService.ValidateEmail(model.Email);
+            string validatePasswordString = _accountService.ValidatePassword(model.Password, model.ConfirmPassword);
+            if (!string.IsNullOrEmpty(validateEmailString))
             {
+                TempData["error"] = validateEmailString;
+                return RedirectToAction("Create", "Account");
+            }
+            else if (!string.IsNullOrEmpty(validatePasswordString))
+            {
+                TempData["error"] = validatePasswordString;
                 return RedirectToAction("Create", "Account");
             }
 
@@ -306,7 +319,8 @@ namespace VIPS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ResetPasswordUpdate(ResetPasswordViewModel model, CancellationToken ct)
         {
-            if (_accountService.ValidatePassword(model.NewPassword, model.ConfirmPassword) == false)
+            string validatePasswordString = _accountService.ValidatePassword(model.NewPassword, model.ConfirmPassword);
+            if (!string.IsNullOrEmpty(validatePasswordString))
             {
                 return RedirectToAction("ResetPassword", "Account", new
                 {

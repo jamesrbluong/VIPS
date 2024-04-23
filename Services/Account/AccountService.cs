@@ -55,9 +55,9 @@ namespace Services.Account
 
         public void SendEmail(string Email, string Code, string Purpose, string scheme, HostString host)
         {
-            var fromEmail = new MailAddress("joshuastabile@gmail.com", "test"); // change email from mine
+            var fromEmail = new MailAddress("noreplyVIPS@gmail.com", "VIPS"); // change email from mine
             var toEmail = new MailAddress(Email);
-            var fromEmailPassword = "gynn cppj sxpk bxbc";
+            var fromEmailPassword = "zatp cpuw nbla owjp";
 
             string baseUrl = string.Format("{0}://{1}", scheme, host);
 
@@ -99,47 +99,42 @@ namespace Services.Account
 
         }
 
-        public bool ValidateEmail(string email)
+        public string ValidateEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
             {
-                // TempData["error"] = "Email must not be empty";
-                return false;
+                return "Email is empty";
             }
 
             if (!email.Contains("@unf.edu"))
             {
-                // TempData["error"] = "Email must contain \"@unf.edu\"";
-                return false;
+                return "Email must contain \"@unf.edu\"";
             }
 
-            return true;
+            return "";
         }
 
-        public bool ValidatePassword(string password)
+        public string ValidatePassword(string password)
         {
             if (string.IsNullOrEmpty(password))
             {
-                // TempData["error"] = "Password must not be empty";
-                return false;
+                return "Password must not be empty";
             }
 
-            return true;
+            return "";
         }
-        public bool ValidatePassword(string password, string confirmPassword)
+        public string ValidatePassword(string password, string confirmPassword)
         {
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
             {
-                // TempData["error"] = "Password must not be empty";
-                return false;
+                return "Password must not be empty";
             }
             if (!password.Equals(confirmPassword))
             {
-                // TempData["error"] = "Passwords do not match";
-                return false;
+                return "Passwords do not match";
             }
 
-            return true;
+            return "";
         }
     }
 }
