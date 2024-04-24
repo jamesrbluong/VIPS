@@ -85,18 +85,21 @@
                     var type = data[i].nodeId.slice(0, 1);
 
                     if (type === "s") {
+                        var maxLength = 30;
+                        var label = data[i].name;
+                        var title = label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
+
                         nodesArray.push({
                             id: data[i].nodeId,
-                            label: data[i].name,
+                            label: label,
                             x: data[i].x,
                             y: data[i].y,
                             type: "school",
                             color: "purple",
-                            title: data[i].name.substring(0, 30) + '...',
+                            title: title,
                             shape: "square",
                             size: 250,
                             font: { vadjust: -400 }
-
                         });
 
                         var li = document.createElement('li');
@@ -111,15 +114,19 @@
                         deptItems.push(ul);
                     }
                     else if (type === "d") {
+                        var maxLength = 30;
+                        var label = data[i].name;
+                        var title = label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
+
                         nodesArray.push({
                             id: data[i].nodeId,
-                            label: data[i].name,
+                            label: label,
                             schoolId: data[i].schoolId,
                             x: data[i].x,
                             y: data[i].y,
                             type: "department",
                             color: "#0A233F",
-                            title: data[i].name.substring(0, 30) + '...',
+                            title: title,
                             shape: "hexagon",
                             size: 250,
                             font: { vadjust: -400 }
@@ -138,14 +145,18 @@
 
                     }
                     else if (type === "p") {
+                        var maxLength = 30;
+                        var label = data[i].name;
+                        var title = label.length > maxLength ? label.substring(0, maxLength) + '...' : label;
+
                         nodesArray.push({
                             id: data[i].nodeId,
-                            label: data[i].name,
+                            label: label,
                             x: data[i].x,
                             y: data[i].y,
                             type: "partner",
                             color: "red",
-                            title: data[i].name.substring(0, 30) + '...',
+                            title: title,
                             shape: "circle"
                         });
                     }
@@ -167,53 +178,31 @@
             success: function (params) {
                 for (var i = 0; i < params.length; i++) {
                     var tempEdge = ""
-                    console.log("edge test" + JSON.stringify(params));
+                    var tempEdge = {
+                        from: params[i].fromId,
+                        to: params[i].toId,
+                        ExpirationDate: params[i].expirationDate,
+                        CreatedOn: "",
+                        ContractName: "",
+                        Owner: "",
+                        StageName: "",
+                        UpdatedOn: "",
+                        AgencyName: "",
+                        City: "",
+                        Department: "",
+                        FacultyInitiator: "",
+                        Renewal: "",
+                        State: "",
+                        Year: "",
+                        type: "contract",
+                        color: checkExpiration(params[i].expirationDate)
+                    };
+
                     if (params[i].contractId != 0) {
-                        tempEdge =
-                        {
-                            id: i,
-                            from: params[i].fromId,
-                            to: params[i].toId,
-                            ContractId: params[i].contractId,
-                            ExpirationDate: params[i].expirationDate,
-                            CreatedOn: "",
-                            ContractName: "",
-                            Owner: "",
-                            StageName: "",
-                            UpdatedOn: "",
-                            AgencyName: "",
-                            City: "",
-                            Department: "",
-                            FacultyInitiator: "",
-                            Renewal: "",
-                            State: "",
-                            Year: "",
-                            type: "contract",
-                            color: checkExpiration(params[i].expirationDate)
-                        }
+                        tempEdge.id = i;
+                        tempEdge.ContractId = params[i].contractId;
                     }
-                    else {
-                        tempEdge =
-                        {
-                            from: params[i].fromId,
-                            to: params[i].toId,
-                            ExpirationDate: params[i].expirationDate,
-                            CreatedOn: "",
-                            ContractName: "",
-                            Owner: "",
-                            StageName: "",
-                            UpdatedOn: "",
-                            AgencyName: "",
-                            City: "",
-                            Department: "",
-                            FacultyInitiator: "",
-                            Renewal: "",
-                            State: "",
-                            Year: "",
-                            type: "contract",
-                            color: checkExpiration(params[i].expirationDate)
-                        }
-                    }
+
                     edgesArray.push(tempEdge);
 
                 }
@@ -487,7 +476,6 @@
                 network.redraw();
             }
         });
-
         function refreshNetwork() {
             var selectedNodes = [];
             var selectedColors = [];
@@ -498,34 +486,59 @@
                 selectedColors.push(checkbox.value);
             });
 
-            var allNodes = network.body.data.nodes.get();
-            allNodes.forEach(function (node) {
-                if (selectedNodes.length === 0 || selectedNodes.includes(node.id)) {
-                    network.body.data.nodes.update({ id: node.id, hidden: false });
-                } else {
-                    network.body.data.nodes.update({ id: node.id, hidden: true });
+            var nodeUpdates = [];
+            var edgeUpdates = [];
+            var hideUpdates = [];
+
+            // Batch updates for nodes
+            network.body.data.nodes.forEach(function (node) {
+                var shouldBeVisible = selectedNodes.length === 0 || selectedNodes.includes(node.id);
+                if (node.hidden !== !shouldBeVisible) {
+                    nodeUpdates.push({ id: node.id, hidden: !shouldBeVisible });
                 }
             });
-
             selectedNodes.forEach(function (selectedNodeId) {
                 var connectedEdges = network.getConnectedEdges(selectedNodeId);
                 connectedEdges.forEach(function (edgeId) {
                     var edge = network.body.data.edges.get(edgeId);
-                    network.body.data.nodes.update({ id: edge.from, hidden: false });
-                    network.body.data.nodes.update({ id: edge.to, hidden: false });
+                    nodeUpdates.push({ id: edge.from, hidden: false });
+                    nodeUpdates.push({ id: edge.to, hidden: false });
                 });
             });
-        
 
-            var allEdges = network.body.data.edges.get();
-            allEdges.forEach(function (edge) {
-                var edgeColor = edge.color;
-                if (selectedColors.length === 0 || selectedColors.includes(edgeColor)) {
-                    network.body.data.edges.update({ id: edge.id, hidden: false });
-                } else {
-                    network.body.data.edges.update({ id: edge.id, hidden: true });
+            network.body.data.nodes.update(nodeUpdates);
+
+            // Batch updates for edges
+            network.body.data.edges.forEach(function (edge) {
+                var shouldBeVisible = selectedColors.length === 0 || selectedColors.includes(edge.color);
+                if (edge.hidden !== !shouldBeVisible) {
+                    edgeUpdates.push({ id: edge.id, hidden: !shouldBeVisible });
                 }
             });
+            network.body.data.edges.update(edgeUpdates);
+
+            // Clean up nodes that should be hidden
+            network.body.data.nodes.forEach(function (node) {
+                if (!hasVisibleEdges(node.id)) {
+                    hideUpdates.push({ id: node.id, hidden: true });
+                }
+            });
+            network.body.data.nodes.update(hideUpdates);
+        }
+        function hasVisibleEdges(nodeId) {
+            var connectedEdges = network.getConnectedEdges(nodeId);
+
+            for (var i = 0; i < connectedEdges.length; i++) {
+                var edgeId = connectedEdges[i];
+                var edge = network.body.data.edges.get(edgeId);
+
+                // Check if the edge is visible
+                if (!edge.hidden) {
+                    return true; // At least one visible edge found
+                }
+            }
+
+            return false; // No visible edges found
         }
 
         var submitButton = document.getElementById('submitFilters');
@@ -646,7 +659,9 @@
         checkbox.className = c;
 
         var label = document.createElement('label');
-        label.textContent = textContent;
+        label.textContent = ' ' + textContent.substring(0, 30);
+        label.title = textContent;
+        label.style.whiteSpace = 'pre-wrap';
 
         var filterArray = [checkbox, label];
 

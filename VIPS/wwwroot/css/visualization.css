@@ -19,7 +19,28 @@
         text-align: center;
     }
 
+.submit-filters-container-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 3px solid lightgrey;
+}
+
+.filtermenu::-webkit-scrollbar {
+    background-color: lightgrey; /* Change scrollbar background color */
+}
+.filtermenu::-webkit-scrollbar-thumb {
+    background-color: #888; /* Change scrollbar thumb color */
+}
+
 .menu-container {
+    border-top: 3px solid lightgrey;
+    border-left: 3px solid lightgrey;
+    border-bottom: 3px solid lightgrey;
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -41,9 +62,14 @@
     }
 
 .dropdown-check-list {
+    padding-left: 5px;
     display: inline-block;
 }
+    .dropdown-check-list ul {
+        padding-left: 0;
+        text-indent: 0;
 
+    }
     .dropdown-check-list .anchor {
         position: relative;
         cursor: pointer;
@@ -80,7 +106,7 @@
         border-top: none;
     }
 
-        .dropdown-check-list ul.items li {
+        .dropdown-check-list li {
             list-style: none;
         }
 
@@ -91,8 +117,6 @@
     .dropdown-check-list.visible .items {
         display: block;
     }
-
-
 
 #mynetwork {
     width: 100%;
@@ -118,7 +142,7 @@
     z-index: 1;
     top: 0;
     right: 0;
-    background-color: #A7A8A9;
+    background-color: #f9f9f9;
     overflow-x: hidden;
     padding-top: 60px;
     border-top: 3px solid lightgray;

@@ -36,6 +36,8 @@
 <div id="visnavbar" class="visnavbar">
     <button id="filterbtn" type="button">Filters</button>
     <div class="filtermenu menu-container menu-container-upwards" style="height: 500px; overflow-y: scroll;">
+        <div class="divider" style="margin: 10px 0;"></div>
+        <h6 style="display: flex; justify-content: center; align-items: center;">Edge Filters</h6>
         <div id="edgeList" class="dropdown-check-list" tabindex="100">
             <input type="checkbox" class="edge-filter" id="color-red" value="#C41F4B">
             <label for="color-red">Expired</label><br>
@@ -47,9 +49,12 @@
             <label for="color-green">Active</label><br>
          </div>
         <div class="divider" style="margin: 10px 0;"></div>
+        <h6 style="display: flex; justify-content: center; align-items: center;">Node Filters</h6>
         <div id="deptList" class="dropdown-check-list" tabindex="100">
         </div>
-        <button id="submitFilters" style="height:50px;">Submit Filters</button>
+        <div class="submit-filters-container-bottom">
+            <button id="submitFilters" style="height:50px; ">Submit Filters</button>
+        </div>
     </div>
     <button id="legendbtn" type="button">Legend</button>
     <div class="legendmenu menu-container menu-container-upwards" style="padding: 10px;">
