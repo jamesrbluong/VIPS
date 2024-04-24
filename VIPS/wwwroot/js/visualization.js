@@ -44,6 +44,7 @@
             improvedLayout: false
         },
         interaction: {
+            zoomView: true,
             dragNodes: false,
             navigationButtons: false,
             selectConnectedEdges: false,
@@ -235,6 +236,15 @@
         document.getElementById("totalEdges").innerHTML = "Number of Edges: " + data.edges.length;
         document.getElementById("overlay").style.visibility = "visible";
 
+        var afterzoomlimit = {
+            scale: 0.01,
+        }
+        network.on("zoom", function () {
+            if (network.getScale() <= afterzoomlimit.scale) {
+                console.log(network.getScale());
+                network.moveTo(afterzoomlimit);
+            }
+        });
         network.on("stabilizationIterationsDone", function () {
             network.setOptions({ physics: false });
 
