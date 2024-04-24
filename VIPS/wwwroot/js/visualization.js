@@ -99,7 +99,8 @@
                             title: title,
                             shape: "square",
                             size: 250,
-                            font: { vadjust: -400 }
+                            font: { vadjust: -400 },
+                            hidden: false
                         });
 
                         var li = document.createElement('li');
@@ -129,7 +130,8 @@
                             title: title,
                             shape: "hexagon",
                             size: 250,
-                            font: { vadjust: -400 }
+                            font: { vadjust: -400 },
+                            hidden: false
                         });
 
                         var li = document.createElement('li');
@@ -157,7 +159,8 @@
                             type: "partner",
                             color: "red",
                             title: title,
-                            shape: "circle"
+                            shape: "circle",
+                            hidden: false
                         });
                     }
                     else {
@@ -195,7 +198,8 @@
                         State: "",
                         Year: "",
                         type: "contract",
-                        color: checkExpiration(params[i].expirationDate)
+                        color: checkExpiration(params[i].expirationDate),
+                        hidden: false
                     };
 
                     if (params[i].contractId != 0) {
@@ -219,9 +223,13 @@
             edges: new vis.DataSet(edgesArray)
         };
 
+               
+
         // var nodesView = new vis.DataView(nodes, { filter: } );
 
         network = new vis.Network(container, data, options);
+
+        DeleteSingleNodes(); 
 
         document.getElementById("totalNodes").innerHTML = "Number of Nodes: " + data.nodes.length;
         document.getElementById("totalEdges").innerHTML = "Number of Edges: " + data.edges.length;
@@ -476,6 +484,22 @@
                 network.redraw();
             }
         });
+        function DeleteSingleNodes() {
+            var nodesToDelete = [];
+
+            network.body.data.nodes.forEach(function (node) {
+                var connectedEdges = network.getConnectedEdges(node.id);
+                if (connectedEdges.length === 0) {
+                    // If no connected edges, mark node for deletion
+                    nodesToDelete.push(node.id);
+                }
+            });
+
+            // Delete nodes that have no connected edges
+            nodesToDelete.forEach(function (nodeId) {
+                network.body.data.nodes.remove({ id: nodeId });
+            });
+        }
         function refreshNetwork() {
             var selectedNodes = [];
             var selectedColors = [];
@@ -488,7 +512,8 @@
 
             var nodeUpdates = [];
             var edgeUpdates = [];
-            var hideUpdates = [];
+            var hideNodeUpdates = [];
+            var hideEdgeUpdates = [];
 
             // Batch updates for nodes
             network.body.data.nodes.forEach(function (node) {
@@ -520,10 +545,21 @@
             // Clean up nodes that should be hidden
             network.body.data.nodes.forEach(function (node) {
                 if (!hasVisibleEdges(node.id)) {
-                    hideUpdates.push({ id: node.id, hidden: true });
+
+                    hideNodeUpdates.push({ id: node.id, hidden: true });
+
+                    // Get all edges connected to this node and set them to hidden
+                    var connectedEdges = network.getConnectedEdges(node.id);
+                    connectedEdges.forEach(function (edgeId) {
+                        hideEdgeUpdates.push({ id: edgeId, hidden: true });
+                    });
                 }
             });
-            network.body.data.nodes.update(hideUpdates);
+
+            network.body.data.nodes.update(hideNodeUpdates);
+            network.body.data.edges.update(hideEdgeUpdates);
+
+            ResetNodeAndEdgeCounts();
         }
         function hasVisibleEdges(nodeId) {
             var connectedEdges = network.getConnectedEdges(nodeId);
@@ -539,6 +575,40 @@
             }
 
             return false; // No visible edges found
+        }
+
+        function ResetNodeAndEdgeCounts()
+        {
+            var visibleNodes = [];
+            var visibleEdges = [];
+
+            network.body.data.nodes.forEach(function (node) {
+                if (!node.hidden) { visibleNodes.push(node.id); }
+            });
+
+            network.body.data.edges.forEach(function (edge) {
+                if (visibleNodes.includes(edge.from) && visibleNodes.includes(edge.to)) {
+                    visibleEdges.push(edge);
+                }
+            });
+
+            var numNodes = visibleNodes.length;
+            var numEdges = visibleEdges.length;
+
+            if (numNodes != data.nodes.length) {
+                document.getElementById("totalNodes").innerHTML = "Number of Nodes: " + numNodes + "/" + data.nodes.length;
+            }
+            else {
+                document.getElementById("totalNodes").innerHTML = "Number of Nodes: " + data.nodes.length;
+            }
+            if (numEdges != data.edges.length) {
+                document.getElementById("totalEdges").innerHTML = "Number of Edges: " + numEdges + "/" + data.edges.length;
+            }
+            else {
+                document.getElementById("totalEdges").innerHTML = "Number of Edges: " + data.edges.length;
+            }
+            
+            
         }
 
         var submitButton = document.getElementById('submitFilters');
