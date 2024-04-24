@@ -562,6 +562,9 @@ namespace VIPS.Migrations
                     b.Property<string>("ToId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ContractName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
 

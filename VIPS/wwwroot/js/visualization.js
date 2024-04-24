@@ -95,8 +95,8 @@
                             title: data[i].name.substring(0, 30) + '...',
                             shape: "square",
                             size: 250,
-                            font: {vadjust: -400}
-                            
+                            font: { vadjust: -400 }
+
                         });
 
                         var li = document.createElement('li');
@@ -233,6 +233,9 @@
         // var nodesView = new vis.DataView(nodes, { filter: } );
 
         network = new vis.Network(container, data, options);
+
+        var allNodes = network.body.data.nodes.get();
+        var allEdges = network.body.data.edges.get();
 
         document.getElementById("totalNodes").innerHTML = "Number of Nodes: " + data.nodes.length;
         document.getElementById("totalEdges").innerHTML = "Number of Edges: " + data.edges.length;
@@ -383,7 +386,7 @@
                                         // newElements.push(createAnchor("No Contracts", "sidebarData")); // work on
                                     }
                                 }
-                                
+
 
 
                                 sidebarNode.replaceChildren(...newElements);
@@ -488,6 +491,48 @@
             }
         });
 
+        //WIP Updated function add/remove
+        //function refreshNetwork(allNodes, allEdges) {
+        //    var selectedNodes = [];
+        //    var selectedEdges = [];
+        //    var nodesInGraph = network.body.data.nodes.getIds();
+        //    var edgesInGraph = network.body.data.edges.getIds();
+
+        //    document.querySelectorAll('.deptEntry:checked').forEach(function (checkbox) {
+        //        selectedNodes.push(checkbox.id);
+        //    });
+        //    document.querySelectorAll('.edge-filter:checked').forEach(function (checkbox) {
+        //        selectedEdges.push(checkbox.value);
+        //    });
+
+
+        //    allNodes.forEach(function (node) {
+        //        if ((selectedNodes.length === 0 || selectedNodes.includes(node.id)) && !nodesInGraph.includes(node.id)) {
+        //            network.body.data.nodes.add(node);
+        //        } else if (!selectedNodes.includes(node.id) && nodesInGraph.includes(node.id)){
+        //            network.body.data.nodes.remove(node);
+        //        }
+
+        //    });
+
+        //    selectedNodes.forEach(function (selectedNodeId) {
+        //        var connectedEdges = network.getConnectedEdges(selectedNodeId);
+        //        connectedEdges.forEach(function (edgeId) {
+        //            var edge = network.body.data.edges.get(edgeId);
+        //            network.body.data.nodes.add(edge);
+        //        });
+        //    });
+
+        //    allEdges.forEach(function (edge) {
+        //        var edgeColor = edge.color;
+        //        if ((selectedEdges.length === 0 || selectedEdges.includes(edgeColor)) && !edgesInGraph.includes(edge.id)) {
+        //            network.body.data.edges.add(edge);
+        //        } else if (!selectedEdges.includes(edge.id) && edgesInGraph.includes(edge.id)) {
+        //            network.body.data.edges.remove(edge);
+        //        }
+        //    });
+        //}
+
         function refreshNetwork() {
             var selectedNodes = [];
             var selectedColors = [];
@@ -515,11 +560,10 @@
                     network.body.data.nodes.update({ id: edge.to, hidden: false });
                 });
             });
-        }
 
             var allEdges = network.body.data.edges.get();
             allEdges.forEach(function (edge) {
-                var edgeColor = edge.color; 
+                var edgeColor = edge.color;
                 if (selectedColors.length === 0 || selectedColors.includes(edgeColor)) {
                     network.body.data.edges.update({ id: edge.id, hidden: false });
                 } else {
@@ -527,13 +571,34 @@
                 }
             });
 
+            var nodeCheck = network.body.data.nodes.get();
+            nodeCheck.forEach(function (node) {
+                if (!hasVisibleEdges(node.id)) {
+                    network.body.data.nodes.update({ id: node.id, hidden: true });
+                }
+            });
+}
 
 
+        function hasVisibleEdges(nodeId) {
+            var connectedEdges = network.getConnectedEdges(nodeId);
+
+            for (var i = 0; i < connectedEdges.length; i++) {
+                var edgeId = connectedEdges[i];
+                var edge = network.body.data.edges.get(edgeId);
+
+                // Check if the edge is visible
+                if (!edge.hidden) {
+                    return true; // At least one visible edge found
+                }
+            }
+
+            return false; // No visible edges found
         }
 
         var submitButton = document.getElementById('submitFilters');
         submitButton.addEventListener('click', function () {
-            refreshNetwork();
+            refreshNetwork(allNodes, allEdges);
         });
 
         //var colorblind = document.querySelector('.colorblind'); 
@@ -622,6 +687,7 @@
         });
 
     });
+
 
     function openSidebar() {
         document.getElementById("sidebar").style.visibility = "visible";

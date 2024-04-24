@@ -35,21 +35,24 @@
 
 <div id="visnavbar" class="visnavbar">
     <button id="filterbtn" type="button">Filters</button>
-    <div class="filtermenu menu-container menu-container-upwards" style="height: 500px; overflow-y: scroll;">
+    <div class="filtermenu menu-container menu-container-upwards" style="height: 500px; overflow-y: scroll; padding-top:10px; padding-right:5px;">
         <div id="edgeList" class="dropdown-check-list" tabindex="100">
-            <input type="checkbox" class="edge-filter" id="color-red" value="#C41F4B">
-            <label for="color-red">Expired</label><br>
-
-            <input type="checkbox" class="edge-filter" id="color-yellow" value="FFC62F">
-            <label for="color-yellow">6 Months to Expired</label><br>
-
-            <input type="checkbox" class="edge-filter" id="color-green" value="76BC43">
-            <label for="color-green">Active</label><br>
+            <ul>
+            <li style="list-style:none">
+                <input type="checkbox" class="edge-filter" id="color-red" value="#C41F4B">
+                <label for="color-red">Expired</label><br></li>
+                <li style="list-style:none">
+                    <input type="checkbox" class="edge-filter" id="color-yellow" value="FFC62F">
+                <label for="color-yellow">6 Months to Expired</label><br></li>
+                <li style="list-style:none">
+                    <input type="checkbox" class="edge-filter" id="color-green" value="76BC43">
+                    <label for="color-green">Active</label><br></li>
+            </ul>
          </div>
-        <div class="divider" style="margin: 10px 0;"></div>
+        <button id="submitFilters" class="box-button" style="height:50px; width:175px; float:right">Submit Filters</button>
+        <div class="divider" style="margin: 5px 0;"></div>
         <div id="deptList" class="dropdown-check-list" tabindex="100">
         </div>
-        <button id="submitFilters" style="height:50px;">Submit Filters</button>
     </div>
     <button id="legendbtn" type="button">Legend</button>
     <div class="legendmenu menu-container menu-container-upwards" style="padding: 10px;">
