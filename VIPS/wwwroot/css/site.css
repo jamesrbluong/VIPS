@@ -276,7 +276,7 @@ tr:nth-child(even) {
 }
 
 /*
-	tr:nth-child(even) {
+tr:nth-child(even) {
 	background-color: #a7a8a9;
 	color: #000;
 }
@@ -285,8 +285,8 @@ tr:nth-child(odd) {
 	background-color: #0a233f;
 	color: #fff;
 }
+	*/
 
-*/
 
 
 
