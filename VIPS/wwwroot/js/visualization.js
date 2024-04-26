@@ -241,7 +241,6 @@
         }
         network.on("zoom", function () {
             if (network.getScale() <= afterzoomlimit.scale) {
-                console.log(network.getScale());
                 network.moveTo(afterzoomlimit);
             }
         });
