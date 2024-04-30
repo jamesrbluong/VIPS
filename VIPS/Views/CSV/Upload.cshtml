@@ -9,10 +9,10 @@
 
 @if (Model != null && Model.Any())
 {
-    @Html.ActionLink("Submit", "Submit", "CSV", null, new { @class = "btn btn-primary" } )
-    @Html.ActionLink("OverWrite Submit", "OverWriteSubmit", "CSV", null, new { @class = "btn btn-primary" } )
-    @Html.ActionLink("Clear CSV", "ClearUpload", "CSV", null, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Export to CSV", "ErrorExportCSV", "CSV", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Submit", "Submit", "CSV", null, new { @class = "btn btn-primary", title = "Submit the CSV if there is no Errors" })
+    @Html.ActionLink("OverWrite Submit", "OverWriteSubmit", "CSV", null, new { @class = "btn btn-primary", title = "Submit even if there are Errors" })
+    @Html.ActionLink("Clear CSV", "ClearUpload", "CSV", null, new { @class = "btn btn-primary", title = "Clear the uploaded CSV" })
+    @Html.ActionLink("Export to CSV", "ErrorExportCSV", "CSV", null, new { @class = "btn btn-primary", title = "Export Errors to a CSV" })
     <h2>Detailed View</h2>
 
     <p>
