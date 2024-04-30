@@ -271,12 +271,12 @@ tr:nth-child(even) {
 	margin-right: 5px;
 }
 
-tr:nth-child(even) {
+.table tr:nth-child(even) {
 	background-color: #a7a8a9;
 	color: #000;
 }
 
-tr:nth-child(odd) {
+.table tr:nth-child(odd) {
 	background-color: #0a233f;
 	color: #fff;
 }
