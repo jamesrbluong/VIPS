@@ -7,15 +7,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+    <script>
+        function filterContracts() {
+            var input = document.getElementById('myInput').value.toLowerCase();
+            var contractItems = document.querySelectorAll('#contractList tbody tr');
+
+            contractItems.forEach(function(item) {
+                var contractName = item.querySelector('td:nth-child(3)').textContent.toLowerCase(); // ContractName is the third column
+                if (contractName.includes(input)) {
+                    item.style.display = 'table-row'; // Show the item
+                } else {
+                    item.style.display = 'none'; // Hide the item
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 
     <h1>Search</h1>
 
-    <form method="get" asp-action="SearchView">
-        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Search...">
-        <button type="submit">Search</button>
+  <form method="get" asp-action="SearchView">
+    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" id="myInput" placeholder="Search..." value="@Model.SearchQuery">
+    <button type="submit">Search</button>
+    <button type="button" onclick="resetSearch()">Reset</button>
+
+
+<script>
+    function resetSearch() {
+        document.getElementById("myInput").value = ""; // Set the value of the search input to an empty string
+        document.querySelector("form").submit(); // Submit the form after resetting
+    }
+</script>
+
+
+
 
         <label for="sortOrder">Filter:</label>
         <select id="sortOrder" name="sortOrder" onchange="this.form.submit()">
@@ -27,7 +53,6 @@
         </select>
 
         <p style="display:inline-block; margin-left:10px;">Contracts on Page: @Model.TotalContracts</p> <!-- Total number of contracts within the search -->
-        
     </form>
     
     <table class="table">
@@ -48,7 +73,7 @@
                 <th>Year</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="contractList">
             @foreach (var contract in Model.ContractList)
             {
                 <tr>

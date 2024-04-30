@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace VIPS.Models.ViewModels.Search
+﻿namespace VIPS.Models.ViewModels.Search
 {
     public class SearchViewModel
     {
@@ -12,5 +9,8 @@ namespace VIPS.Models.ViewModels.Search
 
         // New property to hold the sorting order
         public string SortOrder { get; set; }
+
+        // New property to hold the renewal periods
+        public Dictionary<string, int> RenewalPeriods { get; set; }
     }
 }

@@ -241,21 +241,17 @@ a.box-bottomtext {
 	padding-left: 10px;
 }
 
-table, th, td {
-	border-collapse: collapse; 
+table,
+th,
+td {
+	border-collapse: collapse;
 	border: 1px solid black;
 	border-top: 1px solid black;
-	
 }
 
-
-/*
 tr:nth-child(even) {
 	background-color: #EDEEEE;
-	
 }
-
-*/
 
 .search-home {
 	box-sizing: border-box;
@@ -275,7 +271,6 @@ tr:nth-child(even) {
 	margin-right: 5px;
 }
 
-/*
 tr:nth-child(even) {
 	background-color: #a7a8a9;
 	color: #000;
@@ -285,7 +280,6 @@ tr:nth-child(odd) {
 	background-color: #0a233f;
 	color: #fff;
 }
-	*/
 
 
 
