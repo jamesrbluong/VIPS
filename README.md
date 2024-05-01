@@ -7,6 +7,7 @@ Password: Admin123*
 
 
 Aspects of our project that can be continuted to work on
+
 ● Optimization of CSV to Contract conversion
 
 ● Optimization of Creation of Partner Data
