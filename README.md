@@ -1,7 +1,4 @@
-
-Our Community Partner was Justin Snipes of the UNF Office of Experiential Learning (Previously the Center for Community-Based Learning). Their mission was to increase community engagement and civic participation within UNF, through this UNF students are better able to engage with their community and gain professional skills that can serve them in the future.
-
-This is a project in conjecuntion with the University of North Florida to help organize contracts they have between. 
+This is a Student project working with the University of North Florida to help organize contracts they have between them. It takes CSV information from iContracts and displays that through node visualization (in the homepage) and tabular data in the search view.
 
 ## Login 
 Username: admin@unf.edu
